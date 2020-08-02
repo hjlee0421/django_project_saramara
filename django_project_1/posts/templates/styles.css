@@ -1,0 +1,424 @@
+/* ################################################################################################################## */
+/* ################################################################################################################## */
+/* ################################################################################################################## */
+/* 베이스 페이지 */
+
+body {
+  display: block;
+  margin: 1%;
+}
+
+h1 {
+  outline-style: solid;
+  outline-color: #594231;
+  background-color: #ffffb1;
+  display: block;
+  font-size: 2em;
+  margin: 0 auto;
+}
+
+p {
+  margin: 0 auto;
+}
+
+header {
+  outline-style: solid;
+  outline-color: #594231;
+  /* 나중에 outline 없애야 함 */
+  background-color: #ffffb1;
+  text-align: left;
+  font-size: 35px;
+  /* color: white; */
+  position: relative;
+}
+
+.mylayout {
+  outline-style: solid;
+  outline-color: #594231;
+  /* 나중에 outline 없애야 함 */
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto; /* 레이아웃 전체 센터로 위치*/
+}
+
+/* Dropdown Button */
+.dropbtn {
+  background-color: #ffffb1;
+  border: 1px solid;
+  border-color: #594231;
+  color: #594231;
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  position: fixed;
+  z-index: 1000;
+  bottom: 5%;
+  right: 7.5%;
+  cursor: pointer;
+  vertical-align: top;
+  background-position: -276px -116px;
+  outline: 0;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: fixed;
+  background-color: #ffffb1;
+  outline-style: solid;
+  outline-color: #594231;
+  color: #594231;
+  min-width: 160px;
+  bottom: calc(5% + 50px);
+  /* calc(100% - 18px); */
+  right: calc(10% + 25px);
+  z-index: 100;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: #594231;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #dddd;
+}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {
+  display: block;
+}
+
+.dropdown-divider {
+  height: 0;
+  overflow: hidden;
+  border-top: 0.1px solid #000000;
+}
+
+footer {
+  outline-style: solid;
+  outline-color: #594231;
+  /* 나중에 outline 없애야 함 */
+  /* background-color: #ffffb1; */
+  text-align: center;
+  font-size: 20px;
+  color: black;
+  position: relative;
+  /* width: 660px; */
+  width: 100%;
+  max-width: 1000px;
+  margin: auto;
+  z-index: 1;
+}
+
+/* ################################################################################################################## */
+/* ################################################################################################################## */
+/* ################################################################################################################## */
+/* 리스트 페이지 */
+
+.hot-items {
+  width: 98%;
+  margin: 0 auto;
+}
+
+.items-sort {
+  outline-style: solid;
+  outline-color: #594231;
+  width: 98%;
+  margin: 0 auto;
+}
+
+/* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  height: auto;
+  text-align: left;
+  border: none;
+  outline: none;
+  transition: 0.4s;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active,
+.accordion:hover {
+  background-color: #ccc;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+  padding: 0 18px;
+  background-color: white;
+  display: none;
+  overflow: hidden;
+}
+
+.accordion:after {
+  content: "\02795"; /* Unicode character for "plus" sign (+) */
+  font-size: 13px;
+  color: #777;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+/* Item filter accordian style */
+/* Item filter accordian style */
+
+.ask-list {
+  outline-style: solid;
+  outline-color: #594231;
+  text-align: right;
+  width: 99%;
+}
+
+.items-wrap {
+  margin: 0 auto;
+}
+
+.single-item {
+  outline-style: solid;
+  outline-color: #594231;
+  background-color: #ffffb1;
+  height: 200px;
+  width: 98%;
+  max-width: 1000px;
+  display: block;
+  font-size: 2em;
+  margin: 0 auto;
+}
+
+.wrap-pagination {
+  text-align: center;
+}
+
+.pagination {
+  display: inline-block;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+.pagination a.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.pagination a:hover:not(.active) {
+  background-color: #ddd;
+}
+
+/* ################################################################################################################## */
+/* ################################################################################################################## */
+/* ################################################################################################################## */
+/* 질문 페이지 */
+
+.ask-wrap {
+  width: 98%;
+  margin: 0 auto;
+}
+
+.item-ask {
+  height: 200px;
+}
+
+/* The container must be positioned relative: */
+/* 위치만 지정해주는 div 이고, 실제 select 가 변경되려면 아래에 .custom-select select 부분을 변경해야 함 */
+.custom-select {
+  position: relative;
+  font-family: Arial;
+}
+
+.custom-select select {
+  display: block;
+  height: 25px;
+
+  width: 100%;
+  max-width: 1000px;
+  font-size: 10px;
+}
+
+.select-selected {
+  background-color: DodgerBlue;
+}
+
+/* Style the arrow inside the select element: */
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
+
+/* Point the arrow upwards when the select box is open (active): */
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
+
+/* style the items (options), including the selected item: */
+.select-items div,
+.select-selected {
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+}
+
+/* Style items (options): */
+.select-items {
+  position: absolute;
+  background-color: DodgerBlue;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+/* Hide the items when the select box is closed: */
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover,
+.same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.ask-button {
+  display: block;
+  margin: auto;
+  height: 50px;
+  width: 100px;
+  font-size: 10px;
+}
+
+/* ################################################################################################################## */
+/* ################################################################################################################## */
+/* ################################################################################################################## */
+/* 마이 페이지 */
+
+.tab-wrap {
+  width: 98%;
+  margin: 0 auto;
+}
+
+.tab-left-wrap {
+  outline-style: solid;
+  outline-color: #594231;
+  text-align: left;
+  width: 22%;
+  display: inline-block;
+  height: 200px;
+}
+
+.tab-right-wrap {
+  outline-style: solid;
+  outline-color: #594231;
+  text-align: center;
+  width: 76%;
+  display: inline-block;
+  height: 200px;
+}
+
+.tab-right-out {
+  display: inline;
+  width: 100%;
+}
+
+#logout {
+  width: 30%;
+  display: inline;
+}
+
+/* Style the tab */
+.tab {
+  float: left;
+  /* border: 1px solid #ccc; */
+  background-color: #f1f1f1;
+  width: 100%;
+  height: auto;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  display: block;
+  background-color: inherit;
+  color: black;
+  padding: 10px 10px;
+  width: 100%;
+  border: none;
+  outline: none;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current "tab button" class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  float: right;
+  width: 100%;
+  height: 100%;
+}
+
+/* ################################################################################################################## */
+/* ################################################################################################################## */
+/* ################################################################################################################## */
+/* ahref 용 페이지 */
+
+a {
+  color: #594231;
+  text-decoration: none;
+}
+
+/* unvisited link */
+a:link {
+  color: #594231;
+  text-decoration: none;
+}
+
+/* visited link */
+a:visited {
+  color: #594231;
+  text-decoration: none;
+}
+
+/* mouse over link */
+a:hover {
+  color: #594231;
+  text-decoration: none;
+}
+
+/* selected link */
+a:active {
+  color: #594231;
+  text-decoration: none;
+}

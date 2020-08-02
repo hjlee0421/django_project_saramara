@@ -5,7 +5,7 @@ from .models import Post
 
 
 class PostAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('author', 'title')
 
 
 admin.site.register(Post, PostAdmin)
