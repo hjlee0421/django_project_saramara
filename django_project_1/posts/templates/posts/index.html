@@ -76,7 +76,7 @@
       <div class="dropdown">
         <button onclick="myFunction()" class="dropbtn"></button>
         <div id="myDropdown" class="dropdown-content">
-          <a href="my_page.html">마이페이지</a>
+          <a href="{% url 'posts:mypage' %}">마이페이지</a>
           <div class="dropdown-divider"></div>
           <a href="item_ask.html">질문하기</a>
           <a href="{% url 'posts:index' %}">답해주기</a>

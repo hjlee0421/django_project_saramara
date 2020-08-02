@@ -10,12 +10,19 @@
     <ul>
       {% for choice in post.choice_set.all %}
       <li>
-        {{ choice.choice_text }} -- {{ choice.votes }} vote{{
-        choice.votes|pluralize }}
+        {{ choice.choice_text }} -- {{ choice.votes }}
       </li>
       {% endfor %}
     </ul>
+    <!-- <ul>
+      {% for choice in post.choice_set.all %}
+      <li>
+        {{ choice.choice_text }} -- {{ choice.votes }} vote {{
+        choice.votes|pluralize }}
+      </li>
+      {% endfor %}
+    </ul> -->
 
-    <a href="{% url 'posts:detail' post.id %}">Vote again?</a>
+    <a href="{% url 'posts:detail' post.id %}">또 투표 하시겠습니까?</a>
   </body>
 </html>

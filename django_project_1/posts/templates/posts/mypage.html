@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ㅅㄹㅁㄹ</title>
 
+    {% load static %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'posts/style.css' %}"
+    />
+    <script src="{% static 'posts/myScript1.js' %}"></script>
+
     <!--    link css file styles.css-->
     <link rel="stylesheet" type="text/css" href="styles.css" />
   </head>
@@ -13,7 +21,7 @@
     <div class="mylayout">
       <!--        site header-->
       <header>
-        <a href="item_list.html">
+        <a href="{% url 'posts:index' %}">
           사라마라
         </a>
       </header>
@@ -23,10 +31,10 @@
       <div class="dropdown">
         <button onclick="myFunction()" class="dropbtn"></button>
         <div id="myDropdown" class="dropdown-content">
-          <a href="my_page.html">마이페이지</a>
+          <a href="{% url 'posts:mypage' %}">마이페이지</a>
           <div class="dropdown-divider"></div>
           <a href="item_ask.html">질문하기</a>
-          <a href="item_list.html">답해주기</a>
+          <a href="{% url 'posts:index' %}">답해주기</a>
         </div>
       </div>
       <!--        floating button nav-->

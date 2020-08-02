@@ -8,4 +8,7 @@ urlpatterns = [
     path('<int:pk>/', views.DetailView.as_view(), name='detail'),
     path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
     path('<int:post_id>/votes/', views.vote, name='vote'),
+    path('mypage/', views.mypage, name='mypage'),
+    # path('ask/', views.ask, name='ask'),
 ]
+# resutls 필요없을듯
