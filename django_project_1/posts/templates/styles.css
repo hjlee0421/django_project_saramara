@@ -341,11 +341,11 @@ footer {
 
 .tab-right-out {
   display: inline;
-  width: 100%;
+  /* width: 100%; */
 }
 
 #logout {
-  width: 30%;
+  /* width: 30%; */
   display: inline;
 }
 
