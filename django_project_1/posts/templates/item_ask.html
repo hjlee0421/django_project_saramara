@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ㅅㄹㅁㄹ</title>
+
+    <!--    link css file styles.css-->
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+  </head>
+  <body>
+    <!--    base layout-->
+    <div class="mylayout">
+      <!--        site header-->
+      <header>
+        <a href="item_list.html">
+          사라마라
+        </a>
+      </header>
+      <!--        site header-->
+
+      <!--        floating button nav-->
+      <div class="dropdown">
+        <button onclick="myFunction()" class="dropbtn"></button>
+        <div id="myDropdown" class="dropdown-content">
+          <a href="my_page.html">마이페이지</a>
+          <div class="dropdown-divider"></div>
+          <a href="item_ask.html">질문하기</a>
+          <a href="item_list.html">답해주기</a>
+        </div>
+      </div>
+      <!--        floating button nav-->
+      <br />
+      <!--        hot items-->
+      <div class="hot-items">
+        <h1>이번주 사라마라 인기 아이템1</h1>
+        <h1>이번주 사라마라 인기 아이템2</h1>
+        <h1>이번주 사라마라 인기 아이템3</h1>
+      </div>
+      <!--        item filter-->
+      <br />
+      <div class="ask-wrap">
+        <h1>질문하기</h1>
+        <br />
+        <h1>제목</h1>
+        <br />
+        <input type="file" name="filefield" multiple="multiple" />
+        <!--surround the select box with a "custom-select" DIV element. Remember to set the width:-->
+        <div class="custom-select">
+          <select>
+            <option value="0">카테고리 add js w3 howto_custom_select</option>
+            <option value="1">상의</option>
+            <option value="2">하의</option>
+            <option value="3">신발</option>
+            <option value="4">가방</option>
+            <option value="5">악세서리</option>
+          </select>
+        </div>
+
+        <br />
+        <h1>브랜드</h1>
+        <br />
+        <h1>가격</h1>
+        <br />
+        <h1>링크</h1>
+        <br />
+        <h1>사진</h1>
+        <br />
+        <h1 class="item-ask">고민하는 이유</h1>
+        <br />
+        <button class="ask-button" type="submit">사라마라 질문하기</button>
+        <br />
+      </div>
+
+      <!--        site footer-->
+      <footer>
+        <h1>copyright 사라마라</h1>
+      </footer>
+      <!--        site footer-->
+    </div>
+
+    <!--    link js file myScript1.js-->
+    <script src="myScript1.js"></script>
+    <!--    link js file myScript1.js-->
+  </body>
+</html>
