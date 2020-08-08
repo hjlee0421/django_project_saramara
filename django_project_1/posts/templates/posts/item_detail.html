@@ -13,7 +13,7 @@
     <div class="mylayout">
       <!--        site header-->
       <header>
-        <a href="item_list.html">
+        <a href="{% url 'posts:index' %}">
           사라마라
         </a>
       </header>
@@ -25,8 +25,8 @@
         <div id="myDropdown" class="dropdown-content">
           <a href="my_page.html">마이페이지</a>
           <div class="dropdown-divider"></div>
-          <a href="item_ask.html">질문하기</a>
-          <a href="item_list.html">답해주기</a>
+          <a href="{% url 'posts:ask' %}">질문하기</a>
+          <a href="{% url 'posts:index' %}">답해주기</a>
         </div>
       </div>
       <!--        floating button nav-->

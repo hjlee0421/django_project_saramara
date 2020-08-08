@@ -6,7 +6,41 @@
     <title>ㅅㄹㅁㄹ</title>
 
     <!--    link css file styles.css-->
-    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="styles.css" /> -->
+    {% load static %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'posts/style.css' %}"
+    />
+    <script src="{% static 'posts/myScript1.js' %}"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="myScript1.js"></script>
+    <script src="demo.js"></script>
+
+    <!--    jquery hide p-->
+    <script>
+      $(document).ready(function () {
+        $("p").click(function () {
+          $(this).hide();
+        });
+      });
+    </script>
+
+    <!--    <script type="text/javascript">-->
+    <!--        $(document).ready(function() {-->
+    <!--            var myElement = $(".check1");-->
+    <!--            myElement.text("Hello Sweden!");-->
+    <!--        });-->
+    <!--    </script>-->
+
+    <!--    <script type="text/javascript">-->
+    <!--        function codeAddress() {-->
+    <!--            confirm('yes or no');-->
+    <!--        }-->
+    <!--        window.onload = codeAddress;-->
+    <!--    </script>-->
   </head>
   <body>
     <!--    base layout-->
@@ -40,6 +74,24 @@
       <!--        item filter-->
       <br />
       <div class="ask-wrap">
+        <form method="POST" action=".">
+          {% csrf_token %} {% for field in form %}
+          <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            <input
+              type="{{ field.field.widget.input_type }}"
+              class="form-control"
+              id="{{ field.id_for_label }}"
+              placeholder="{{ field.label }}"
+              name="{{ field.name }}"
+            />
+          </div>
+          {% if field.errors %}
+          <span style="color: red;">{{ field.errors }}</span>
+          {% endif %} {% endfor %}
+          <button type="submit" class="btn btn-primary">글쓰기</button>
+        </form>
+
         <h1>질문하기</h1>
         <br />
         <h1>제목</h1>

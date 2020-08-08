@@ -15,7 +15,14 @@ def home(request):
         suser = User.objects.get(pk=user_id)
         return HttpResponse(suser.username)
 
-    return HttpResponse("home!")
+    return HttpResponse(suser.username)
+
+
+def logout(request):
+    if request.session.get('user_id'):
+        del(request.session['user_id'])
+
+    return redirect('/posts/')
 
 
 def login(request):

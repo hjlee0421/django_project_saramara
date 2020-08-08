@@ -1,9 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
 from .models import Post, Choice
 from django.urls import reverse
 from django.views import generic
+from .forms import PostForm
+from django.contrib.auth.models import User
 
 
 class IndexView(generic.ListView):
@@ -11,7 +13,7 @@ class IndexView(generic.ListView):
     context_object_name = 'latest_post_list'
 
     def get_queryset(self):
-        return Post.objects.all
+        return Post.objects.all()
 
 
 class DetailView(generic.DeleteView):
@@ -46,3 +48,22 @@ def vote(request, post_id):
 
 def mypage(request):
     return render(request, 'posts/mypage.html')
+
+
+def ask(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            user_id = request.session.get('user_id')
+            suser = User.objects.get(pk=user_id)
+            post = Post()
+            post.title = form.cleaned_data['title']
+            post.content = form.cleaned_data['content']
+            post.author = suser
+            post.save()
+
+            return redirect('/posts/')
+    else:
+        form = PostForm()
+
+    return render(request, 'posts/item_ask.html', {'form': form})
