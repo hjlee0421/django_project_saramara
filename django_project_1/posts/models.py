@@ -14,6 +14,16 @@ class Post(models.Model):
     content = models.TextField()
     pup_date = models.DateTimeField(
         verbose_name='date published', default=None)
+    # CATEGORY_CHOICES = (
+    #     ('상의', '상의'),
+    #     ('하의', '하의'),
+    #     ('신발', '신발'),
+    #     ('기타', '기타'),
+    # )
+    # category = models.CharField(
+    #     max_length=128, choices=CATEGORY_CHOICES, default=None, null=True, blank=True)
+    # image = models.ImageField(??) 사진 갯수 제한?
+    # category = 정해진 카테고리에서 선택하게끔
     # content2 = models.TextField(default=None)
     # author = models.ForeignKey(User) 		# 비추
     # author = models.ForeignKey('auth.User') # 비추
