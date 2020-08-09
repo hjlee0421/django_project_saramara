@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.views import generic
 from .forms import PostForm
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 
 class IndexView(generic.ListView):
@@ -50,6 +51,7 @@ def mypage(request):
     return render(request, 'posts/mypage.html')
 
 
+@login_required
 def ask(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -61,7 +63,8 @@ def ask(request):
             post.content = form.cleaned_data['content']
             post.author = suser
             post.save()
-
+            return redirect('/posts/')
+        else:
             return redirect('/posts/')
     else:
         form = PostForm()

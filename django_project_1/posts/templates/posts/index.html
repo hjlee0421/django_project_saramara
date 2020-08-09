@@ -1,155 +1,45 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ㅅㄹㅁㄹ</title>
-
-    <!--    link css file styles.css-->
-    <!-- <link rel="stylesheet" type="text/css" href="styles.css" /> -->
-    {% load static %}
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'posts/style.css' %}"
-    />
-    <script src="{% static 'posts/myScript1.js' %}"></script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="myScript1.js"></script>
-    <script src="demo.js"></script>
-
-    <!--    jquery hide p-->
-    <script>
-      $(document).ready(function () {
-        $("p").click(function () {
-          $(this).hide();
-        });
-      });
-    </script>
-
-    <!--    <script type="text/javascript">-->
-    <!--        $(document).ready(function() {-->
-    <!--            var myElement = $(".check1");-->
-    <!--            myElement.text("Hello Sweden!");-->
-    <!--        });-->
-    <!--    </script>-->
-
-    <!--    <script type="text/javascript">-->
-    <!--        function codeAddress() {-->
-    <!--            confirm('yes or no');-->
-    <!--        }-->
-    <!--        window.onload = codeAddress;-->
-    <!--    </script>-->
-  </head>
-
-  <!-- <body>
-    {% if latest_post_list %}
-    <ul>
-      {% for post in latest_post_list %}
-      <li>
-        <a href="{% url 'posts:detail' post.id %}"
-          >title : {{post.title}} & content : {{post.content}} by
-          {{post.author}}
-        </a>
-      </li>
-      {% endfor %}
-    </ul>
-    {% else %}
-    <p>no posts are available</p>
-    {% endif %}
-  </body> -->
-
-  <body>
-    <!--    base layout-->
-    <div class="mylayout">
-      <!--        site header-->
-      <header>
-        <a href="{% url 'posts:index' %}">
-          사라마라
-        </a>
-      </header>
-      <!--        site header-->
-
-      <!--        floating button nav-->
-      <div class="dropdown">
-        <button onclick="myFunction()" class="dropbtn"></button>
-        <div id="myDropdown" class="dropdown-content">
-          <a href="{% url 'posts:mypage' %}">마이페이지</a>
-          <div class="dropdown-divider"></div>
-          <a href="{% url 'posts:ask' %}">질문하기</a>
-          <a href="{% url 'posts:index' %}">답해주기</a>
-        </div>
+{% extends 'posts/base.html' %} {% block content %}
+<br />
+<div class="items-sort">
+  <button class="accordion">Filter for itmes</button>
+  <div class="panel">
+    <p>Add js for DB</p>
+  </div>
+</div>
+<br />
+<!--        item filter-->
+<div class="ask-list">
+  <a href="{% url 'posts:ask' %}">질문하기</a>
+</div>
+<br />
+<!--        item list-->
+<div class="items-wrap">
+  {% if latest_post_list %}
+  <ul>
+    {% for post in latest_post_list %}
+    <a href="{% url 'posts:detail' post.id %}"
+      ><div class="single-item">
+        title : {{post.title}} & content : {{post.content}} by {{post.author}}
       </div>
-      <!--        floating button nav-->
-      <br />
-      <!--        hot items-->
-      <div class="hot-items">
-        <h1 class="check1">이번주 사라마라 인기 아이템1</h1>
-        <h1>이번주 사라마라 인기 아이템2</h1>
-        <h1>이번주 사라마라 인기 아이템3</h1>
-      </div>
-      <!--        item filter-->
-      <br />
-      <div class="items-sort">
-        <button class="accordion">Filter for itmes</button>
-        <div class="panel">
-          <p>Add js for DB</p>
-        </div>
-      </div>
-      <br />
-      <!--        item filter-->
-      <div class="ask-list">
-        <a href="{% url 'posts:ask' %}">질문하기</a>
-      </div>
-      <br />
-      <!--        item list-->
-      <div class="items-wrap">
-        {% if latest_post_list %}
-        <ul>
-          {% for post in latest_post_list %}
-          <a href="{% url 'posts:detail' post.id %}"
-            ><div class="single-item">
-              title : {{post.title}} & content : {{post.content}} by
-              {{post.author}}
-            </div>
-          </a>
-          {% endfor %}
-        </ul>
-        {% else %}
-        <p>no posts are available</p>
-        {% endif %}
-      </div>
-      <!--        item list-->
-      <!--        pagination-->
-      <div class="wrap-pagination">
-        <div class="pagination">
-          <a href="#">&laquo;</a>
-          <a href="#">1</a>
-          <a href="#">2</a>
-          <a href="#">3</a>
-          <a href="#">4</a>
-          <a href="#">5</a>
-          <a href="#">6</a>
-          <a href="#">&raquo;</a>
-        </div>
-      </div>
-      <!--        pagination-->
-
-      <!--        site footer-->
-      <footer>
-        <h1>copyright 사라마라</h1>
-      </footer>
-      <!--        site footer-->
-    </div>
-
-    <!--    link js file myScript1.js-->
-    <script
-      type="text/javascript"
-      src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
-    ></script>
-    <script type="text/javascript" src="myScript1.js"></script>
-
-    <!--    link js file myScript1.js-->
-  </body>
-</html>
+    </a>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>no posts are available</p>
+  {% endif %}
+</div>
+<!--        item list-->
+<!--        pagination-->
+<div class="wrap-pagination">
+  <div class="pagination">
+    <a href="#">&laquo;</a>
+    <a href="#">1</a>
+    <a href="#">2</a>
+    <a href="#">3</a>
+    <a href="#">4</a>
+    <a href="#">5</a>
+    <a href="#">6</a>
+    <a href="#">&raquo;</a>
+  </div>
+</div>
+{% endblock %}

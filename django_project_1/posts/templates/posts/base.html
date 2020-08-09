@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ㅅㄹㅁㄹ</title>
+
+    <!--    link css file styles.css-->
+    <!-- <link rel="stylesheet" type="text/css" href="styles.css" /> -->
+    {% load static %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'posts/style.css' %}"
+    />
+    <script src="{% static 'posts/myScript1.js' %}"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"
+    />
+    <script src="myScript1.js"></script>
+    <script src="demo.js"></script>
+
+    <!--    jquery hide p-->
+    <script>
+      $(document).ready(function () {
+        $("p").click(function () {
+          $(this).hide();
+        });
+      });
+    </script>
+
+    <!--    <script type="text/javascript">-->
+    <!--        $(document).ready(function() {-->
+    <!--            var myElement = $(".check1");-->
+    <!--            myElement.text("Hello Sweden!");-->
+    <!--        });-->
+    <!--    </script>-->
+
+    <!--    <script type="text/javascript">-->
+    <!--        function codeAddress() {-->
+    <!--            confirm('yes or no');-->
+    <!--        }-->
+    <!--        window.onload = codeAddress;-->
+    <!--    </script>-->
+  </head>
+
+  <!-- <body>
+    {% if latest_post_list %}
+    <ul>
+      {% for post in latest_post_list %}
+      <li>
+        <a href="{% url 'posts:detail' post.id %}"
+          >title : {{post.title}} & content : {{post.content}} by
+          {{post.author}}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>no posts are available</p>
+    {% endif %}
+  </body> -->
+
+  <body>
+    <!--    base layout-->
+    <div class="mylayout">
+      <!--        site header-->
+      <header>
+        <a href="{% url 'posts:index' %}">
+          사라마라
+        </a>
+        {% if user.is_authenticated %}
+        <a
+          class="btn btn-default"
+          href="{% url 'posts:ask' %}"
+          style="float: right;"
+          >New Post</a
+        >
+        <p style="float: right;">
+            <div style="font-size: 3rem; color: green; display: inline; float: right;">Welcome, {{ user.username }}
+                <small>(<a href="{% url 'susers:signout' %}">Logout</a>)</small>
+                &nbsp;&nbsp;
+            </div>
+        </p>
+        {% else %}
+        <div style="float: right;">
+          <a class="btn btn-default" href="{% url 'susers:signup' %}"
+            >Sign up</a
+          >
+          <a class="btn btn-default" href="{% url 'susers:signin' %}">Login</a>
+        </div>
+        {% endif %}
+      </header>
+      <!--        site header-->
+
+      <!--        floating button nav-->
+      <div class="dropdown">
+        <button onclick="myFunction()" class="dropbtn"></button>
+        <div id="myDropdown" class="dropdown-content">
+          <a href="{% url 'posts:mypage' %}">마이페이지</a>
+          <div class="dropdown-divider"></div>
+          <a href="{% url 'posts:ask' %}">질문하기</a>
+          <a href="{% url 'posts:index' %}">답해주기</a>
+        </div>
+      </div>
+      <!--        floating button nav-->
+      <br />
+      <!--        hot items-->
+      <!-- <div class="hot-items">
+        <h1 class="check1">이번주 사라마라 인기 아이템1</h1>
+        <h1>이번주 사라마라 인기 아이템2</h1>
+        <h1>이번주 사라마라 인기 아이템3</h1>
+      </div> -->
+      <!--        item filter-->
+      {% block content %}
+      {% endblock %}
+      <footer>
+        <h1>copyright 사라마라</h1>
+      </footer>
+      <!--        site footer-->
+    </div>
+
+    <!--    link js file myScript1.js-->
+    <script
+      type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+    ></script>
+    <script type="text/javascript" src="myScript1.js"></script>
+
+    <!--    link js file myScript1.js-->
+  </body>
+</html>
