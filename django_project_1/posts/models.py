@@ -12,6 +12,9 @@ class Post(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # 추천!
     title = models.CharField(max_length=128)
     content = models.TextField()
+    price = models.CharField(max_length=128, default='NA', null=True)
+    brand = models.CharField(max_length=128, default='NA', null=True)
+    link = models.CharField(max_length=128, default='NA', null=True)
     pup_date = models.DateTimeField(auto_now_add=True,
                                     verbose_name='date published')
     CATEGORY_CHOICES = (
@@ -37,7 +40,7 @@ class Post(models.Model):
 
 class Choice(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200)
+    choice_text = models.CharField(max_length=200, default=["사라", "마라"])
     votes = models.IntegerField(default=0)
 
     def __str__(self):

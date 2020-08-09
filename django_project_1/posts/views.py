@@ -60,7 +60,11 @@ def ask(request):
             suser = User.objects.get(pk=user_id)
             post = Post()
             post.title = form.cleaned_data['title']
+            post.brand = form.cleaned_data['brand']
+            post.price = form.cleaned_data['price']
+            post.link = form.cleaned_data['link']
             post.content = form.cleaned_data['content']
+
             post.author = suser
             post.save()
             return redirect('/posts/')
