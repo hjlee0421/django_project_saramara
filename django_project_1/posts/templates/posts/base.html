@@ -68,9 +68,9 @@
     {% endif %}
   </body> -->
 
-  <body>
+  <body style="background-color: black;">
     <!--    base layout-->
-    <div class="mylayout">
+    <div class="mylayout" style="background-color: white;">
       <!--        site header-->
       <header>
         <a href="{% url 'posts:index' %}">
@@ -84,7 +84,7 @@
           >New Post</a
         >
         <p style="float: right;">
-            <div style="font-size: 3rem; color: green; display: inline; float: right;">Welcome, {{ user.username }}
+            <div style="font-size: 2rem; color: green; display: inline; float: right;">Welcome, {{ user.username }}
                 <small>(<a href="{% url 'susers:signout' %}">Logout</a>)</small>
                 &nbsp;&nbsp;
             </div>
