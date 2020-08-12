@@ -3,8 +3,14 @@ from django.conf import settings  # 추천!
 # from django.conf.auth.models import User  # 비추
 from django.utils import timezone
 from datetime import datetime
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
+
+
+class User(AbstractUser):
+    age = models.IntegerField(default=0)
+    gender = models.IntegerField(default=0)
 
 
 class Post(models.Model):
@@ -37,10 +43,19 @@ class Post(models.Model):
     def was_published_recently(self):
         return self.pup_date <= timezone.now() - datetime.timedelta(days=1)
 
+    class Meta:
+        ordering = ['-id']
+
 
 class Choice(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200, default=["사라", "마라"])
+    SARAMARA_CHOICES = (
+        ('사라', '사라'),
+        ('마라', '마라'),
+    )
+    choice_text = models.CharField(
+        max_length=128, choices=SARAMARA_CHOICES, default='사라', null=False)
+    # choice_text = models.CharField(max_length=200, default=["사라", "마라"])
     votes = models.IntegerField(default=0)
 
     def __str__(self):

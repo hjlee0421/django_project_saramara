@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'susers',
 ]
 
+AUTH_USER_MODEL = 'posts.User'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

@@ -5,8 +5,9 @@ from .models import Post, Choice
 from django.urls import reverse
 from django.views import generic
 from .forms import PostForm
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from .models import User
 
 
 class IndexView(generic.ListView):
@@ -14,7 +15,7 @@ class IndexView(generic.ListView):
     context_object_name = 'latest_post_list'
 
     def get_queryset(self):
-        return Post.objects.all()
+        return Post.objects.all()  # .order_by('-id')
 
 
 class DetailView(generic.DeleteView):

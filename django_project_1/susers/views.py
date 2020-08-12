@@ -4,12 +4,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 # from .models import Post, Choice
 from django.urls import reverse
 from django.views import generic
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import login, logout
 from .forms import UserForm
 from django.contrib.auth import authenticate
 from .forms import LoginForm
+from posts.models import User
 
 
 # def signup(request):
