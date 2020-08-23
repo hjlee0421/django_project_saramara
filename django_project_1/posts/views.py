@@ -28,19 +28,48 @@ class ResultsView(generic.DetailView):
     template_name = 'posts/results.html'
 
 
+# copy and change sara <> mara
+# add @login_required
 def sara_vote(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    Post.sara
 
-    # bring sara text field and change to list
+    user_id = request.session.get('user_id')
 
-    # add id to list
-    selected_choice.votes += 1
+    sara_str = post.sara
+    mara_str = post.mara
 
-    # change list to string
+    # check textfield is empty or not and create list
+    if not sara_str:
+        sara_list = sara_str.split(' ')
+    else:
+        sara_list = []
 
-    # save string to db
-    selected_choice.save()
+    if not mara_str:
+        mara_list = mara_str.split(' ')
+    else:
+        mara_list = []
+
+    if str(user_id) in sara_list:
+        # user_id in sara_str which means unvote for sara
+        sara_list.remove(str(user_id))
+
+    elif str(user_id) in mara_list:
+        # user_id in mara_list which means unvote for mara and vote for sara
+        mara_list.remove(str(user_id))
+        sara_list.append(str(user_id))
+
+    else:
+        # user_id not in both of sara or mara which means new
+        sara_list.append(str(user_id))
+
+    sara_cnt = len(sara_list)
+    mara_cnt = len(mara_list)
+
+    sara_str = ' '.join(sara_list)
+    mara_str = ' '.join(mara_list)
+
+    Post.sara = sara_str
+    Post.mara = mara_str
 
     # Always return an HttpResponseRedirect after successfully dealing
     # with POST data. This prevents data from being posted twice if a
