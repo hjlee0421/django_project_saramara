@@ -28,6 +28,27 @@ class ResultsView(generic.DetailView):
     template_name = 'posts/results.html'
 
 
+def sara_vote(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    Post.sara
+
+    # bring sara text field and change to list
+
+    # add id to list
+    selected_choice.votes += 1
+
+    # change list to string
+
+    # save string to db
+    selected_choice.save()
+
+    # Always return an HttpResponseRedirect after successfully dealing
+    # with POST data. This prevents data from being posted twice if a
+    # user hits the Back button.
+    return HttpResponseRedirect(reverse('posts:detail', args=(post.id,)))
+    # return HttpResponseRedirect(reverse('posts:results', args=(post.id,)))
+
+
 def vote(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     try:

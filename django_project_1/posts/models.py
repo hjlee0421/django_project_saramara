@@ -23,6 +23,8 @@ class Post(models.Model):
     link = models.CharField(max_length=128, default='NA', null=True)
     pup_date = models.DateTimeField(auto_now_add=True,
                                     verbose_name='date published')
+    sara = models.TextField(null=True)
+    mara = models.TextField(null=True)
     CATEGORY_CHOICES = (
         ('상의', '상의'),
         ('하의', '하의'),
