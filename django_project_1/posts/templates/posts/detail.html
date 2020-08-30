@@ -11,28 +11,30 @@
 <br />
 <!--        작성한 내용을 container 라는 div 안에 담아서 표현-->
 <div>
-  <h1>사진들</h1>
+  <h1>{{ post.title }}</h1>
   <br />
   <h1>사진들</h1>
   <br />
-  <h1>사진들</h1>
+  <h1>{{ post.category }}</h1>
   <br />
-  <h1>카테고리</h1>
+  <h1>{{ post.price }}</h1>
   <br />
-  <h1>브랜드</h1>
+  <h1>{{ post.brand }}</h1>
   <br />
-  <h1>가격</h1>
+  <h1>{{ post.link }}</h1>
   <br />
-  <h1>링크</h1>
-  <br />
-  <h1>고민하는 이유</h1>
+  <h1>{{ post.content }}</h1>
   <br />
   <h1>투표공간</h1>
-  <h1>{{ post.title }}</h1>
-  <h2>{{ post.content }}</h2>
 
+  <!-- bootstrp 써서 색깔? 같은거 하고, a:click 은 색깔 칠해진걸로 해서 투표 한걸 보이게끔 버튼 변경 css 부분 -->
   <button onclick="#" class="sarabtn">사라</button>
+  <h1>{{ post.sara_cnt }}</h1>
+  <br />
+
   <button onclick="#" class="marabtn">마라</button>
+  <h1>{{ post.mara_cnt }}</h1>
+  <br />
 
   {% if error_message %}
   <p><strong>{{ error_message }}</strong></p>
@@ -56,9 +58,7 @@
   <h1>투표결과</h1>
   <ul>
     {% for choice in post.choice_set.all %}
-    <li>
-      {{ choice.choice_text }} -- {{ choice.votes }}
-    </li>
+    <li>{{ choice.choice_text }} -- {{ choice.votes }}</li>
     {% endfor %}
   </ul>
 

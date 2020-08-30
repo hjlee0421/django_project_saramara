@@ -40,7 +40,12 @@ INSTALLED_APPS = [
     'posts',
     'polls',
     'susers',
+    # 'ckeditor',
+    # 'ckeditor_uploader',
 ]
+
+# KEDITOR_UPLOAD_PATH = 'uploads/'
+# CKEDITOR_IMAGE_BACKEND = "pillow"
 
 AUTH_USER_MODEL = 'posts.User'
 

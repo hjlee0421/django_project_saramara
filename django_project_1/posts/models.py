@@ -23,8 +23,9 @@ class Post(models.Model):
     link = models.CharField(max_length=128, default='NA', null=True)
     pup_date = models.DateTimeField(auto_now_add=True,
                                     verbose_name='date published')
-    sara = models.TextField(null=True)
-    mara = models.TextField(null=True)
+    sara = models.TextField(blank=True, null=True)
+    mara = models.TextField(blank=True, null=True)
+
     CATEGORY_CHOICES = (
         ('상의', '상의'),
         ('하의', '하의'),
@@ -44,6 +45,18 @@ class Post(models.Model):
 
     def was_published_recently(self):
         return self.pup_date <= timezone.now() - datetime.timedelta(days=1)
+
+    def sara_cnt(self):
+        if self.sara is None:
+            return 0
+        else:
+            return len(self.sara.split(' '))
+
+    def mara_cnt(self):
+        if self.mara is None:
+            return 0
+        else:
+            return len(self.mara.split(' '))
 
     class Meta:
         ordering = ['-id']
