@@ -28,7 +28,10 @@
   <h1>투표공간</h1>
 
   <!-- bootstrp 써서 색깔? 같은거 하고, a:click 은 색깔 칠해진걸로 해서 투표 한걸 보이게끔 버튼 변경 css 부분 -->
-  <button onclick="#" class="sarabtn">사라</button>
+  {{user.username}}
+  <button onclick="location.href='?sara={{user.username}}';" class="sarabtn">
+    사라
+  </button>
   <h1>{{ post.sara_cnt }}</h1>
   <br />
 

@@ -20,9 +20,11 @@ class Post(models.Model):
     content = models.TextField()
     price = models.CharField(max_length=128, default='NA', null=True)
     brand = models.CharField(max_length=128, default='NA', null=True)
-    link = models.CharField(max_length=128, default='NA', null=True)
+    link = models.CharField(
+        max_length=128, blank=True, null=True)
     pup_date = models.DateTimeField(auto_now_add=True,
                                     verbose_name='date published')
+    # blank = ui에서 빈칸 from valid check, null 은 db에서 빈값을 받는 개념
     sara = models.TextField(blank=True, null=True)
     mara = models.TextField(blank=True, null=True)
 

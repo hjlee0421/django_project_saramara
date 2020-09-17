@@ -18,14 +18,33 @@ class IndexView(generic.ListView):
         return Post.objects.all()  # .order_by('-id')
 
 
-class DetailView(generic.DeleteView):
+class DetailView(generic.DetailView):
     model = Post
     template_name = 'posts/detail.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        # import pdb
+        # pdb.set_trace()
+        if len(request.get_full_path().split('?')) == 1:
+            pass
+        elif len(request.get_full_path().split('?')) == 2:
+            print("sara clicked")
+            self.funcname()
+        return self.render_to_response(context)
+
+    def funcname(self):
+        print("funcname")
 
 
 class ResultsView(generic.DetailView):
     model = Post
     template_name = 'posts/results.html'
+
+
+# action을 눌렀을때 무언가가 호출이 된다
+# 링크를 누르면 어떤 함수가 호출이 된다
 
 
 # copy and change sara <> mara
@@ -158,10 +177,13 @@ def mypage(request):
 def ask(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
+        # import pdb
+        # pdb.set_trace()
         if form.is_valid():
             user_id = request.session.get('user_id')
             suser = User.objects.get(pk=user_id)
             post = Post()
+
             post.title = form.cleaned_data['title']
             post.brand = form.cleaned_data['brand']
             post.price = form.cleaned_data['price']
