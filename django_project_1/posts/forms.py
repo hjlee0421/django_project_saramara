@@ -5,6 +5,7 @@ from django import forms
 # stackoverflow 적용
 
 # https://stackoverflow.com/a/30403969
+# required=False
 
 
 class PostForm(forms.Form):

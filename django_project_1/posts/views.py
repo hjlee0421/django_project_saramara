@@ -22,6 +22,7 @@ class DetailView(generic.DetailView):
     model = Post
     template_name = 'posts/detail.html'
 
+    # get 이라는 함수는 html call 이랑 연관이 있고, 여기에 코드를 추가해줌으로 url을 get 할때 정보를 관리한다?
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
@@ -36,6 +37,17 @@ class DetailView(generic.DetailView):
 
     def funcname(self):
         print("funcname")
+
+        # Post.objects.all()
+        # post = Post.objects.first()
+        # post
+        # post.title
+        # post.link
+        # post.sara
+        # post.title ='???'
+        # post.save()
+        # 위 방식을 통해서 db에 저장
+        # request의 url 을 통해서 확인하고 post 통해서 db update
 
 
 class ResultsView(generic.DetailView):
