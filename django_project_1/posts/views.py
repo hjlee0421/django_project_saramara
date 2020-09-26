@@ -26,19 +26,34 @@ class DetailView(generic.DetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
+        # print(context)
         # import pdb
         # pdb.set_trace()
         if len(request.get_full_path().split('?')) == 1:
             pass
         elif len(request.get_full_path().split('?')) == 2:
-            print("sara clicked")
-            self.funcname()
+            if request.get_full_path().split('?')[1].split('=')[0] == 'sara':
+                print("sara clicked")
+                self.funcname()
+                user_name = request.get_full_path().split('?')[1].split('=')[1]
+                self.sara_vote(user_name)
+            elif request.get_full_path().split('?')[1].split('=')[0] == 'mara':
+                print("mara clicked")
+                self.funcname()
+                user_name = request.get_full_path().split('?')[1].split('=')[1]
+                self.mara_vote(user_name)
+
         return self.render_to_response(context)
+        # return HttpResponseRedirect(reverse('posts:detail', args=(self.object.id,)))
 
     def funcname(self):
-        print("funcname")
-
-        # Post.objects.all()
+        # print("funcname")
+        # print(self.object.title)
+        post = self.object
+        print(post.title)
+        # print(self.object.link)
+        # print(not self.object.sara)
+        # Post.objects
         # post = Post.objects.first()
         # post
         # post.title
@@ -48,6 +63,107 @@ class DetailView(generic.DetailView):
         # post.save()
         # 위 방식을 통해서 db에 저장
         # request의 url 을 통해서 확인하고 post 통해서 db update
+
+    def sara_vote(self, user_name):
+
+        post = self.object
+
+        user_name = user_name
+
+        sara_str = post.sara
+        print('sara str')
+        print(sara_str)
+
+        mara_str = post.mara
+        print('mara str')
+        print(mara_str)
+
+        if sara_str is None:
+            sara_list = []
+        else:
+            sara_list = sara_str.split(' ')
+
+        # if not sara_str:
+        #     sara_list = sara_str.split(' ')
+        # else:
+        #     sara_list = []
+
+        if mara_str is None:
+            mara_list = []
+        else:
+            mara_list = mara_str.split(' ')
+
+        if user_name in sara_list:
+            # user_id in sara_str which means unvote for sara
+            sara_list.remove(user_name)
+
+        elif user_name in mara_list:
+            # user_id in mara_list which means unvote for mara and vote for sara
+            mara_list.remove(user_name)
+            sara_list.append(user_name)
+
+        else:
+            # user_id not in both of sara or mara which means new
+            sara_list.append(user_name)
+
+        post.sara_cnt = len(sara_list)
+        post.mara_cnt = len(mara_list)
+
+        sara_str = ' '.join(sara_list)
+        mara_str = ' '.join(mara_list)
+
+        post.sara = sara_str
+        post.mara = mara_str
+
+        post.save()
+
+    def mara_vote(self, user_name):
+
+        post = self.object
+
+        user_name = user_name
+
+        mara_str = post.mara
+        print('mara str')
+        print(mara_str)
+
+        sara_str = post.sara
+        print('sara str')
+        print(sara_str)
+
+        if mara_str is None:
+            mara_list = []
+        else:
+            mara_list = mara_str.split(' ')
+
+        if sara_str is None:
+            sara_list = []
+        else:
+            sara_list = sara_str.split(' ')
+
+        if user_name in mara_list:
+            # user_id in sara_str which means unvote for sara
+            mara_list.remove(user_name)
+
+        elif user_name in sara_list:
+            # user_id in mara_list which means unvote for mara and vote for sara
+            sara_list.remove(user_name)
+            mara_list.append(user_name)
+
+        else:
+            # user_id not in both of sara or mara which means new
+            mara_list.append(user_name)
+
+        post.mara_cnt = len(mara_list)
+        post.sara_cnt = len(sara_list)
+
+        mara_str = ' '.join(mara_list)
+        sara_str = ' '.join(sara_list)
+
+        post.mara = mara_str
+        post.sara = sara_str
+
+        post.save()
 
 
 class ResultsView(generic.DetailView):
@@ -185,7 +301,7 @@ def mypage(request):
     return render(request, 'posts/mypage.html')
 
 
-@login_required
+@ login_required
 def ask(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
