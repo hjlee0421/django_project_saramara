@@ -84,11 +84,6 @@ class DetailView(generic.DetailView):
         print('mara list before')
         print(mara_list)
 
-        if '' in sara_list:
-            sara_list.remove('')
-        if '' in mara_list:
-            mara_list.remove('')
-
         if user_name in sara_list:
             print("1번 콜")
             # user_id in sara_str which means unvote for sara
@@ -150,11 +145,6 @@ class DetailView(generic.DetailView):
             sara_list = []
         else:
             sara_list = sara_str.split(' ')
-
-        if '' in mara_list:
-            mara_list.remove('')
-        if '' in sara_list:
-            sara_list.remove('')
 
         if user_name in mara_list:
             # user_id in sara_str which means unvote for sara

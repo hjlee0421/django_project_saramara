@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'posts',
     'polls',
     'susers',
+    'bootstrap_modal_forms',
     # 'ckeditor',
     # 'ckeditor_uploader',
 ]

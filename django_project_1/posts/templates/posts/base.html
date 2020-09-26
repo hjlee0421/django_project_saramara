@@ -27,6 +27,7 @@
     <script src="myScript1.js"></script>
     <script src="demo.js"></script>
 
+
     <!--    jquery hide p-->
     <script>
       $(document).ready(function () {
@@ -104,10 +105,17 @@
       <div class="dropdown">
         <button onclick="myFunction()" class="dropbtn"></button>
         <div id="myDropdown" class="dropdown-content">
+          {% if user.is_authenticated %}
           <a href="{% url 'posts:mypage' %}">마이페이지</a>
           <div class="dropdown-divider"></div>
           <a href="{% url 'posts:ask' %}">질문하기</a>
           <a href="{% url 'posts:index' %}">답해주기</a>
+          {% else %}
+          <a href="{% url 'susers:signin' %}">마이페이지</a>
+          <div class="dropdown-divider"></div>
+          <a href="{% url 'susers:signin' %}">질문하기</a>
+          <a href="{% url 'posts:index' %}">답해주기</a>
+          {% endif %}
         </div>
       </div>
       <!--        floating button nav-->

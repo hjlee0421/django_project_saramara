@@ -51,13 +51,14 @@ def signup(request):
 
 
 def home(request):
-    user_id = request.session.get('user_id')
+    # user_id = request.session.get('user_id')
 
-    if user_id:
-        suser = User.objects.get(pk=user_id)
-        return HttpResponse(suser.username)
+    # if user_id:
+    #     suser = User.objects.get(pk=user_id)
+    #     return HttpResponse(suser.username)
 
-    return HttpResponse(suser.username)
+    # return HttpResponse(suser.username)
+    return redirect('/posts/')
 
 
 def signout(request):
