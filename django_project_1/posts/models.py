@@ -27,6 +27,8 @@ class Post(models.Model):
     # blank = ui에서 빈칸 from valid check, null 은 db에서 빈값을 받는 개념
     sara = models.TextField(blank=True, null=True)
     mara = models.TextField(blank=True, null=True)
+    sara_cnt = models.IntegerField(default=0)
+    mara_cnt = models.IntegerField(default=0)
 
     CATEGORY_CHOICES = (
         ('상의', '상의'),
@@ -48,17 +50,18 @@ class Post(models.Model):
     def was_published_recently(self):
         return self.pup_date <= timezone.now() - datetime.timedelta(days=1)
 
-    def sara_cnt(self):
-        if self.sara is None:
-            return 0
-        else:
-            return len(self.sara.split(' '))
+    # def sara_cnt(self):
+    #     if self.sara is None:
+    #         return 0
+    #     else:
 
-    def mara_cnt(self):
-        if self.mara is None:
-            return 0
-        else:
-            return len(self.mara.split(' '))
+    #         return len(self.sara.split(' ').remove(''))
+
+    # def mara_cnt(self):
+    #     if self.mara is None:
+    #         return 0
+    #     else:
+    #         return len(self.mara.split(' ').remove(''))
 
     class Meta:
         ordering = ['-id']

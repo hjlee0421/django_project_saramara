@@ -30,36 +30,26 @@ class DetailView(generic.DetailView):
         # import pdb
         # pdb.set_trace()
         if len(request.get_full_path().split('?')) == 1:
+            print('sara str')
+            print(self.object.sara)
+            print(self.object.sara_cnt)
+            print('mara str')
+            print(self.object.mara)
+            print(self.object.mara_cnt)
             pass
         elif len(request.get_full_path().split('?')) == 2:
             if request.get_full_path().split('?')[1].split('=')[0] == 'sara':
                 print("sara clicked")
-                self.funcname()
                 user_name = request.get_full_path().split('?')[1].split('=')[1]
                 self.sara_vote(user_name)
             elif request.get_full_path().split('?')[1].split('=')[0] == 'mara':
                 print("mara clicked")
-                self.funcname()
                 user_name = request.get_full_path().split('?')[1].split('=')[1]
                 self.mara_vote(user_name)
 
         return self.render_to_response(context)
         # return HttpResponseRedirect(reverse('posts:detail', args=(self.object.id,)))
 
-    def funcname(self):
-        # print("funcname")
-        # print(self.object.title)
-        post = self.object
-        print(post.title)
-        # print(self.object.link)
-        # print(not self.object.sara)
-        # Post.objects
-        # post = Post.objects.first()
-        # post
-        # post.title
-        # post.link
-        # post.sara
-        # post.title ='???'
         # post.save()
         # 위 방식을 통해서 db에 저장
         # request의 url 을 통해서 확인하고 post 통해서 db update
@@ -83,28 +73,48 @@ class DetailView(generic.DetailView):
         else:
             sara_list = sara_str.split(' ')
 
-        # if not sara_str:
-        #     sara_list = sara_str.split(' ')
-        # else:
-        #     sara_list = []
-
         if mara_str is None:
             mara_list = []
         else:
             mara_list = mara_str.split(' ')
 
+        print('sara list before')
+        print(sara_list)
+
+        print('mara list before')
+        print(mara_list)
+
+        if '' in sara_list:
+            sara_list.remove('')
+        if '' in mara_list:
+            mara_list.remove('')
+
         if user_name in sara_list:
+            print("1번 콜")
             # user_id in sara_str which means unvote for sara
             sara_list.remove(user_name)
 
         elif user_name in mara_list:
+            print("2번 콜")
             # user_id in mara_list which means unvote for mara and vote for sara
             mara_list.remove(user_name)
             sara_list.append(user_name)
 
         else:
+            print("3번 콜")
             # user_id not in both of sara or mara which means new
             sara_list.append(user_name)
+
+        if '' in sara_list:
+            sara_list.remove('')
+        if '' in mara_list:
+            mara_list.remove('')
+
+        print('sara list after')
+        print(sara_list)
+
+        print('mara list after')
+        print(mara_list)
 
         post.sara_cnt = len(sara_list)
         post.mara_cnt = len(mara_list)
@@ -141,6 +151,11 @@ class DetailView(generic.DetailView):
         else:
             sara_list = sara_str.split(' ')
 
+        if '' in mara_list:
+            mara_list.remove('')
+        if '' in sara_list:
+            sara_list.remove('')
+
         if user_name in mara_list:
             # user_id in sara_str which means unvote for sara
             mara_list.remove(user_name)
@@ -153,6 +168,11 @@ class DetailView(generic.DetailView):
         else:
             # user_id not in both of sara or mara which means new
             mara_list.append(user_name)
+
+        if '' in mara_list:
+            mara_list.remove('')
+        if '' in sara_list:
+            sara_list.remove('')
 
         post.mara_cnt = len(mara_list)
         post.sara_cnt = len(sara_list)
