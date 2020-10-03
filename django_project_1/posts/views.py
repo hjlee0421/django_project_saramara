@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
-from .models import Post, Choice
+from .models import Post  # , Choice
 from django.urls import reverse
 from django.views import generic
 from .forms import PostForm
@@ -232,7 +232,8 @@ def sara_vote(request, post_id):
     # Always return an HttpResponseRedirect after successfully dealing
     # with POST data. This prevents data from being posted twice if a
     # user hits the Back button.
-    return HttpResponseRedirect(reverse('posts:detail', args=(post.id,)))
+    return HttpResponseRedirect(self.request.path_info)
+    # return HttpResponseRedirect('<int:pk>', args=(post.id,))
     # return HttpResponseRedirect(reverse('posts:results', args=(post.id,)))
 
 
@@ -283,28 +284,29 @@ def mara_vote(request, post_id):
     # Always return an HttpResponseRedirect after successfully dealing
     # with POST data. This prevents data from being posted twice if a
     # user hits the Back button.
-    return HttpResponseRedirect(reverse('posts:detail', args=(post.id,)))
+    return HttpResponseRedirect(self.request.path_info)
+    # return HttpResponseRedirect('<int:pk>', args=(post.id,))
     # return HttpResponseRedirect(reverse('posts:results', args=(post.id,)))
 
 
-def vote(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
-    try:
-        selected_choice = post.choice_set.get(pk=request.POST['choice'])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the post voting form.
-        return render(request, 'posts/detail.html', {
-            'post': post,
-            'error_message': "You didn't select a choice.",
-        })
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse('posts:detail', args=(post.id,)))
-        # return HttpResponseRedirect(reverse('posts:results', args=(post.id,)))
+# def vote(request, post_id):
+#     post = get_object_or_404(Post, pk=post_id)
+#     try:
+#         selected_choice = post.choice_set.get(pk=request.POST['choice'])
+#     except (KeyError, Choice.DoesNotExist):
+#         # Redisplay the post voting form.
+#         return render(request, 'posts/detail.html', {
+#             'post': post,
+#             'error_message': "You didn't select a choice.",
+#         })
+#     else:
+#         selected_choice.votes += 1
+#         selected_choice.save()
+#         # Always return an HttpResponseRedirect after successfully dealing
+#         # with POST data. This prevents data from being posted twice if a
+#         # user hits the Back button.
+#         return HttpResponseRedirect(reverse('posts:detail', args=(post.id,)))
+#         # return HttpResponseRedirect(reverse('posts:results', args=(post.id,)))
 
 
 def mypage(request):
@@ -318,7 +320,11 @@ def ask(request):
         # import pdb
         # pdb.set_trace()
         if form.is_valid():
-            user_id = request.session.get('user_id')
+            # import pdb
+            # pdb.set_trace()
+            # user_id = request.session.get('user_id')
+            user_id = request.session.get('_auth_user_id')
+            print(user_id)
             suser = User.objects.get(pk=user_id)
             post = Post()
 
@@ -330,9 +336,9 @@ def ask(request):
 
             post.author = suser
             post.save()
-            return redirect('/posts/')
+            return redirect('/')
         else:
-            return redirect('/posts/')
+            return redirect('/')
     else:
         form = PostForm()
 

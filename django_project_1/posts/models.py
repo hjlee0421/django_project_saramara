@@ -67,16 +67,16 @@ class Post(models.Model):
         ordering = ['-id']
 
 
-class Choice(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    SARAMARA_CHOICES = (
-        ('사라', '사라'),
-        ('마라', '마라'),
-    )
-    choice_text = models.CharField(
-        max_length=128, choices=SARAMARA_CHOICES, default='사라', null=False)
-    # choice_text = models.CharField(max_length=200, default=["사라", "마라"])
-    votes = models.IntegerField(default=0)
+# class Choice(models.Model):
+#     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+#     SARAMARA_CHOICES = (
+#         ('사라', '사라'),
+#         ('마라', '마라'),
+#     )
+#     choice_text = models.CharField(
+#         max_length=128, choices=SARAMARA_CHOICES, default='사라', null=False)
+#     # choice_text = models.CharField(max_length=200, default=["사라", "마라"])
+#     votes = models.IntegerField(default=0)
 
-    def __str__(self):
-        return self.choice_text
+#     def __str__(self):
+#         return self.choice_text

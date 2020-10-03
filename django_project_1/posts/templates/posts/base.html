@@ -29,13 +29,13 @@
 
 
     <!--    jquery hide p-->
-    <script>
+    <!-- <script>
       $(document).ready(function () {
         $("p").click(function () {
           $(this).hide();
         });
       });
-    </script>
+    </script> -->
 
     <!--    <script type="text/javascript">-->
     <!--        $(document).ready(function() {-->
@@ -86,7 +86,7 @@
         >
         <p style="float: right;">
             <div style="font-size: 2rem; color: green; display: inline; float: right;">Welcome, {{ user.username }}
-                <small>(<a href="{% url 'susers:signout' %}">Logout</a>)</small>
+                <small>(<a href="{% url 'susers:signout' %}">LogOut</a>)</small>
                 &nbsp;&nbsp;
             </div>
         </p>
@@ -95,7 +95,7 @@
           <a class="btn btn-default" href="{% url 'susers:signup' %}"
             >Sign up</a
           >
-          <a class="btn btn-default" href="{% url 'susers:signin' %}">Login</a>
+          <a class="btn btn-default" href="{% url 'susers:signin' %}">SignIn</a>
         </div>
         {% endif %}
       </header>

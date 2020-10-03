@@ -15,12 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from susers.views import home
 
 urlpatterns = [
-    path('posts/', include('posts.urls', namespace='posts')),
-    path('polls/', include('polls.urls', namespace='polls')),
-    path('susers/', include('susers.urls', namespace='susers')),
     path('admin/', admin.site.urls),
-    path('', home),
+    path('', include('posts.urls', namespace='posts')),
+    path('', include('susers.urls', namespace='susers')),
 ]

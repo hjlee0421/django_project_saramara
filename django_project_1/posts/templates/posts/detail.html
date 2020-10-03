@@ -42,32 +42,6 @@
   <h1>{{ post.mara_cnt }}</h1>
   <br />
 
-  {% if error_message %}
-  <p><strong>{{ error_message }}</strong></p>
-  {% endif %}
-
-  <form action="{% url 'posts:vote' post.id %}" method="post">
-    {% csrf_token %} {% for choice in post.choice_set.all %}
-    <input
-      type="radio"
-      name="choice"
-      id="choice{{ forloop.counter }}"
-      value="{{ choice.id }}"
-    />
-    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label
-    ><br />
-    {% endfor %}
-    <input type="submit" value="Vote" />
-  </form>
-  <br />
-
-  <h1>투표결과</h1>
-  <ul>
-    {% for choice in post.choice_set.all %}
-    <li>{{ choice.choice_text }} -- {{ choice.votes }}</li>
-    {% endfor %}
-  </ul>
-
   <br />
   <h1>공유하기</h1>
 </div>

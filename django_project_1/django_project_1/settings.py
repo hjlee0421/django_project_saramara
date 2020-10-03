@@ -38,9 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'posts',
-    'polls',
+    # 'polls',
     'susers',
-    'bootstrap_modal_forms',
+    # 'bootstrap_modal_forms',
     # 'ckeditor',
     # 'ckeditor_uploader',
 ]

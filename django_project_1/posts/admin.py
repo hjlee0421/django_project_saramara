@@ -1,18 +1,18 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Post, Choice, User
+from .models import Post, User  # Choice,
 
 # Register your models here.
 
 
-class ChoiceInline(admin.TabularInline):
-    model = Choice
-    extra = 2
+# class ChoiceInline(admin.TabularInline):
+#     model = Choice
+#     extra = 2
 
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ('author', 'title')
-    inlines = [ChoiceInline]
+    # inlines = [ChoiceInline]
 
 
 admin.site.register(Post, PostAdmin)
