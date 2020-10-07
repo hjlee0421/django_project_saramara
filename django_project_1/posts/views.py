@@ -23,6 +23,7 @@ class DetailView(generic.DetailView):
     template_name = 'posts/detail.html'
 
     # get 이라는 함수는 html call 이랑 연관이 있고, 여기에 코드를 추가해줌으로 url을 get 할때 정보를 관리한다?
+    # TO-DO : 추후에는 POST 방식으로 데이터를 변경을 한다.
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
@@ -333,6 +334,11 @@ def ask(request):
             post.price = form.cleaned_data['price']
             post.link = form.cleaned_data['link']
             post.content = form.cleaned_data['content']
+            post.ckcontent = form.cleaned_data['ckcontent']
+
+            # TO-DO : 위 코드를 통해서 추가가 되는 구조는 좋은 구조가 아니다
+            # TO-DO : CKEDITOR와 기본 제목 들을 시각적으로 표현 가능하면 알아보기
+            # TO-DO : POST GET PATCH DELETE  연산에 대해서 공부하기
 
             post.author = suser
             post.save()
@@ -343,3 +349,5 @@ def ask(request):
         form = PostForm()
 
     return render(request, 'posts/item_ask.html', {'form': form})
+
+# js 동적인 내용 표현

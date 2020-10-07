@@ -1,40 +1,21 @@
-{% extends 'posts/base.html' %} {% block content %}
+{% extends 'posts/base.html' %} {% block content %} {% load static %}
+<script
+  type="text/javascript"
+  src="{% static 'ckeditor/ckeditor-init.js' %}"
+></script>
+<script
+  type="text/javascript"
+  src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"
+></script>
+
 <br />
 <div class="ask-wrap">
   <h1>질문하기</h1>
-  <br />
   <form method="POST" action=".">
-    {% csrf_token %} {% for field in form %}
-    <div class="form-group">
-      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-      <input
-        type="{{ field.field.widget.input_type }}"
-        class="form-control"
-        id="{{ field.id_for_label }}"
-        placeholder="{{ field.label }}"
-        name="{{ field.name }}"
-      />
-    </div>
-    {% if field.errors %}
-    <span style="color: red;">{{ field.errors }}</span>
-    {% endif %} {% endfor %}
-
-    <div class="custom-select">
-      <select>
-        <option value="0">category(FORM! add js w3 howto_custom_select)</option>
-        <option value="1">상의</option>
-        <option value="2">하의</option>
-        <option value="3">신발</option>
-        <option value="4">가방</option>
-        <option value="5">악세서리</option>
-      </select>
-    </div>
-    <br />
-    <!--surround the select box with a "custom-select" DIV element. Remember to set the width:-->
-    <input type="file" name="filefield" multiple="multiple" />
-    <br />
+    {% csrf_token %} {{ form.media }} {{ form.as_p }}
     <button type="submit" class="btn btn-primary">사라마라 질문하기</button>
   </form>
+  <br />
   <br />
 </div>
 

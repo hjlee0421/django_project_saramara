@@ -5,6 +5,9 @@ from django.utils import timezone
 from datetime import datetime
 from django.contrib.auth.models import AbstractUser
 
+from ckeditor.fields import RichTextField
+
+
 # Create your models here.
 
 
@@ -29,6 +32,7 @@ class Post(models.Model):
     mara = models.TextField(blank=True, null=True)
     sara_cnt = models.IntegerField(default=0)
     mara_cnt = models.IntegerField(default=0)
+    ckcontent = RichTextField(blank=True, null=True)
 
     CATEGORY_CHOICES = (
         ('상의', '상의'),
@@ -43,6 +47,7 @@ class Post(models.Model):
     # content2 = models.TextField(default=None)
     # author = models.ForeignKey(User) 		# 비추
     # author = models.ForeignKey('auth.User') # 비추
+    # TO-DO:
 
     def __str__(self):
         return self.title

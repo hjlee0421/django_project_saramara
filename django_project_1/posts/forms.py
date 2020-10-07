@@ -1,4 +1,5 @@
 from django import forms
+from ckeditor.widgets import CKEditorWidget
 
 # 여기에 field 넣어주면 무조건 넣어야 하는 필드값으로 인식
 
@@ -18,3 +19,4 @@ class PostForm(forms.Form):
     link = forms.CharField(max_length=128, label='링크', required=False)
     content = forms.CharField(
         error_messages={'required': '내용을 입력하세요'}, widget=forms.Textarea, label='내용')
+    ckcontent = forms.CharField(widget=CKEditorWidget())
