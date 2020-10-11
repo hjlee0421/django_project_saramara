@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Post  # , Choice
 from django.urls import reverse
 from django.views import generic
+from django.views.generic.edit import FormMixin
 from .forms import PostForm
 # from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -18,15 +19,28 @@ class IndexView(generic.ListView):
         return Post.objects.all()  # .order_by('-id')
 
 
-class DetailView(generic.DetailView):
+class DetailView(generic.DetailView, FormMixin):
     model = Post
     template_name = 'posts/detail.html'
 
     # get 이라는 함수는 html call 이랑 연관이 있고, 여기에 코드를 추가해줌으로 url을 get 할때 정보를 관리한다?
     # TO-DO : 추후에는 POST 방식으로 데이터를 변경을 한다.
+
+    # https://stackoverflow.com/questions/36950416/when-to-use-get-get-queryset-get-context-data-in-django
+    # https://stackoverflow.com/questions/16668441/django-get-and-post-handling-methods
+    # https://docs.djangoproject.com/en/3.1/topics/class-based-views/mixins/
+    # a better solution 부분
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        print('???')
+        return HttpResponse('This is POST request')
+
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
+        print('?')
         # print(context)
         # import pdb
         # pdb.set_trace()
