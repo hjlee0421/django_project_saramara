@@ -31,15 +31,21 @@ class DetailView(generic.DetailView, FormMixin):
     # https://docs.djangoproject.com/en/3.1/topics/class-based-views/mixins/
     # a better solution 부분
 
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
-        print('???')
-        return HttpResponse('This is POST request')
+    # def post(self, request, *args, **kwargs):
+    #     self.object = self.get_object()
+    #     context = self.get_context_data(object=self.object)
+    #     print('???')
+    #     return HttpResponse('This is POST request')
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
+        print(type(self.object))
+        print(self.object.__dict__.keys())
+        print(self.object.content)
+
+        # TO-DO : 여기에 그냥 form=PostForm 을 넣어주는게 맞는건가???
+        context = self.get_context_data(object=self.object, form=PostForm)
+
         print('?')
         # print(context)
         # import pdb
@@ -62,7 +68,7 @@ class DetailView(generic.DetailView, FormMixin):
                 user_name = request.get_full_path().split('?')[1].split('=')[1]
                 self.mara_vote(user_name)
 
-        return self.render_to_response(context)
+        return self.render_to_response(context)  # context
         # return HttpResponseRedirect(reverse('posts:detail', args=(self.object.id,)))
 
         # post.save()
@@ -203,51 +209,51 @@ class ResultsView(generic.DetailView):
 # copy and change sara <> mara
 # ADD LOGIN STEP
 # add @login_required
-def sara_vote(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
+# def sara_vote(request, post_id):
+#     post = get_object_or_404(Post, pk=post_id)
 
-    user_id = request.session.get('user_id')
+#     user_id = request.session.get('user_id')
 
-    sara_str = post.sara
-    mara_str = post.mara
+#     sara_str = post.sara
+#     mara_str = post.mara
 
-    # check textfield is empty or not and create list
-    if not sara_str:
-        sara_list = sara_str.split(' ')
-    else:
-        sara_list = []
+#     # check textfield is empty or not and create list
+#     if not sara_str:
+#         sara_list = sara_str.split(' ')
+#     else:
+#         sara_list = []
 
-    if not mara_str:
-        mara_list = mara_str.split(' ')
-    else:
-        mara_list = []
+#     if not mara_str:
+#         mara_list = mara_str.split(' ')
+#     else:
+#         mara_list = []
 
-    if str(user_id) in sara_list:
-        # user_id in sara_str which means unvote for sara
-        sara_list.remove(str(user_id))
+#     if str(user_id) in sara_list:
+#         # user_id in sara_str which means unvote for sara
+#         sara_list.remove(str(user_id))
 
-    elif str(user_id) in mara_list:
-        # user_id in mara_list which means unvote for mara and vote for sara
-        mara_list.remove(str(user_id))
-        sara_list.append(str(user_id))
+#     elif str(user_id) in mara_list:
+#         # user_id in mara_list which means unvote for mara and vote for sara
+#         mara_list.remove(str(user_id))
+#         sara_list.append(str(user_id))
 
-    else:
-        # user_id not in both of sara or mara which means new
-        sara_list.append(str(user_id))
+#     else:
+#         # user_id not in both of sara or mara which means new
+#         sara_list.append(str(user_id))
 
-    sara_cnt = len(sara_list)
-    mara_cnt = len(mara_list)
+#     sara_cnt = len(sara_list)
+#     mara_cnt = len(mara_list)
 
-    sara_str = ' '.join(sara_list)
-    mara_str = ' '.join(mara_list)
+#     sara_str = ' '.join(sara_list)
+#     mara_str = ' '.join(mara_list)
 
-    Post.sara = sara_str
-    Post.mara = mara_str
+#     Post.sara = sara_str
+#     Post.mara = mara_str
 
-    # Always return an HttpResponseRedirect after successfully dealing
-    # with POST data. This prevents data from being posted twice if a
-    # user hits the Back button.
-    return HttpResponseRedirect(self.request.path_info)
+#     # Always return an HttpResponseRedirect after successfully dealing
+#     # with POST data. This prevents data from being posted twice if a
+#     # user hits the Back button.
+#     return HttpResponseRedirect(self.request.path_info)
     # return HttpResponseRedirect('<int:pk>', args=(post.id,))
     # return HttpResponseRedirect(reverse('posts:results', args=(post.id,)))
 
@@ -255,51 +261,51 @@ def sara_vote(request, post_id):
 # copy and change sara <> mara
 # ADD LOGIN STEP
 # add @login_required
-def mara_vote(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
+# def mara_vote(request, post_id):
+#     post = get_object_or_404(Post, pk=post_id)
 
-    user_id = request.session.get('user_id')
+#     user_id = request.session.get('user_id')
 
-    mara_str = post.mara
-    sara_str = post.sara
+#     mara_str = post.mara
+#     sara_str = post.sara
 
-    # check textfield is empty or not and create list
-    if not mara_str:
-        mara_list = mara_str.split(' ')
-    else:
-        mara_list = []
+#     # check textfield is empty or not and create list
+#     if not mara_str:
+#         mara_list = mara_str.split(' ')
+#     else:
+#         mara_list = []
 
-    if not sara_str:
-        sara_list = sara_str.split(' ')
-    else:
-        sara_list = []
+#     if not sara_str:
+#         sara_list = sara_str.split(' ')
+#     else:
+#         sara_list = []
 
-    if str(user_id) in mara_list:
-        # user_id in mara_str which means unvote for mara
-        mara_list.remove(str(user_id))
+#     if str(user_id) in mara_list:
+#         # user_id in mara_str which means unvote for mara
+#         mara_list.remove(str(user_id))
 
-    elif str(user_id) in sara_list:
-        # user_id in sara_list which means unvote for sara and vote for mara
-        sara_list.remove(str(user_id))
-        mara_list.append(str(user_id))
+#     elif str(user_id) in sara_list:
+#         # user_id in sara_list which means unvote for sara and vote for mara
+#         sara_list.remove(str(user_id))
+#         mara_list.append(str(user_id))
 
-    else:
-        # user_id not in both of mara or sara which means new
-        mara_list.append(str(user_id))
+#     else:
+#         # user_id not in both of mara or sara which means new
+#         mara_list.append(str(user_id))
 
-    mara_cnt = len(mara_list)
-    sara_cnt = len(sara_list)
+#     mara_cnt = len(mara_list)
+#     sara_cnt = len(sara_list)
 
-    mara_str = ' '.join(mara_list)
-    sara_str = ' '.join(sara_list)
+#     mara_str = ' '.join(mara_list)
+#     sara_str = ' '.join(sara_list)
 
-    Post.mara = mara_str
-    Post.sara = sara_str
+#     Post.mara = mara_str
+#     Post.sara = sara_str
 
-    # Always return an HttpResponseRedirect after successfully dealing
-    # with POST data. This prevents data from being posted twice if a
-    # user hits the Back button.
-    return HttpResponseRedirect(self.request.path_info)
+#     # Always return an HttpResponseRedirect after successfully dealing
+#     # with POST data. This prevents data from being posted twice if a
+#     # user hits the Back button.
+#     return HttpResponseRedirect(self.request.path_info)
     # return HttpResponseRedirect('<int:pk>', args=(post.id,))
     # return HttpResponseRedirect(reverse('posts:results', args=(post.id,)))
 

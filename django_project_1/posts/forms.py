@@ -17,6 +17,6 @@ class PostForm(forms.Form):
     price = forms.CharField(
         error_messages={'required': '가격을 입력하세요'}, max_length=128, label='가격')
     link = forms.CharField(max_length=128, label='링크', required=False)
-    # content = forms.CharField(
-    #     error_messages={'required': '내용을 입력하세요'}, widget=forms.Textarea, label='내용')
+    content = forms.CharField(
+        error_messages={'required': '내용을 입력하세요'}, widget=forms.Textarea, label='내용')
     ckcontent = forms.CharField(widget=CKEditorWidget())

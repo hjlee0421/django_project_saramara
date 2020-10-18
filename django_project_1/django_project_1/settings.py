@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'susers',
     # 'bootstrap_modal_forms',
     'ckeditor',
-    # 'ckeditor_uploader',
+    'ckeditor_uploader',
 ]
 
 # KEDITOR_UPLOAD_PATH = 'uploads/'
@@ -65,7 +65,9 @@ ROOT_URLCONF = 'django_project_1.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # 'DIRS': [],
+        # CKEDITOR
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,3 +132,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# CKEDITOR
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = 'media/'
