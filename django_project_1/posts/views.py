@@ -3,12 +3,23 @@ from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
 from .models import Post  # , Choice
 from django.urls import reverse
-from django.views import generic
+from django.views import generic, View
 from django.views.generic.edit import FormMixin
 from .forms import PostForm
 # from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .models import User
+
+# generic.ListView
+
+
+class PostView(View):
+    def post(self, request, *args, **kwargs):
+        pass
+    # post def 안에서 pdb 활용해서 뜯어보기
+    # base.py 에서 view class 를 바로 post 함수를 override 하게 되는 class
+    # list view 와 비슷하게
+    # url이 먼저 잘 연결되는지 확인하고 안에 채우기
 
 
 class IndexView(generic.ListView):
@@ -21,10 +32,14 @@ class IndexView(generic.ListView):
 
 class DetailView(generic.DetailView, FormMixin):
     model = Post
+    form_class = PostForm
     template_name = 'posts/detail.html'
 
     # get 이라는 함수는 html call 이랑 연관이 있고, 여기에 코드를 추가해줌으로 url을 get 할때 정보를 관리한다?
     # TO-DO : 추후에는 POST 방식으로 데이터를 변경을 한다.
+    # DETAIL VIEW VS LIST VIEW
+    # 게시글의 ID가 필요한게 DETAIL VIEW,  LIST VIEW 는 그러한 ID가 필요하지 않다.
+    # 명확한 게시글을 고르는 경우 DETAIL VIEW, 아닌 경우는 LIST VIEW
 
     # https://stackoverflow.com/questions/36950416/when-to-use-get-get-queryset-get-context-data-in-django
     # https://stackoverflow.com/questions/16668441/django-get-and-post-handling-methods
@@ -44,7 +59,9 @@ class DetailView(generic.DetailView, FormMixin):
         print(self.object.content)
 
         # TO-DO : 여기에 그냥 form=PostForm 을 넣어주는게 맞는건가???
-        context = self.get_context_data(object=self.object, form=PostForm)
+        # import pdb
+        # pdb.set_trace()
+        context = self.get_context_data(object=self.object)  # , form=PostForm)
 
         print('?')
         # print(context)
@@ -67,7 +84,9 @@ class DetailView(generic.DetailView, FormMixin):
                 print("mara clicked")
                 user_name = request.get_full_path().split('?')[1].split('=')[1]
                 self.mara_vote(user_name)
-
+        # import pdb
+        # pdb.set_trace()
+        context['comment'] = self.object.comment_set.all()
         return self.render_to_response(context)  # context
         # return HttpResponseRedirect(reverse('posts:detail', args=(self.object.id,)))
 
@@ -347,19 +366,20 @@ def ask(request):
             user_id = request.session.get('_auth_user_id')
             print(user_id)
             suser = User.objects.get(pk=user_id)
-            post = Post()
+            # post = Post()
 
-            post.title = form.cleaned_data['title']
-            post.brand = form.cleaned_data['brand']
-            post.price = form.cleaned_data['price']
-            post.link = form.cleaned_data['link']
-            post.content = form.cleaned_data['content']
-            post.ckcontent = form.cleaned_data['ckcontent']
+            # post.title = form.cleaned_data['title']
+            # post.brand = form.cleaned_data['brand']
+            # post.price = form.cleaned_data['price']
+            # post.link = form.cleaned_data['link']
+            # post.content = form.cleaned_data['content']
+            # post.ckcontent = form.cleaned_data['ckcontent']
 
             # TO-DO : 위 코드를 통해서 추가가 되는 구조는 좋은 구조가 아니다
             # TO-DO : CKEDITOR와 기본 제목 들을 시각적으로 표현 가능하면 알아보기
             # TO-DO : POST GET PATCH DELETE  연산에 대해서 공부하기
-
+            post = Post(**form.cleaned_data)
+            # TO-DO : 위 코드 하나로 다 해결함
             post.author = suser
             post.save()
             return redirect('/')

@@ -72,6 +72,14 @@ class Post(models.Model):
         ordering = ['-id']
 
 
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    text = models.CharField(max_length=200)
+
+# TO-DO : COMMENT MODEL 다시보기
+
 # class Choice(models.Model):
 #     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 #     SARAMARA_CHOICES = (

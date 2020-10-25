@@ -17,7 +17,7 @@
 <br />
 <!--        작성한 내용을 container 라는 div 안에 담아서 표현-->
 <div>
-  <h1>제목 : {{ post.title }}</h1>
+  <h1>제목 : {{ post.title }} </h1>
   <br />
   <p>카테고리 : {{ post.category }}</p>
   <br />
@@ -62,6 +62,10 @@
 <!--        댓글 공간-->
 <div>
   <h1>댓글창 with pagination</h1>
+  <!-- {{comment}} -->
+  {% for element in comment %}
+    {{element.text}} - {{element.author}} <br>
+  {% endfor %}
   <br />
   <br />
   <br />
