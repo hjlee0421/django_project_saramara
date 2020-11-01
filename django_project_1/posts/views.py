@@ -12,6 +12,8 @@ from .models import User
 
 # generic.ListView
 
+#
+
 
 class PostView(View):
     def post(self, request, *args, **kwargs):
