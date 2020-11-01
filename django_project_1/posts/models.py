@@ -13,9 +13,44 @@ from ckeditor.fields import RichTextField
 # class User(AbstractUser):
 
 
+# User 가 posts model꺼를 사용함
+'''
+In [15]: from posts.models import Post, Comment, User
+
+In [16]: User.objects.all()
+Out[16]: <QuerySet [<User: hjlee0421>, <User: testtesttest>]>
+
+In [17]: User.objects.first()
+Out[17]: <User: hjlee0421>
+
+In [18]: user = User.objects.first()
+
+In [19]: post
+Out[19]: <Post: 테스트2>
+
+In [20]: comment = Comment(post=post, author=user, text='comment text')
+
+In [21]: comment.save()
+
+In [22]: post.comment_set.all()
+Out[22]: <QuerySet [<Comment: Comment object (1)>]>
+
+In [23]: comment = Comment(post=post, author=user, text='comment text2')
+
+In [24]: comment.save()
+
+In [25]: post.comment_set.all()
+Out[25]: <QuerySet [<Comment: Comment object (1)>, <Comment: Comment object (2)>]>
+
+In [26]: 
+
+In [26]: exit
+'''
+
+
 class User(AbstractUser):
-    age = models.IntegerField(default=0)
     gender = models.IntegerField(default=0)
+    age = models.IntegerField(default=0)
 
 
 class Post(models.Model):
@@ -57,6 +92,9 @@ class Post(models.Model):
     def was_published_recently(self):
         return self.pup_date <= timezone.now() - datetime.timedelta(days=1)
 
+    class Meta:
+        ordering = ['-id']
+
     # def sara_cnt(self):
     #     if self.sara is None:
     #         return 0
@@ -69,9 +107,6 @@ class Post(models.Model):
     #         return 0
     #     else:
     #         return len(self.mara.split(' ').remove(''))
-
-    class Meta:
-        ordering = ['-id']
 
 
 class Comment(models.Model):
