@@ -9,16 +9,11 @@ from posts.models import User  # create new user
 from .forms import UserForm
 from .forms import LoginForm
 
+
 # def signup(request):
-#     if request.method == 'POST':
-#         form = UserForm(request.POST)
-#         if form.is_valid():
-#             new_user = User.objects.create_user(**form.cleaned_data)
-#             login(request, new_user)
-#             return redirect('/posts/')
-#     else:
-#         form = UserForm()
-#         return render(request, 'susers/register.html')
+# def signin(request):
+# def signout(request):
+# TODO : 1) def 형태를 class 형태로 다시 변경해주기 2) model 부분이 없는거 내용 확인하기
 
 
 def signup(request):
@@ -47,31 +42,6 @@ def signup(request):
         return render(request, 'susers/signup.html', res_data)
 
 
-# def home(request):
-#     # user_id = request.session.get('user_id')
-
-#     # if user_id:
-#     #     suser = User.objects.get(pk=user_id)
-#     #     return HttpResponse(suser.username)
-
-#     # return HttpResponse(suser.username)
-#     return redirect('/')
-
-
-def signout(request):
-    if request.session.get('user_id'):
-        del(request.session['user_id'])
-
-    logout(request)
-
-    return redirect('/')
-
-
-# def signout(request):
-#     logout(request)
-#     return redirect('/posts/')
-
-
 def signin(request):
     if request.method == "GET":
         return render(request, 'susers/signin.html')
@@ -95,6 +65,43 @@ def signin(request):
                 res_data['error'] = "비밀번호가 틀렸습니다."
 
     return render(request, 'susers/signin.html', res_data)
+
+
+def signout(request):
+    if request.session.get('user_id'):
+        del(request.session['user_id'])
+
+    logout(request)
+
+    return redirect('/')
+
+
+# def signup(request):
+#     if request.method == 'POST':
+#         form = UserForm(request.POST)
+#         if form.is_valid():
+#             new_user = User.objects.create_user(**form.cleaned_data)
+#             login(request, new_user)
+#             return redirect('/posts/')
+#     else:
+#         form = UserForm()
+#         return render(request, 'susers/register.html')
+
+
+# def home(request):
+#     # user_id = request.session.get('user_id')
+
+#     # if user_id:
+#     #     suser = User.objects.get(pk=user_id)
+#     #     return HttpResponse(suser.username)
+
+#     # return HttpResponse(suser.username)
+#     return redirect('/')
+
+
+# def signout(request):
+#     logout(request)
+#     return redirect('/posts/')
 
 
 # def signin(request):

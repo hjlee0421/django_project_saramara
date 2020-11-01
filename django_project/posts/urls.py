@@ -6,9 +6,8 @@ app_name = 'posts'
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path('<int:pk>/', views.DetailView.as_view(), name='detail'),
-    # path('/', views.PostView.as_view(), name='post'),   >> post 방식으로 투표를 하려면 이렇게 변경되는쪽으로 TO-D0
-    # path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
-    # path('<int:post_id>/votes/', views.vote, name='vote'),
+    # TODO : 현재 /pk/ 로 넘어가서 detail 페이지를 보여주는 view 부분을 아래처럼 변경해야 POST방식으로 사용 가능
+    # path('/', views.PostView.as_view(), name='post'), >> POST 방식으로 투표를 하려면 이렇게 변경 되야 함
     path('mypage/', views.mypage, name='mypage'),
     path('ask/', views.ask, name='ask'),
 ]

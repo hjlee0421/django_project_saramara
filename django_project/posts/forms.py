@@ -1,18 +1,7 @@
 from django import forms
 from ckeditor.widgets import CKEditorWidget
-from .models import Post
-# 여기에 field 넣어주면 무조건 넣어야 하는 필드값으로 인식
+from .models import Post, Comment
 
-# stackoverflow 적용
-
-# https://stackoverflow.com/a/30403969
-# required=False
-
-
-# class PostForm(forms.Form):
-#     class Meta:
-#         model = Post
-#         fields = ['title', 'brand']
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -26,7 +15,34 @@ class PostForm(forms.ModelForm):
         self.fields['price'].required = True
         self.fields['ckcontent'].required = True
 
-# TO-DO : 아래를 위에 방식으로 변경하여 ASK 화면 만들기
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('post', 'author', 'text', 'created_date')
+
+    def __init__(self, *args, **kwargs):
+        super(CommentForm, self).__init__(*args, **kwargs)
+        self.fields['text'].required = True
+
+# TOOD : CommentForm을 html에서 어떻게 사용하지?
+
+
+# 여기에 field 넣어주면 무조건 넣어야 하는 필드값으로 인식
+
+# stackoverflow 적용
+
+# https://stackoverflow.com/a/30403969
+# required=False
+
+
+# class PostForm(forms.Form):
+#     class Meta:
+#         model = Post
+#         fields = ['title', 'brand']
+
+
+# 아래는 구버전
 
 # class PostForm(forms.Form):
 #     title = forms.CharField(

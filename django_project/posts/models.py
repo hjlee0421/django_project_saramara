@@ -14,6 +14,8 @@ from ckeditor.fields import RichTextField
 
 
 # User 가 posts model꺼를 사용함
+# TODO : Views 에 def/class 만들어서 detail 페이지에서 댓글 submit 하면 아래방식으로 저장해야 함
+
 '''
 In [15]: from posts.models import Post, Comment, User
 
@@ -56,6 +58,8 @@ class User(AbstractUser):
 class Post(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # 추천!
+    # author = models.ForeignKey(User) 		# 비추
+    # author = models.ForeignKey('auth.User') # 비추
     title = models.CharField(max_length=128)
     # content = models.TextField()
     price = models.CharField(max_length=128, blank=True,  null=True)
@@ -79,12 +83,7 @@ class Post(models.Model):
     )
     category = models.CharField(
         max_length=128, choices=CATEGORY_CHOICES, default='상의', null=False)
-    # image = models.ImageField(??) 사진 갯수 제한?
     # category = 정해진 카테고리에서 선택하게끔
-    # content2 = models.TextField(default=None)
-    # author = models.ForeignKey(User) 		# 비추
-    # author = models.ForeignKey('auth.User') # 비추
-    # TO-DO:
 
     def __str__(self):
         return self.title
@@ -95,19 +94,6 @@ class Post(models.Model):
     class Meta:
         ordering = ['-id']
 
-    # def sara_cnt(self):
-    #     if self.sara is None:
-    #         return 0
-    #     else:
-
-    #         return len(self.sara.split(' ').remove(''))
-
-    # def mara_cnt(self):
-    #     if self.mara is None:
-    #         return 0
-    #     else:
-    #         return len(self.mara.split(' ').remove(''))
-
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -115,19 +101,3 @@ class Comment(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text = models.CharField(max_length=200)
     created_date = models.DateTimeField(default=timezone.now)
-
-# TO-DO : COMMENT MODEL 다시보기
-
-# class Choice(models.Model):
-#     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-#     SARAMARA_CHOICES = (
-#         ('사라', '사라'),
-#         ('마라', '마라'),
-#     )
-#     choice_text = models.CharField(
-#         max_length=128, choices=SARAMARA_CHOICES, default='사라', null=False)
-#     # choice_text = models.CharField(max_length=200, default=["사라", "마라"])
-#     votes = models.IntegerField(default=0)
-
-#     def __str__(self):
-#         return self.choice_text

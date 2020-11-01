@@ -10,9 +10,34 @@ from .forms import PostForm
 from django.contrib.auth.decorators import login_required
 from .models import User
 
+# TODO : ??? MAIN PAGE 에서 카테고리별로 필터를 걸어주려면 아래의 ListView를 활용해서 보여줘야 함
+# 현재는 IndexView 를 사용중임
 # generic.ListView
 
-#
+# class IndexView(generic.ListView):
+# TODO : IndeView를 활용해서 전체 리스트 볼때 1) 필터를 걸수있게 하고 2) pagination도 적용하기
+# https://wayhome25.github.io/django/2017/05/02/CBV/
+# https://stackoverflow.com/questions/52510586/how-to-filter-a-generic-listview
+# class PostView(View):
+#   def post(self, request, *args, **kwargs):
+# TODO : PostView를 활용해서 아래의 DetailView를 대체해야 POST 방식으로 각각의 post 불러오고, update 가능함
+# https://laziness.xyz/2017/05/Django-Class-based-view-post
+# class DetailView(generic.DetailView, FormMixin):
+#   def get(self, request, *args, **kwargs):
+#   def sara_vote(self, user_name):
+#   def mara_vote(self, user_name):
+# def mypage(request):
+# @ login_required
+# def ask(request):
+# TODO : def로 되어있는 부분을 class 형태로 변경하기
+
+
+class IndexView(generic.ListView):
+    template_name = 'posts/index.html'
+    context_object_name = 'latest_post_list'
+
+    def get_queryset(self):
+        return Post.objects.all()  # .order_by('-id')
 
 
 class PostView(View):
@@ -24,22 +49,13 @@ class PostView(View):
     # url이 먼저 잘 연결되는지 확인하고 안에 채우기
 
 
-class IndexView(generic.ListView):
-    template_name = 'posts/index.html'
-    context_object_name = 'latest_post_list'
-
-    def get_queryset(self):
-        return Post.objects.all()  # .order_by('-id')
-#
-
-
 class DetailView(generic.DetailView, FormMixin):
     model = Post
     form_class = PostForm
     template_name = 'posts/detail.html'
 
     # get 이라는 함수는 html call 이랑 연관이 있고, 여기에 코드를 추가해줌으로 url을 get 할때 정보를 관리한다?
-    # TO-DO : 추후에는 POST 방식으로 데이터를 변경을 한다.
+    # TODO : 추후에는 POST 방식으로 데이터를 변경을 한다.
     # DETAIL VIEW VS LIST VIEW
     # 게시글의 ID가 필요한게 DETAIL VIEW,  LIST VIEW 는 그러한 ID가 필요하지 않다.
     # 명확한 게시글을 고르는 경우 DETAIL VIEW, 아닌 경우는 LIST VIEW
@@ -61,7 +77,16 @@ class DetailView(generic.DetailView, FormMixin):
         print(self.object.__dict__.keys())
         # print(self.object.content)
 
-        # TO-DO : 여기에 그냥 form=PostForm 을 넣어주는게 맞는건가???
+        # TODO : 여기에 그냥 form=PostForm 을 넣어주는게 맞는건가???
+        # django - views - generic - base.py 에서 ContextMixin: 아래에
+        # extra_context = None 으로 초기화해줘서 된건지 base.py 어딘가 다른곳에 초기화를 해준건지 확실하지 않음
+        # 아마 맞는것 같음
+        # class ContextMixin:
+        """
+        A default context mixin that passes the keyword arguments received by
+        get_context_data() as the template context.
+        """
+        # extra_context = None
         # import pdb
         # pdb.set_trace()
         context = self.get_context_data(object=self.object)  # , form=PostForm)
@@ -221,9 +246,48 @@ class DetailView(generic.DetailView, FormMixin):
         post.save()
 
 
-class ResultsView(generic.DetailView):
-    model = Post
-    template_name = 'posts/results.html'
+def mypage(request):
+    return render(request, 'posts/mypage.html')
+
+
+@ login_required
+def ask(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        # import pdb
+        # pdb.set_trace()
+        if form.is_valid():
+            # import pdb
+            # pdb.set_trace()
+            # user_id = request.session.get('user_id')
+            user_id = request.session.get('_auth_user_id')
+            print(user_id)
+            suser = User.objects.get(pk=user_id)
+            # post = Post()
+
+            # post.title = form.cleaned_data['title']
+            # post.brand = form.cleaned_data['brand']
+            # post.price = form.cleaned_data['price']
+            # post.link = form.cleaned_data['link']
+            # post.content = form.cleaned_data['content']
+            # post.ckcontent = form.cleaned_data['ckcontent']
+
+            post = Post(**form.cleaned_data)
+            # TODO : 위 코드를 통해서 추가가 되는 구조는 좋은 구조가 아니다, 위 코드 1줄로 다 해결가능 함
+
+            post.author = suser
+            post.save()
+            return redirect('/')
+        else:
+            return redirect('/')
+    else:
+        form = PostForm()
+
+    return render(request, 'posts/ask.html', {'form': form})
+
+# class ResultsView(generic.DetailView):
+#     model = Post
+#     template_name = 'posts/results.html'
 
 
 # action을 눌렀을때 무언가가 호출이 된다
@@ -353,46 +417,5 @@ class ResultsView(generic.DetailView):
 #         return HttpResponseRedirect(reverse('posts:detail', args=(post.id,)))
 #         # return HttpResponseRedirect(reverse('posts:results', args=(post.id,)))
 
-
-def mypage(request):
-    return render(request, 'posts/mypage.html')
-
-
-@ login_required
-def ask(request):
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        # import pdb
-        # pdb.set_trace()
-        if form.is_valid():
-            # import pdb
-            # pdb.set_trace()
-            # user_id = request.session.get('user_id')
-            user_id = request.session.get('_auth_user_id')
-            print(user_id)
-            suser = User.objects.get(pk=user_id)
-            # post = Post()
-
-            # post.title = form.cleaned_data['title']
-            # post.brand = form.cleaned_data['brand']
-            # post.price = form.cleaned_data['price']
-            # post.link = form.cleaned_data['link']
-            # post.content = form.cleaned_data['content']
-            # post.ckcontent = form.cleaned_data['ckcontent']
-
-            # TO-DO : 위 코드를 통해서 추가가 되는 구조는 좋은 구조가 아니다
-            # TO-DO : CKEDITOR와 기본 제목 들을 시각적으로 표현 가능하면 알아보기
-            # TO-DO : POST GET PATCH DELETE  연산에 대해서 공부하기
-            post = Post(**form.cleaned_data)
-            # TO-DO : 위 코드 하나로 다 해결함
-            post.author = suser
-            post.save()
-            return redirect('/')
-        else:
-            return redirect('/')
-    else:
-        form = PostForm()
-
-    return render(request, 'posts/ask.html', {'form': form})
 
 # js 동적인 내용 표현
