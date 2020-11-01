@@ -8,7 +8,9 @@ from django.contrib.auth.models import AbstractUser
 from ckeditor.fields import RichTextField
 
 
-# Create your models here.
+# class User(AbstractUser):
+# class Post(models.Model):
+# class User(AbstractUser):
 
 
 class User(AbstractUser):
