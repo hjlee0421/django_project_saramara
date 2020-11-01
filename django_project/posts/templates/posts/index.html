@@ -63,6 +63,7 @@
 <div class="items-wrap">
   {% if latest_post_list %}
   <ul>
+    
     {% for post in latest_post_list %}
     <a href="{% url 'posts:detail' post.id %}"
       ><div class="single-item">

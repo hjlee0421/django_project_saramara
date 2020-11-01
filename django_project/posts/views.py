@@ -42,7 +42,15 @@ class IndexView(generic.ListView):
 
 class PostView(View):
     def post(self, request, *args, **kwargs):
-        pass
+
+        context = {}
+        import pdb
+        pdb.set_trace()
+        return HttpResponse(context)
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        return HttpResponse(context)
     # post def 안에서 pdb 활용해서 뜯어보기
     # base.py 에서 view class 를 바로 post 함수를 override 하게 되는 class
     # list view 와 비슷하게
