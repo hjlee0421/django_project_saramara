@@ -11,7 +11,7 @@ class PostAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('post', 'author', 'text')
+    list_display = ('post', 'author', 'text', 'created_date')
     list_filter = ('post',)
 
 

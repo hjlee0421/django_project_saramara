@@ -64,12 +64,28 @@
   <h1>댓글창 with pagination</h1>
   <!-- {{comment}} -->
   {% for element in comment %}
-    {{element.text}} - {{element.author}} <br>
+    <strong>{{element.author}}</strong> <br>
+    {{element.text}} - {{element.created_date}}<br>
+    {% empty %}
+    <p>No comments here yet :(</p>
   {% endfor %}
   <br />
   <br />
+  <!-- {% for comment in post.comments.all %}
+    <div class="comment">
+        <div class="date">{{ comment.created_date }}</div>
+        <strong>{{ comment.author }}</strong>
+        <p>{{ comment.text|linebreaks }}</p>
+    </div>
+{% empty %}
+    <p>No comments here yet :(</p>
+{% endfor %} -->
   <br />
   <h1>댓글작성창</h1>
+  <form method="POST" action=".">
+    {% csrf_token %} {{ form.media }} {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">사라마라 질문하기</button>
+  </form>
 </div>
 <!--        댓글 공간-->
 

@@ -57,9 +57,9 @@ class Post(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # 추천!
     title = models.CharField(max_length=128)
-    content = models.TextField()
-    price = models.CharField(max_length=128, default='NA', null=True)
-    brand = models.CharField(max_length=128, default='NA', null=True)
+    # content = models.TextField()
+    price = models.CharField(max_length=128, blank=True,  null=True)
+    brand = models.CharField(max_length=128, blank=True,  null=True)
     link = models.CharField(
         max_length=128, blank=True, null=True)
     pup_date = models.DateTimeField(auto_now_add=True,
@@ -114,6 +114,7 @@ class Comment(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text = models.CharField(max_length=200)
+    created_date = models.DateTimeField(default=timezone.now)
 
 # TO-DO : COMMENT MODEL 다시보기
 

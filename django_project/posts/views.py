@@ -59,7 +59,7 @@ class DetailView(generic.DetailView, FormMixin):
         self.object = self.get_object()
         print(type(self.object))
         print(self.object.__dict__.keys())
-        print(self.object.content)
+        # print(self.object.content)
 
         # TO-DO : 여기에 그냥 form=PostForm 을 넣어주는게 맞는건가???
         # import pdb
@@ -97,10 +97,12 @@ class DetailView(generic.DetailView, FormMixin):
         # 위 방식을 통해서 db에 저장
         # request의 url 을 통해서 확인하고 post 통해서 db update
 
-    def sara_vote(self, user_name):
-
+    def add_comment(self, user_name):
         post = self.object
+        user_name = user_name
 
+    def sara_vote(self, user_name):
+        post = self.object
         user_name = user_name
 
         sara_str = post.sara

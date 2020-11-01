@@ -38,11 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'posts',
-    # 'polls',
     'susers',
-    # 'bootstrap_modal_forms',
     'ckeditor',
     'ckeditor_uploader',
+    # 'bootstrap_modal_forms',
 ]
 
 # KEDITOR_UPLOAD_PATH = 'uploads/'
