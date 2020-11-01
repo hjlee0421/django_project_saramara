@@ -393,6 +393,6 @@ def ask(request):
     else:
         form = PostForm()
 
-    return render(request, 'posts/item_ask.html', {'form': form})
+    return render(request, 'posts/ask.html', {'form': form})
 
 # js 동적인 내용 표현
