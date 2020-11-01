@@ -1,12 +1,12 @@
 # SARAMARA WEBSITE TECH SPEC
 
-OWNER : HAJUNE LEE
-LAST UPDATE : 2020-11-01
+- OWNER : HAJUNE LEE
+- LAST UPDATE : 2020-11-01
 
 ## 요약 (Summary)
 
 - 가장 먼저 테크 스펙을 세 줄 내외로 정리합니다. 테크 스펙의 제안 전체에 대해 누가/무엇을/언제/어디서/왜를 간략하면서도 명확하게 적습니다.
-  ex) Bottom Navigation 영역(하단 탭)을 유저가 원하는 순서로 커스텀할 수 있게 합니다.
+- ex) Bottom Navigation 영역(하단 탭)을 유저가 원하는 순서로 커스텀할 수 있게 합니다.
   서버에 순서 정렬 및 저장 API를 요청할 수 없으므로, 순서를 로컬에 저장하고 불러옵니다.
 
 ## 배경 (Background)
