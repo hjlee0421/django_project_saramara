@@ -47,6 +47,43 @@ class IndexView(generic.ListView):
 
 # TODO : 아래의 PostView를 <int:pk> url 로 연결해서 각 Post model의 object 정보를 get 함수로 보여줄수있어야 함
 # TODO : POST  방법을 이용해서 투표해도, 새로운 page가 계속 생기고 뒤로가기 할때 계속 화면이 보임 >> 아마 DRF 사용?
+'''
+POST 사용한곳은
+ASK
+SIGN-IN
+SIGN-UP
+
+VIEW 와 FORM 그리고 HTML 에서 사용함
+
+보고 따라하면 DETAIL에서도 되지 않을까?
+
+
+def signin(request):
+    if request.method == "GET":
+        return render(request, 'susers/signin.html')
+    elif request.method == "POST":
+        username = request.POST.get('username', None)
+        password = request.POST.get('password', None)
+
+        res_data = {}
+
+        if not(username and password):
+            res_data['error'] = "모든값을 입려해주세요."
+        else:
+            # 여기가 결국 로그인 포인트
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            user = User.objects.get(username=username)
+            if check_password(password, user.password):
+                request.session['user_id'] = user.id
+                return redirect('/')
+            else:
+                res_data['error'] = "비밀번호가 틀렸습니다."
+
+    return render(request, 'susers/signin.html', res_data)
+'''
+
+
 class PostView(SingleObjectMixin, View):  # generic.DetailView, FormMixin
     # class PostView(generic.detail.BaseDetailView, FormMixin):
     model = Post
