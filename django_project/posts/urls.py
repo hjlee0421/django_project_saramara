@@ -11,5 +11,7 @@ urlpatterns = [
     # path('<int:post_id>/votes/', views.vote, name='vote'),
     path('mypage/', views.mypage, name='mypage'),
     path('ask/', views.ask, name='ask'),
+    path('test/', views.PostView.as_view(), name='postview'),
+    # # path('<int:pk>/', views.PostView.as_view(), name='detail'),
 ]
 # resutls 필요없을듯

@@ -36,16 +36,29 @@
   <!-- bootstrp 써서 색깔? 같은거 하고, a:click 은 색깔 칠해진걸로 해서 투표 한걸 보이게끔 버튼 변경 css 부분 -->
   {{user.username}}
   <br />
+
+  <form method="POST" action=".">
+    {% csrf_token %}
+    <input type="submit" name="sara_button" value="이건사야지" class="btn btn-primary" />
+  </form>
+
+  <br />
+
+  <form method="POST" action=".">
+    {% csrf_token %}
+    <input type="submit" name="mara_button" value="이건아니지" class="btn btn-primary" />
+  </form>
+
   <button onclick="location.href='?sara={{user.username}}';" class="sarabtn">
     사라
   </button>
-  <h1>{{ post.sara_cnt }}</h1>
+  <h2> count : {{ post.sara_cnt }}</h2>
   <br />
 
   <button onclick="location.href='?mara={{user.username}}';" class="marabtn">
     마라
   </button>
-  <h1>{{ post.mara_cnt }}</h1>
+  <h2> count : {{ post.mara_cnt }}</h2>
   <br />
 
   <br />
