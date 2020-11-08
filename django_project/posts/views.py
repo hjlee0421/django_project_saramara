@@ -84,45 +84,94 @@ def signin(request):
 '''
 
 
-class PostView(SingleObjectMixin, View):  # generic.DetailView, FormMixin
-    # class PostView(generic.detail.BaseDetailView, FormMixin):
+# class PostView(SingleObjectMixin, View):  # generic.DetailView, FormMixin
+#     # class PostView(generic.detail.BaseDetailView, FormMixin):
+#     model = Post
+#     form_class = PostForm
+
+#     initial = {'key': 'value'}
+#     template_name = 'posts/detail.html'
+
+#     # def get(self, request, *args, **kwargs):
+#     #     form = self.form_class(initial=self.initial)
+#     #     return render(request, self.template_name, {'form': form})
+
+#     def get(self, request, *args, **kwargs):
+#         print('#########################################33')
+#         print('#########################################33')
+#         print('#########################################33')
+#         print('#########################################33')
+#         print('Hello, PostView get def')
+#         form = self.form_class(initial=self.initial)
+#         # print(form)
+#         # return render(request, self.template_name, {'form': form})
+#         # self.object = self.get_object()
+#         # context = self.get_context_data(object=self.object)
+#         # return self.render_to_response(context)
+#         return render(request, self.template_name, {'form': form})
+
+#     # def get(self, request, *args, **kwargs):
+#     #     self.object = self.get_object()
+#     #     context = self.get_context_data(object=self.object)  # , form=PostForm)
+#     #     context['comment'] = self.object.comment_set.all()
+#     #     return self.render_to_response(context)
+#         # print('Hello, PostView get def')
+#         # form = self.form_class(initial=self.initial)
+#         # return render(request, self.template_name, {'form': form})
+#         # context = {'Hello, PostView get def'}
+#         # return HttpResponse(context)
+#         # return HttpResponse('Hello, World!333')
+
+#     # get 없애고 post만 남으면 페이지 없으로 뜸
+
+#     def post(self, request, *args, **kwargs):
+#         print('#########################################33')
+#         print('#########################################33')
+#         print('#########################################33')
+#         print('#########################################33')
+#         print('Hello, PostView post def')
+#         user_id = request.session.get('_auth_user_id')
+#         suser = User.objects.get(pk=user_id)
+#         print('user : ', suser)
+#         print('please true, ', 'sara_button' in request.POST)
+#         print('please false, ', 'mara_button' in request.POST)
+
+#         print(request.POST)
+
+#         post = Post(author=suser, title='test for POST')
+
+#         if 'sara_button' in request.POST:
+#             sara_vote(post, suser)
+#         elif 'mara_button' in request.POST:
+#             mara_vote(post, suser)
+
+#         # # post.save()
+#         form = PostForm(request.POST)
+#         # if form.is_valid():
+#         #     print('Hello, PostView get def and form is valid')
+#         #     # process form cleaned data
+#         #     return HttpResponseRedirect('/test/')
+
+#         return render(request, self.template_name, {'form': form})
+#         # context = {'Hello, PostView post def'}
+#         # import pdb
+#         # pdb.set_trace()
+#         # return HttpResponse(context)
+#         # return HttpResponse(context)
+
+#     # post def 안에서 pdb 활용해서 뜯어보기
+#     # base.py 에서 view class 를 바로 post 함수를 override 하게 되는 class
+#     # list view 와 비슷하게
+#     # url이 먼저 잘 연결되는지 확인하고 안에 채우기
+
+
+# class DetailView(generic.DetailView, FormMixin):
+class DetailView(generic.DetailView, FormMixin, View):
     model = Post
     form_class = PostForm
-
-    initial = {'key': 'value'}
     template_name = 'posts/detail.html'
 
-    # def get(self, request, *args, **kwargs):
-    #     form = self.form_class(initial=self.initial)
-    #     return render(request, self.template_name, {'form': form})
-
-    def get(self, request, *args, **kwargs):
-        print('#########################################33')
-        print('#########################################33')
-        print('#########################################33')
-        print('#########################################33')
-        print('Hello, PostView get def')
-        form = self.form_class(initial=self.initial)
-        # print(form)
-        # return render(request, self.template_name, {'form': form})
-        # self.object = self.get_object()
-        # context = self.get_context_data(object=self.object)
-        # return self.render_to_response(context)
-        return render(request, self.template_name, {'form': form})
-
-    # def get(self, request, *args, **kwargs):
-    #     self.object = self.get_object()
-    #     context = self.get_context_data(object=self.object)  # , form=PostForm)
-    #     context['comment'] = self.object.comment_set.all()
-    #     return self.render_to_response(context)
-        # print('Hello, PostView get def')
-        # form = self.form_class(initial=self.initial)
-        # return render(request, self.template_name, {'form': form})
-        # context = {'Hello, PostView get def'}
-        # return HttpResponse(context)
-        # return HttpResponse('Hello, World!333')
-
-    # get 없애고 post만 남으면 페이지 없으로 뜸
+    initial = {'key': 'value'}
 
     def post(self, request, *args, **kwargs):
         print('#########################################33')
@@ -140,35 +189,30 @@ class PostView(SingleObjectMixin, View):  # generic.DetailView, FormMixin
 
         post = Post(author=suser, title='test for POST')
 
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+
         if 'sara_button' in request.POST:
-            sara_vote(post, suser)
+            self.sara_vote(suser)
         elif 'mara_button' in request.POST:
-            mara_vote(post, suser)
+            self.mara_vote(suser)
 
         # # post.save()
-        form = PostForm(request.POST)
+        # form = PostForm(request.POST)
         # if form.is_valid():
         #     print('Hello, PostView get def and form is valid')
         #     # process form cleaned data
         #     return HttpResponseRedirect('/test/')
 
-        return render(request, self.template_name, {'form': form})
+        # return render(request, self.template_name, {'form': form})
         # context = {'Hello, PostView post def'}
         # import pdb
         # pdb.set_trace()
         # return HttpResponse(context)
         # return HttpResponse(context)
-
-    # post def 안에서 pdb 활용해서 뜯어보기
-    # base.py 에서 view class 를 바로 post 함수를 override 하게 되는 class
-    # list view 와 비슷하게
-    # url이 먼저 잘 연결되는지 확인하고 안에 채우기
-
-
-class DetailView(generic.DetailView, FormMixin):
-    model = Post
-    form_class = PostForm
-    template_name = 'posts/detail.html'
+        context['comment'] = self.object.comment_set.all()
+        print(context)
+        return self.render_to_response(context)
 
     # get 이라는 함수는 html call 이랑 연관이 있고, 여기에 코드를 추가해줌으로 url을 get 할때 정보를 관리한다?
     # TODO : 추후에는 POST 방식으로 데이터를 변경을 한다.
@@ -212,23 +256,23 @@ class DetailView(generic.DetailView, FormMixin):
         # print(context)
         # import pdb
         # pdb.set_trace()
-        if len(request.get_full_path().split('?')) == 1:
-            print('sara str')
-            print(self.object.sara)
-            print(self.object.sara_cnt)
-            print('mara str')
-            print(self.object.mara)
-            print(self.object.mara_cnt)
-            pass
-        elif len(request.get_full_path().split('?')) == 2:
-            if request.get_full_path().split('?')[1].split('=')[0] == 'sara':
-                print("sara clicked")
-                user_name = request.get_full_path().split('?')[1].split('=')[1]
-                self.sara_vote(user_name)
-            elif request.get_full_path().split('?')[1].split('=')[0] == 'mara':
-                print("mara clicked")
-                user_name = request.get_full_path().split('?')[1].split('=')[1]
-                self.mara_vote(user_name)
+        # if len(request.get_full_path().split('?')) == 1:
+        #     print('sara str')
+        #     print(self.object.sara)
+        #     print(self.object.sara_cnt)
+        #     print('mara str')
+        #     print(self.object.mara)
+        #     print(self.object.mara_cnt)
+        #     pass
+        # elif len(request.get_full_path().split('?')) == 2:
+        #     if request.get_full_path().split('?')[1].split('=')[0] == 'sara':
+        #         print("sara clicked")
+        #         user_name = request.get_full_path().split('?')[1].split('=')[1]
+        #         self.sara_vote(user_name)
+        #     elif request.get_full_path().split('?')[1].split('=')[0] == 'mara':
+        #         print("mara clicked")
+        #         user_name = request.get_full_path().split('?')[1].split('=')[1]
+        #         self.mara_vote(user_name)
         # import pdb
         # pdb.set_trace()
         context['comment'] = self.object.comment_set.all()
@@ -243,9 +287,128 @@ class DetailView(generic.DetailView, FormMixin):
         post = self.object
         user_name = user_name
 
+    # def sara_vote(self, user_name):
+    #     post = self.object
+    #     user_name = user_name
+
+    #     sara_str = post.sara
+    #     print('sara str')
+    #     print(sara_str)
+
+    #     mara_str = post.mara
+    #     print('mara str')
+    #     print(mara_str)
+
+    #     if sara_str is None:
+    #         sara_list = []
+    #     else:
+    #         sara_list = sara_str.split(' ')
+
+    #     if mara_str is None:
+    #         mara_list = []
+    #     else:
+    #         mara_list = mara_str.split(' ')
+
+    #     print('sara list before')
+    #     print(sara_list)
+
+    #     print('mara list before')
+    #     print(mara_list)
+
+    #     if user_name in sara_list:
+    #         print("1번 콜")
+    #         # user_id in sara_str which means unvote for sara
+    #         sara_list.remove(user_name)
+
+    #     elif user_name in mara_list:
+    #         print("2번 콜")
+    #         # user_id in mara_list which means unvote for mara and vote for sara
+    #         mara_list.remove(user_name)
+    #         sara_list.append(user_name)
+
+    #     else:
+    #         print("3번 콜")
+    #         # user_id not in both of sara or mara which means new
+    #         sara_list.append(user_name)
+
+    #     if '' in sara_list:
+    #         sara_list.remove('')
+    #     if '' in mara_list:
+    #         mara_list.remove('')
+
+    #     print('sara list after')
+    #     print(sara_list)
+
+    #     print('mara list after')
+    #     print(mara_list)
+
+    #     post.sara_cnt = len(sara_list)
+    #     post.mara_cnt = len(mara_list)
+
+    #     sara_str = ' '.join(sara_list)
+    #     mara_str = ' '.join(mara_list)
+
+    #     post.sara = sara_str
+    #     post.mara = mara_str
+
+    #     post.save()
+
+    # def mara_vote(self, user_name):
+
+    #     post = self.object
+
+    #     user_name = user_name
+
+    #     mara_str = post.mara
+    #     print('mara str')
+    #     print(mara_str)
+
+    #     sara_str = post.sara
+    #     print('sara str')
+    #     print(sara_str)
+
+    #     if mara_str is None:
+    #         mara_list = []
+    #     else:
+    #         mara_list = mara_str.split(' ')
+
+    #     if sara_str is None:
+    #         sara_list = []
+    #     else:
+    #         sara_list = sara_str.split(' ')
+
+    #     if user_name in mara_list:
+    #         # user_id in sara_str which means unvote for sara
+    #         mara_list.remove(user_name)
+
+    #     elif user_name in sara_list:
+    #         # user_id in mara_list which means unvote for mara and vote for sara
+    #         sara_list.remove(user_name)
+    #         mara_list.append(user_name)
+
+    #     else:
+    #         # user_id not in both of sara or mara which means new
+    #         mara_list.append(user_name)
+
+    #     if '' in mara_list:
+    #         mara_list.remove('')
+    #     if '' in sara_list:
+    #         sara_list.remove('')
+
+    #     post.mara_cnt = len(mara_list)
+    #     post.sara_cnt = len(sara_list)
+
+    #     mara_str = ' '.join(mara_list)
+    #     sara_str = ' '.join(sara_list)
+
+    #     post.mara = mara_str
+    #     post.sara = sara_str
+
+    #     post.save()
     def sara_vote(self, user_name):
         post = self.object
-        user_name = user_name
+        user_name = user_name.username
+        print('@@@@@@@@@@@@@@@@@@@@')
 
         sara_str = post.sara
         print('sara str')
@@ -313,7 +476,7 @@ class DetailView(generic.DetailView, FormMixin):
 
         post = self.object
 
-        user_name = user_name
+        user_name = user_name.username
 
         mara_str = post.mara
         print('mara str')
@@ -334,15 +497,18 @@ class DetailView(generic.DetailView, FormMixin):
             sara_list = sara_str.split(' ')
 
         if user_name in mara_list:
+            print("1번 콜")
             # user_id in sara_str which means unvote for sara
             mara_list.remove(user_name)
 
         elif user_name in sara_list:
+            print("2번 콜")
             # user_id in mara_list which means unvote for mara and vote for sara
             sara_list.remove(user_name)
             mara_list.append(user_name)
 
         else:
+            print("3번 콜")
             # user_id not in both of sara or mara which means new
             mara_list.append(user_name)
 
@@ -350,6 +516,12 @@ class DetailView(generic.DetailView, FormMixin):
             mara_list.remove('')
         if '' in sara_list:
             sara_list.remove('')
+
+        print('sara list after')
+        print(sara_list)
+
+        print('mara list after')
+        print(mara_list)
 
         post.mara_cnt = len(mara_list)
         post.sara_cnt = len(sara_list)
