@@ -101,3 +101,6 @@ class Comment(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text = models.CharField(max_length=200)
     created_date = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['-created_date']

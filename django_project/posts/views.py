@@ -572,7 +572,8 @@ def ask(request):
             # post.link = form.cleaned_data['link']
             # post.content = form.cleaned_data['content']
             # post.ckcontent = form.cleaned_data['ckcontent']
-
+            print('formformformformformformformform')
+            print(form)
             post = Post(**form.cleaned_data)
             # TODO : 위 코드를 통해서 추가가 되는 구조는 좋은 구조가 아니다, 위 코드 1줄로 다 해결가능 함
 

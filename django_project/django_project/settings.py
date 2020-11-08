@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'susers',
     'ckeditor',
     'ckeditor_uploader',
+    'rest_framework',
     # 'bootstrap_modal_forms',
 ]
 

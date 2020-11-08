@@ -27,6 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('posts.urls', namespace='posts')),
     path('', include('susers.urls', namespace='susers')),
+    path('api-auth/', include('rest_framework.urls')),
     # START
     path('ckeditor/', include(
         'ckeditor_uploader.urls')),

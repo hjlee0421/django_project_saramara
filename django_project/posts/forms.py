@@ -6,10 +6,11 @@ from .models import Post, Comment
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('title', 'brand', 'price', 'link', 'ckcontent')
+        fields = ('title', 'category', 'brand', 'price', 'link', 'ckcontent')
 
     def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
+        self.fields['title'].required = True
         self.fields['title'].required = True
         self.fields['brand'].required = True
         self.fields['price'].required = True
