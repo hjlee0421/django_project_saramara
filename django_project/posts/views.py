@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
-from .models import Post  # , Choice
+from .models import Post, User, Comment  # , Choice
 from django.urls import reverse
 from django.views import generic, View
 from django.views.generic.edit import FormMixin
@@ -9,7 +9,7 @@ from django.views.generic.detail import SingleObjectMixin
 from .forms import PostForm
 # from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from .models import User
+
 
 # TODO : ??? MAIN PAGE 에서 카테고리별로 필터를 걸어주려면 아래의 ListView를 활용해서 보여줘야 함
 # 현재는 IndexView 를 사용중임
@@ -184,8 +184,11 @@ class DetailView(generic.DetailView, FormMixin, View):
         print('user : ', suser)
         print('please true, ', 'sara_button' in request.POST)
         print('please false, ', 'mara_button' in request.POST)
+        print('comment please true, ', 'add_comment' in request.POST)
 
-        print(request.POST)
+        print('post 내용 = ', request.POST)
+        print('post 타입 = ', type(request.POST))
+        print('post 내용 = ', request.POST.get('add_comment'))
 
         post = Post(author=suser, title='test for POST')
 
@@ -196,6 +199,8 @@ class DetailView(generic.DetailView, FormMixin, View):
             self.sara_vote(suser)
         elif 'mara_button' in request.POST:
             self.mara_vote(suser)
+        elif 'add_comment' in request.POST:
+            self.add_comment(suser, request.POST.get('add_comment'))
 
         # # post.save()
         # form = PostForm(request.POST)
@@ -283,128 +288,16 @@ class DetailView(generic.DetailView, FormMixin, View):
         # 위 방식을 통해서 db에 저장
         # request의 url 을 통해서 확인하고 post 통해서 db update
 
-    def add_comment(self, user_name):
+    def add_comment(self, user_name, user_comment):
+        print('ADD COMMENT CALLED')
         post = self.object
+        print('post = ', post)
+        print('user comment = ', user_comment)
         user_name = user_name
+        print('comment user = ', user_name)
+        comment = Comment(post=post, author=user_name, text=user_comment)
+        comment.save()
 
-    # def sara_vote(self, user_name):
-    #     post = self.object
-    #     user_name = user_name
-
-    #     sara_str = post.sara
-    #     print('sara str')
-    #     print(sara_str)
-
-    #     mara_str = post.mara
-    #     print('mara str')
-    #     print(mara_str)
-
-    #     if sara_str is None:
-    #         sara_list = []
-    #     else:
-    #         sara_list = sara_str.split(' ')
-
-    #     if mara_str is None:
-    #         mara_list = []
-    #     else:
-    #         mara_list = mara_str.split(' ')
-
-    #     print('sara list before')
-    #     print(sara_list)
-
-    #     print('mara list before')
-    #     print(mara_list)
-
-    #     if user_name in sara_list:
-    #         print("1번 콜")
-    #         # user_id in sara_str which means unvote for sara
-    #         sara_list.remove(user_name)
-
-    #     elif user_name in mara_list:
-    #         print("2번 콜")
-    #         # user_id in mara_list which means unvote for mara and vote for sara
-    #         mara_list.remove(user_name)
-    #         sara_list.append(user_name)
-
-    #     else:
-    #         print("3번 콜")
-    #         # user_id not in both of sara or mara which means new
-    #         sara_list.append(user_name)
-
-    #     if '' in sara_list:
-    #         sara_list.remove('')
-    #     if '' in mara_list:
-    #         mara_list.remove('')
-
-    #     print('sara list after')
-    #     print(sara_list)
-
-    #     print('mara list after')
-    #     print(mara_list)
-
-    #     post.sara_cnt = len(sara_list)
-    #     post.mara_cnt = len(mara_list)
-
-    #     sara_str = ' '.join(sara_list)
-    #     mara_str = ' '.join(mara_list)
-
-    #     post.sara = sara_str
-    #     post.mara = mara_str
-
-    #     post.save()
-
-    # def mara_vote(self, user_name):
-
-    #     post = self.object
-
-    #     user_name = user_name
-
-    #     mara_str = post.mara
-    #     print('mara str')
-    #     print(mara_str)
-
-    #     sara_str = post.sara
-    #     print('sara str')
-    #     print(sara_str)
-
-    #     if mara_str is None:
-    #         mara_list = []
-    #     else:
-    #         mara_list = mara_str.split(' ')
-
-    #     if sara_str is None:
-    #         sara_list = []
-    #     else:
-    #         sara_list = sara_str.split(' ')
-
-    #     if user_name in mara_list:
-    #         # user_id in sara_str which means unvote for sara
-    #         mara_list.remove(user_name)
-
-    #     elif user_name in sara_list:
-    #         # user_id in mara_list which means unvote for mara and vote for sara
-    #         sara_list.remove(user_name)
-    #         mara_list.append(user_name)
-
-    #     else:
-    #         # user_id not in both of sara or mara which means new
-    #         mara_list.append(user_name)
-
-    #     if '' in mara_list:
-    #         mara_list.remove('')
-    #     if '' in sara_list:
-    #         sara_list.remove('')
-
-    #     post.mara_cnt = len(mara_list)
-    #     post.sara_cnt = len(sara_list)
-
-    #     mara_str = ' '.join(mara_list)
-    #     sara_str = ' '.join(sara_list)
-
-    #     post.mara = mara_str
-    #     post.sara = sara_str
-
-    #     post.save()
     def sara_vote(self, user_name):
         post = self.object
         user_name = user_name.username
@@ -534,6 +427,125 @@ class DetailView(generic.DetailView, FormMixin, View):
 
         post.save()
 
+    # def sara_vote(self, user_name):
+    #     post = self.object
+    #     user_name = user_name
+
+    #     sara_str = post.sara
+    #     print('sara str')
+    #     print(sara_str)
+
+    #     mara_str = post.mara
+    #     print('mara str')
+    #     print(mara_str)
+
+    #     if sara_str is None:
+    #         sara_list = []
+    #     else:
+    #         sara_list = sara_str.split(' ')
+
+    #     if mara_str is None:
+    #         mara_list = []
+    #     else:
+    #         mara_list = mara_str.split(' ')
+
+    #     print('sara list before')
+    #     print(sara_list)
+
+    #     print('mara list before')
+    #     print(mara_list)
+
+    #     if user_name in sara_list:
+    #         print("1번 콜")
+    #         # user_id in sara_str which means unvote for sara
+    #         sara_list.remove(user_name)
+
+    #     elif user_name in mara_list:
+    #         print("2번 콜")
+    #         # user_id in mara_list which means unvote for mara and vote for sara
+    #         mara_list.remove(user_name)
+    #         sara_list.append(user_name)
+
+    #     else:
+    #         print("3번 콜")
+    #         # user_id not in both of sara or mara which means new
+    #         sara_list.append(user_name)
+
+    #     if '' in sara_list:
+    #         sara_list.remove('')
+    #     if '' in mara_list:
+    #         mara_list.remove('')
+
+    #     print('sara list after')
+    #     print(sara_list)
+
+    #     print('mara list after')
+    #     print(mara_list)
+
+    #     post.sara_cnt = len(sara_list)
+    #     post.mara_cnt = len(mara_list)
+
+    #     sara_str = ' '.join(sara_list)
+    #     mara_str = ' '.join(mara_list)
+
+    #     post.sara = sara_str
+    #     post.mara = mara_str
+
+    #     post.save()
+
+    # def mara_vote(self, user_name):
+
+    #     post = self.object
+
+    #     user_name = user_name
+
+    #     mara_str = post.mara
+    #     print('mara str')
+    #     print(mara_str)
+
+    #     sara_str = post.sara
+    #     print('sara str')
+    #     print(sara_str)
+
+    #     if mara_str is None:
+    #         mara_list = []
+    #     else:
+    #         mara_list = mara_str.split(' ')
+
+    #     if sara_str is None:
+    #         sara_list = []
+    #     else:
+    #         sara_list = sara_str.split(' ')
+
+    #     if user_name in mara_list:
+    #         # user_id in sara_str which means unvote for sara
+    #         mara_list.remove(user_name)
+
+    #     elif user_name in sara_list:
+    #         # user_id in mara_list which means unvote for mara and vote for sara
+    #         sara_list.remove(user_name)
+    #         mara_list.append(user_name)
+
+    #     else:
+    #         # user_id not in both of sara or mara which means new
+    #         mara_list.append(user_name)
+
+    #     if '' in mara_list:
+    #         mara_list.remove('')
+    #     if '' in sara_list:
+    #         sara_list.remove('')
+
+    #     post.mara_cnt = len(mara_list)
+    #     post.sara_cnt = len(sara_list)
+
+    #     mara_str = ' '.join(mara_list)
+    #     sara_str = ' '.join(sara_list)
+
+    #     post.mara = mara_str
+    #     post.sara = sara_str
+
+    #     post.save()
+
 
 def mypage(request):
     return render(request, 'posts/mypage.html')
@@ -573,6 +585,42 @@ def ask(request):
         form = PostForm()
 
     return render(request, 'posts/ask.html', {'form': form})
+
+
+# @ login_required
+# class AskView(View):
+#     def get(self, request):
+#         form = PostForm()
+#         return render(request, 'posts/ask.html', {'form': form})
+
+#     def post(self, request):
+#         form = PostForm(request.POST)
+#         # import pdb
+#         # pdb.set_trace()
+#         if form.is_valid():
+#             # import pdb
+#             # pdb.set_trace()
+#             # user_id = request.session.get('user_id')
+#             user_id = request.session.get('_auth_user_id')
+#             print(user_id)
+#             suser = User.objects.get(pk=user_id)
+#             # post = Post()
+
+#             # post.title = form.cleaned_data['title']
+#             # post.brand = form.cleaned_data['brand']
+#             # post.price = form.cleaned_data['price']
+#             # post.link = form.cleaned_data['link']
+#             # post.content = form.cleaned_data['content']
+#             # post.ckcontent = form.cleaned_data['ckcontent']
+
+#             post = Post(**form.cleaned_data)
+#             # TODO : 위 코드를 통해서 추가가 되는 구조는 좋은 구조가 아니다, 위 코드 1줄로 다 해결가능 함
+
+#             post.author = suser
+#             post.save()
+#             return redirect('/')
+#         else:
+#             return redirect('/')
 
 # class ResultsView(generic.DetailView):
 #     model = Post
@@ -710,132 +758,132 @@ def ask(request):
 # js 동적인 내용 표현
 
 
-def sara_vote(post, user_name):
-    post = post
-    user_name = user_name.username
-    print('@@@@@@@@@@@@@@@@@@@@')
+# def sara_vote(post, user_name):
+#     post = post
+#     user_name = user_name.username
+#     print('@@@@@@@@@@@@@@@@@@@@')
 
-    sara_str = post.sara
-    print('sara str')
-    print(sara_str)
+#     sara_str = post.sara
+#     print('sara str')
+#     print(sara_str)
 
-    mara_str = post.mara
-    print('mara str')
-    print(mara_str)
+#     mara_str = post.mara
+#     print('mara str')
+#     print(mara_str)
 
-    if sara_str is None:
-        sara_list = []
-    else:
-        sara_list = sara_str.split(' ')
+#     if sara_str is None:
+#         sara_list = []
+#     else:
+#         sara_list = sara_str.split(' ')
 
-    if mara_str is None:
-        mara_list = []
-    else:
-        mara_list = mara_str.split(' ')
+#     if mara_str is None:
+#         mara_list = []
+#     else:
+#         mara_list = mara_str.split(' ')
 
-    print('sara list before')
-    print(sara_list)
+#     print('sara list before')
+#     print(sara_list)
 
-    print('mara list before')
-    print(mara_list)
+#     print('mara list before')
+#     print(mara_list)
 
-    if user_name in sara_list:
-        print("1번 콜")
-        # user_id in sara_str which means unvote for sara
-        sara_list.remove(user_name)
+#     if user_name in sara_list:
+#         print("1번 콜")
+#         # user_id in sara_str which means unvote for sara
+#         sara_list.remove(user_name)
 
-    elif user_name in mara_list:
-        print("2번 콜")
-        # user_id in mara_list which means unvote for mara and vote for sara
-        mara_list.remove(user_name)
-        sara_list.append(user_name)
+#     elif user_name in mara_list:
+#         print("2번 콜")
+#         # user_id in mara_list which means unvote for mara and vote for sara
+#         mara_list.remove(user_name)
+#         sara_list.append(user_name)
 
-    else:
-        print("3번 콜")
-        # user_id not in both of sara or mara which means new
-        sara_list.append(user_name)
+#     else:
+#         print("3번 콜")
+#         # user_id not in both of sara or mara which means new
+#         sara_list.append(user_name)
 
-    if '' in sara_list:
-        sara_list.remove('')
-    if '' in mara_list:
-        mara_list.remove('')
+#     if '' in sara_list:
+#         sara_list.remove('')
+#     if '' in mara_list:
+#         mara_list.remove('')
 
-    print('sara list after')
-    print(sara_list)
+#     print('sara list after')
+#     print(sara_list)
 
-    print('mara list after')
-    print(mara_list)
+#     print('mara list after')
+#     print(mara_list)
 
-    post.sara_cnt = len(sara_list)
-    post.mara_cnt = len(mara_list)
+#     post.sara_cnt = len(sara_list)
+#     post.mara_cnt = len(mara_list)
 
-    sara_str = ' '.join(sara_list)
-    mara_str = ' '.join(mara_list)
+#     sara_str = ' '.join(sara_list)
+#     mara_str = ' '.join(mara_list)
 
-    post.sara = sara_str
-    post.mara = mara_str
+#     post.sara = sara_str
+#     post.mara = mara_str
 
-    post.save()
+#     post.save()
 
 
-def mara_vote(post, user_name):
+# def mara_vote(post, user_name):
 
-    post = post
+#     post = post
 
-    user_name = user_name.username
+#     user_name = user_name.username
 
-    mara_str = post.mara
-    print('mara str')
-    print(mara_str)
+#     mara_str = post.mara
+#     print('mara str')
+#     print(mara_str)
 
-    sara_str = post.sara
-    print('sara str')
-    print(sara_str)
+#     sara_str = post.sara
+#     print('sara str')
+#     print(sara_str)
 
-    if mara_str is None:
-        mara_list = []
-    else:
-        mara_list = mara_str.split(' ')
+#     if mara_str is None:
+#         mara_list = []
+#     else:
+#         mara_list = mara_str.split(' ')
 
-    if sara_str is None:
-        sara_list = []
-    else:
-        sara_list = sara_str.split(' ')
+#     if sara_str is None:
+#         sara_list = []
+#     else:
+#         sara_list = sara_str.split(' ')
 
-    if user_name in mara_list:
-        print("1번 콜")
-        # user_id in sara_str which means unvote for sara
-        mara_list.remove(user_name)
+#     if user_name in mara_list:
+#         print("1번 콜")
+#         # user_id in sara_str which means unvote for sara
+#         mara_list.remove(user_name)
 
-    elif user_name in sara_list:
-        print("2번 콜")
-        # user_id in mara_list which means unvote for mara and vote for sara
-        sara_list.remove(user_name)
-        mara_list.append(user_name)
+#     elif user_name in sara_list:
+#         print("2번 콜")
+#         # user_id in mara_list which means unvote for mara and vote for sara
+#         sara_list.remove(user_name)
+#         mara_list.append(user_name)
 
-    else:
-        print("3번 콜")
-        # user_id not in both of sara or mara which means new
-        mara_list.append(user_name)
+#     else:
+#         print("3번 콜")
+#         # user_id not in both of sara or mara which means new
+#         mara_list.append(user_name)
 
-    if '' in mara_list:
-        mara_list.remove('')
-    if '' in sara_list:
-        sara_list.remove('')
+#     if '' in mara_list:
+#         mara_list.remove('')
+#     if '' in sara_list:
+#         sara_list.remove('')
 
-    print('sara list after')
-    print(sara_list)
+#     print('sara list after')
+#     print(sara_list)
 
-    print('mara list after')
-    print(mara_list)
+#     print('mara list after')
+#     print(mara_list)
 
-    post.mara_cnt = len(mara_list)
-    post.sara_cnt = len(sara_list)
+#     post.mara_cnt = len(mara_list)
+#     post.sara_cnt = len(sara_list)
 
-    mara_str = ' '.join(mara_list)
-    sara_str = ' '.join(sara_list)
+#     mara_str = ' '.join(mara_list)
+#     sara_str = ' '.join(sara_list)
 
-    post.mara = mara_str
-    post.sara = sara_str
+#     post.mara = mara_str
+#     post.sara = sara_str
 
-    post.save()
+#     post.save()

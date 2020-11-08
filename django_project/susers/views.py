@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views import generic
+from django.views import generic, View
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate
@@ -13,13 +13,41 @@ from .forms import LoginForm
 # def signup(request):
 # def signin(request):
 # def signout(request):
+
 # TODO : 1) def 형태를 class 형태로 다시 변경해주기 2) model 부분이 없는거 내용 확인하기
 
 
-def signup(request):
-    if request.method == "GET":
+# def signup(request):
+#     if request.method == "GET":
+#         return render(request, 'susers/signup.html')
+#     elif request.method == "POST":
+#         username = request.POST.get('username', None)
+#         password = request.POST.get('password', None)
+#         re_password = request.POST.get('re-password', None)
+
+#         res_data = {}
+
+#         if not(username and password and re_password):
+#             res_data['error'] = "모든값을 입려해주세요."
+#         elif password != re_password:
+#             res_data['error'] = "비밀번호가 다릅니다."
+#         else:
+#             # 여기가 결국 회원가입 포인트
+#             user = User.objects.create_user(
+#                 username, email=None, password=password)
+#             login(request, user)
+#             user = User.objects.get(username=username)
+#             request.session['user_id'] = user.id
+#             return redirect('/')
+
+#         return render(request, 'susers/signup.html', res_data)
+
+
+class SignupView(View):
+    def get(self, request):
         return render(request, 'susers/signup.html')
-    elif request.method == "POST":
+
+    def post(self, request):
         username = request.POST.get('username', None)
         password = request.POST.get('password', None)
         re_password = request.POST.get('re-password', None)
@@ -42,16 +70,44 @@ def signup(request):
         return render(request, 'susers/signup.html', res_data)
 
 
-def signin(request):
-    if request.method == "GET":
+# def signin(request):
+#     if request.method == "GET":
+#         return render(request, 'susers/signin.html')
+#     elif request.method == "POST":
+#         username = request.POST.get('username', None)
+#         password = request.POST.get('password', None)
+
+#         res_data = {}
+
+#         if not(username and password):
+#             res_data['error'] = "모든값을 입려해주세요."
+#         else:
+#             # 여기가 결국 로그인 포인트
+#             user = authenticate(username=username, password=password)
+#             login(request, user)
+#             user = User.objects.get(username=username)
+#             if check_password(password, user.password):
+#                 request.session['user_id'] = user.id
+#                 return redirect('/')
+#             else:
+#                 res_data['error'] = "비밀번호가 틀렸습니다."
+
+#     return render(request, 'susers/signin.html', res_data)
+
+
+class SigninView(View):
+    def get(self, request):
         return render(request, 'susers/signin.html')
-    elif request.method == "POST":
+
+    def post(self, request):
         username = request.POST.get('username', None)
         password = request.POST.get('password', None)
 
         res_data = {}
 
         if not(username and password):
+            res_data['error'] = "모든값을 입려해주세요."
+        elif not(authenticate(username=username, password=password)):
             res_data['error'] = "모든값을 입려해주세요."
         else:
             # 여기가 결국 로그인 포인트
@@ -63,8 +119,7 @@ def signin(request):
                 return redirect('/')
             else:
                 res_data['error'] = "비밀번호가 틀렸습니다."
-
-    return render(request, 'susers/signin.html', res_data)
+        return render(request, 'susers/signin.html', res_data)
 
 
 def signout(request):
@@ -75,6 +130,9 @@ def signout(request):
 
     return redirect('/')
 
+
+# class SignoutView(View):
+#     pass
 
 # def signup(request):
 #     if request.method == 'POST':

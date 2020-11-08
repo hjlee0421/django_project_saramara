@@ -49,15 +49,15 @@
     <input type="submit" name="mara_button" value="이건아니지" class="btn btn-primary" />
   </form>
 
-  <button onclick="location.href='?sara={{user.username}}';" class="sarabtn">
+  <!-- <button onclick="location.href='?sara={{user.username}}';" class="sarabtn">
     사라
-  </button>
+  </button> -->
   <h2> count : {{ post.sara_cnt }}</h2>
   <br />
 
-  <button onclick="location.href='?mara={{user.username}}';" class="marabtn">
+  <!-- <button onclick="location.href='?mara={{user.username}}';" class="marabtn">
     마라
-  </button>
+  </button> -->
   <h2> count : {{ post.mara_cnt }}</h2>
   <br />
 
@@ -96,9 +96,15 @@
   <br />
   <h1>댓글작성창</h1>
   <form method="POST" action=".">
+    {% csrf_token %}
+    <input type="text" name="add_comment"><br><br>
+    <input type="submit" name="add_comment_button" value="댓글달기" class="btn btn-primary" />
+  </form>
+
+  <!-- <form method="POST" action=".">
     {% csrf_token %} {{ form.media }} {{ form.as_p }}
     <button type="submit" class="btn btn-primary">사라마라 질문하기</button>
-  </form>
+  </form> -->
 </div>
 <!--        댓글 공간-->
 
