@@ -6,6 +6,7 @@ from datetime import datetime
 from django.contrib.auth.models import AbstractUser
 
 from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 # class User(AbstractUser):
@@ -15,6 +16,22 @@ from ckeditor.fields import RichTextField
 
 # User 가 posts model꺼를 사용함
 # TODO : Views 에 def/class 만들어서 detail 페이지에서 댓글 submit 하면 아래방식으로 저장해야 함
+# TODO : collectstatic 했더니 css 다 사라져버림..
+'''
+$ python manage.py collectstatic
+
+You have requested to collect static files at the destination
+location as specified in your settings:
+
+    C:\django_project\django_project\static
+
+This will overwrite existing files!
+Are you sure you want to do this?
+
+Type 'yes' to continue, or 'no' to cancel: yes
+
+1182 static files copied to 'C:\django_project\django_project\static', 131 unmodified.
+'''
 
 '''
 In [15]: from posts.models import Post, Comment, User
@@ -73,7 +90,7 @@ class Post(models.Model):
     mara = models.TextField(blank=True, null=True)
     sara_cnt = models.IntegerField(default=0)
     mara_cnt = models.IntegerField(default=0)
-    ckcontent = RichTextField(blank=True, null=True)
+    ckcontent = RichTextUploadingField(blank=True, null=True)
 
     CATEGORY_CHOICES = (
         ('상의', '상의'),
