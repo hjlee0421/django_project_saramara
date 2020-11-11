@@ -76,11 +76,28 @@
 <div>
   <h1>댓글창 with pagination</h1>
   <!-- {{comment}} -->
+  
+  
   {% for element in comment %}
-    <strong>{{element.author}}</strong> <br>
-    {{element.text}} - {{element.created_date}}<br>
+  author {{element.author.id}} <br>
+  user {{user.id}} <br>
+  <strong>{{element.author}}</strong> <br>
+    {{element.text}} - {{element.created_date}} <br>
+  {% if element.author.id == user.id %}
+  <form method="POST" action=".">
+    {% csrf_token %}
+     <button >수정</button> 
+    <input type="hidden" value="{{element.id}}" name="delete_comment">
+
+    <input type="submit" name="delete_comment_button" value="삭제" class="btn" />
+     <br>
+  </form>
+  {% endif %}
     {% empty %}
     <p>No comments here yet :(</p>
+  
+
+
   {% endfor %}
   <br />
   <br />

@@ -173,13 +173,16 @@ class DetailView(generic.DetailView, FormMixin, View):
 
     initial = {'key': 'value'}
 
+    def delete(self, request, *args, **kwargs):
+        return HttpResponse('context')
+
     def post(self, request, *args, **kwargs):
         print('#########################################33')
         print('#########################################33')
         print('#########################################33')
         print('#########################################33')
         print('Hello, PostView post def')
-        user_id = request.session.get('_auth_user_id')
+        user_id = request.session.get('user_id')
         suser = User.objects.get(pk=user_id)
         print('user : ', suser)
         print('please true, ', 'sara_button' in request.POST)
@@ -191,7 +194,15 @@ class DetailView(generic.DetailView, FormMixin, View):
         print('post 내용 = ', request.POST.get('add_comment'))
 
         post = Post(author=suser, title='test for POST')
-
+        # if request.POST['delete_comment_button'] == '삭제':
+        # import pdb
+        # pdb.set_trace()
+        if 'delete_comment_button' in request.POST:
+            comment_id = request.POST['delete_comment']
+            comment = Comment.objects.get(id=comment_id)
+            if suser == comment.author:
+                comment.delete()
+            # return HttpResponse('삭제')
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
 
@@ -550,51 +561,17 @@ class DetailView(generic.DetailView, FormMixin, View):
 def mypage(request):
     return render(request, 'posts/mypage.html')
 
-
-@ login_required
-def ask(request):
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        # import pdb
-        # pdb.set_trace()
-        if form.is_valid():
-            # import pdb
-            # pdb.set_trace()
-            # user_id = request.session.get('user_id')
-            user_id = request.session.get('_auth_user_id')
-            print(user_id)
-            suser = User.objects.get(pk=user_id)
-            # post = Post()
-
-            # post.title = form.cleaned_data['title']
-            # post.brand = form.cleaned_data['brand']
-            # post.price = form.cleaned_data['price']
-            # post.link = form.cleaned_data['link']
-            # post.content = form.cleaned_data['content']
-            # post.ckcontent = form.cleaned_data['ckcontent']
-            print('formformformformformformformform')
-            print(form)
-            post = Post(**form.cleaned_data)
-            # TODO : 위 코드를 통해서 추가가 되는 구조는 좋은 구조가 아니다, 위 코드 1줄로 다 해결가능 함
-
-            post.author = suser
-            post.save()
-            return redirect('/')
-        else:
-            return redirect('/')
-    else:
-        form = PostForm()
-
-    return render(request, 'posts/ask.html', {'form': form})
+#
 
 
 # @ login_required
 # class AskView(View):
-#     def get(self, request):
-#         form = PostForm()
-#         return render(request, 'posts/ask.html', {'form': form})
+#     def get(self, request, *args, **kwargs):
+#         return HttpResponse('result')
 
-#     def post(self, request):
+
+# def aaask(request):
+#     if request.method == 'POST':
 #         form = PostForm(request.POST)
 #         # import pdb
 #         # pdb.set_trace()
@@ -613,7 +590,8 @@ def ask(request):
 #             # post.link = form.cleaned_data['link']
 #             # post.content = form.cleaned_data['content']
 #             # post.ckcontent = form.cleaned_data['ckcontent']
-
+#             print('formformformformformformformform')
+#             print(form)
 #             post = Post(**form.cleaned_data)
 #             # TODO : 위 코드를 통해서 추가가 되는 구조는 좋은 구조가 아니다, 위 코드 1줄로 다 해결가능 함
 
@@ -622,6 +600,45 @@ def ask(request):
 #             return redirect('/')
 #         else:
 #             return redirect('/')
+#     else:
+#         form = PostForm()
+
+#     return render(request, 'posts/ask.html', {'form': form})
+
+
+class AskView(View):
+    def get(self, request):
+        form = PostForm()
+        return render(request, 'posts/ask.html', {'form': form})
+
+    def post(self, request):
+        form = PostForm(request.POST)
+        # import pdb
+        # pdb.set_trace()
+        if form.is_valid():
+            # import pdb
+            # pdb.set_trace()
+            # user_id = request.session.get('user_id')
+            user_id = request.session.get('_auth_user_id')
+            print(user_id)
+            suser = User.objects.get(pk=user_id)
+            # post = Post()
+
+            # post.title = form.cleaned_data['title']
+            # post.brand = form.cleaned_data['brand']
+            # post.price = form.cleaned_data['price']
+            # post.link = form.cleaned_data['link']
+            # post.content = form.cleaned_data['content']
+            # post.ckcontent = form.cleaned_data['ckcontent']
+
+            post = Post(**form.cleaned_data)
+            # TODO : 위 코드를 통해서 추가가 되는 구조는 좋은 구조가 아니다, 위 코드 1줄로 다 해결가능 함
+
+            post.author = suser
+            post.save()
+            return redirect('/')
+        else:
+            return redirect('/')
 
 # class ResultsView(generic.DetailView):
 #     model = Post

@@ -122,17 +122,23 @@ class SigninView(View):
         return render(request, 'susers/signin.html', res_data)
 
 
-def signout(request):
-    if request.session.get('user_id'):
-        del(request.session['user_id'])
+# def signout(request):
+#     if request.session.get('user_id'):
+#         del(request.session['user_id'])
 
-    logout(request)
+#     logout(request)
 
-    return redirect('/')
+#     return redirect('/')
 
 
-# class SignoutView(View):
-#     pass
+class SignoutView(View):
+    def get(self, request):
+        if request.session.get('user_id'):
+            del(request.session['user_id'])
+
+        logout(request)
+
+        return redirect('/')
 
 # def signup(request):
 #     if request.method == 'POST':
