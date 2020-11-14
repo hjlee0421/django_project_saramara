@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'posts',
-    'susers',
+    # 'susers',
     'ckeditor',
     'ckeditor_uploader',
     'rest_framework',
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 # KEDITOR_UPLOAD_PATH = 'uploads/'
 # CKEDITOR_IMAGE_BACKEND = "pillow"
 
+# 사용하는 유저 모델
 AUTH_USER_MODEL = 'posts.User'
 
 MIDDLEWARE = [
