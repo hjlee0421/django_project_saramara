@@ -1,6 +1,5 @@
 from django.db import models
-# Build user defined "User" Model
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser  # user defined "User" Model
 from django.conf import settings  # Foreign Key
 from datetime import datetime
 from django.utils import timezone
@@ -26,20 +25,19 @@ class User(AbstractUser):
     # - gender : female/male (string)
 
 
+# blank = ui에서 빈칸 from valid check, null 은 db에서 빈값을 받는 개념
 class Post(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # 추천!
     # author = models.ForeignKey(User) 		# 비추
     # author = models.ForeignKey('auth.User') # 비추
     title = models.CharField(max_length=128)
-    # content = models.TextField()
     price = models.CharField(max_length=128, blank=True,  null=True)
     brand = models.CharField(max_length=128, blank=True,  null=True)
     link = models.CharField(
         max_length=128, blank=True, null=True)
     pup_date = models.DateTimeField(auto_now_add=True,
                                     verbose_name='date published')
-    # blank = ui에서 빈칸 from valid check, null 은 db에서 빈값을 받는 개념
     sara = models.TextField(blank=True, null=True)
     mara = models.TextField(blank=True, null=True)
     sara_cnt = models.IntegerField(default=0)
@@ -74,4 +72,4 @@ class Comment(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        ordering = ['-created_date']
+        ordering = ['created_date']
