@@ -1,75 +1,29 @@
 from django.db import models
-from django.conf import settings  # 추천!
-# from django.conf.auth.models import User  # 비추
-from django.utils import timezone
-from datetime import datetime
+# Build user defined "User" Model
 from django.contrib.auth.models import AbstractUser
-
+from django.conf import settings  # Foreign Key
+from datetime import datetime
+from django.utils import timezone
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 
-
 # class User(AbstractUser):
 # class Post(models.Model):
-# class User(AbstractUser):
-
-
-# User 가 posts model꺼를 사용함
-# TODO : Views 에 def/class 만들어서 detail 페이지에서 댓글 submit 하면 아래방식으로 저장해야 함
-# TODO : collectstatic 했더니 css 다 사라져버림..
-'''
-$ python manage.py collectstatic
-
-You have requested to collect static files at the destination
-location as specified in your settings:
-
-    C:\django_project\django_project\static
-
-This will overwrite existing files!
-Are you sure you want to do this?
-
-Type 'yes' to continue, or 'no' to cancel: yes
-
-1182 static files copied to 'C:\django_project\django_project\static', 131 unmodified.
-'''
-
-'''
-In [15]: from posts.models import Post, Comment, User
-
-In [16]: User.objects.all()
-Out[16]: <QuerySet [<User: hjlee0421>, <User: testtesttest>]>
-
-In [17]: User.objects.first()
-Out[17]: <User: hjlee0421>
-
-In [18]: user = User.objects.first()
-
-In [19]: post
-Out[19]: <Post: 테스트2>
-
-In [20]: comment = Comment(post=post, author=user, text='comment text')
-
-In [21]: comment.save()
-
-In [22]: post.comment_set.all()
-Out[22]: <QuerySet [<Comment: Comment object (1)>]>
-
-In [23]: comment = Comment(post=post, author=user, text='comment text2')
-
-In [24]: comment.save()
-
-In [25]: post.comment_set.all()
-Out[25]: <QuerySet [<Comment: Comment object (1)>, <Comment: Comment object (2)>]>
-
-In [26]: 
-
-In [26]: exit
-'''
+# class Comment(models.Model):
 
 
 class User(AbstractUser):
     gender = models.IntegerField(default=0)
     age = models.IntegerField(default=0)
+    # kakao_account
+    # email
+    # - email : ####@###.com (string)
+    # birthday
+    # - birthday : MMDD (string)
+    # birthyear
+    # - birthyear : YYYY (string)
+    # gender
+    # - gender : female/male (string)
 
 
 class Post(models.Model):

@@ -1,23 +1,22 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import Post, User, Comment
+from .models import User, Post, Comment
 
-# Register your models here.
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('id', 'username', 'gender', 'age')
+    list_filter = ('username',)
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('author', 'title')
+    list_display = ('id', 'author', 'title')
     list_filter = ('title',)
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('post', 'author', 'text', 'created_date')
+    list_display = ('id', 'post', 'author', 'text', 'created_date')
     list_filter = ('post',)
 
 
-admin.site.register(User, UserAdmin)
 admin.site.register(Post, PostAdmin)
+admin.site.register(User, UserAdmin)
 admin.site.register(Comment, CommentAdmin)
-
-
-# js 대신에 기본 DJANGO 기능으로 해결 가능

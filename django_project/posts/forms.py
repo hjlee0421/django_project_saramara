@@ -1,12 +1,14 @@
-# from posts.models import User
-# from django.contrib.auth.models import User
 from django import forms
+from .models import User, Post, Comment
 from ckeditor.widgets import CKEditorWidget
-from .models import Post, Comment, User
 
-# from django import forms
-# from django.contrib.auth.models import User
-# from posts.models import User
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password')
+
+# TODO : 추후에 age, gender 추가하려면 여기서 추가하고 html에서 추가하면 끝인지? (posts models 에는 age, gender 이미 있음)
 
 
 class PostForm(forms.ModelForm):
@@ -31,8 +33,16 @@ class CommentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CommentForm, self).__init__(*args, **kwargs)
         self.fields['text'].required = True
-
 # TOOD : CommentForm을 html에서 어떻게 사용하지?
+
+
+# ??
+
+class LoginForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ['username', 'password']
 
 
 # 여기에 field 넣어주면 무조건 넣어야 하는 필드값으로 인식
@@ -62,22 +72,3 @@ class CommentForm(forms.ModelForm):
 #     content = forms.CharField(
 #         error_messages={'required': '내용을 입력하세요'}, widget=forms.Textarea, label='내용')
 #     ckcontent = forms.CharField(widget=CKEditorWidget())
-
-
-# SUSERS
-
-
-class UserForm(forms.ModelForm):
-
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password']
-
-# TODO : 추후에 age, gender 추가하려면 여기서 추가하고 html에서 추가하면 끝인지? (posts models 에는 age, gender 이미 있음)
-
-
-class LoginForm(forms.ModelForm):
-
-    class Meta:
-        model = User
-        fields = ['username', 'password']

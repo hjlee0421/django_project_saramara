@@ -952,7 +952,7 @@ class AskView(View):
 
 class SignupView(View):
     def get(self, request):
-        return render(request, 'susers/signup.html')
+        return render(request, 'posts/signup.html')
 
     def post(self, request):
         username = request.POST.get('username', None)
@@ -974,7 +974,7 @@ class SignupView(View):
             request.session['user_id'] = user.id
             return redirect('/')
 
-        return render(request, 'susers/signup.html', res_data)
+        return render(request, 'posts/signup.html', res_data)
 
 
 # def signin(request):
@@ -1004,7 +1004,7 @@ class SignupView(View):
 
 class SigninView(View):
     def get(self, request):
-        return render(request, 'susers/signin.html')
+        return render(request, 'posts/signin.html')
 
     def post(self, request):
         username = request.POST.get('username', None)
@@ -1026,7 +1026,7 @@ class SigninView(View):
                 return redirect('/')
             else:
                 res_data['error'] = "비밀번호가 틀렸습니다."
-        return render(request, 'susers/signin.html', res_data)
+        return render(request, 'posts/signin.html', res_data)
 
 
 # def signout(request):

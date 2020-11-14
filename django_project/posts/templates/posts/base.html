@@ -86,16 +86,16 @@
         >
         <p style="float: right;">
             <div style="font-size: 2rem; color: green; display: inline; float: right;">Welcome, {{ user.username }}
-                <small>(<a href="{% url 'susers:signout' %}">LogOut</a>)</small>
+                <small>(<a href="{% url 'posts:signout' %}">LogOut</a>)</small>
                 &nbsp;&nbsp;
             </div>
         </p>
         {% else %}
         <div style="float: right;">
-          <a class="btn btn-default" href="{% url 'susers:signup' %}"
+          <a class="btn btn-default" href="{% url 'posts:signup' %}"
             >Sign up</a
           >
-          <a class="btn btn-default" href="{% url 'susers:signin' %}">SignIn</a>
+          <a class="btn btn-default" href="{% url 'posts:signin' %}">SignIn</a>
         </div>
         {% endif %}
       </header>
@@ -111,9 +111,9 @@
           <a href="{% url 'posts:ask' %}">질문하기</a>
           <a href="{% url 'posts:index' %}">답해주기</a>
           {% else %}
-          <a href="{% url 'susers:signin' %}">마이페이지</a>
+          <a href="{% url 'posts:signin' %}">마이페이지</a>
           <div class="dropdown-divider"></div>
-          <a href="{% url 'susers:signin' %}">질문하기</a>
+          <a href="{% url 'posts:signin' %}">질문하기</a>
           <a href="{% url 'posts:index' %}">답해주기</a>
           {% endif %}
         </div>
