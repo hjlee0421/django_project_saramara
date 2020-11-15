@@ -8,16 +8,6 @@
 </div>
 <br />
 
-<!-- Button trigger modal -->
-<button
-  type="button"
-  class="btn btn-primary btn-lg"
-  data-toggle="modal"
-  data-target="#myModal"
->
-  Launch demo modal
-</button>
-
 <!-- Modal -->
 <div
   class="modal fade"
@@ -61,13 +51,13 @@
 <br />
 <!--        item list-->
 <div class="items-wrap">
-  {% if latest_post_list %}
+  {% if post_objects %}
   <ul>
     
-    {% for post in latest_post_list %}
+    {% for post in post_objects %}
     <a href="{% url 'posts:detail' post.id %}"
       ><div class="single-item">
-        title : {{post.title}} & content : {{post.content}} by {{post.author}}
+        title : {{post.title|upper}} by {{post.author}} - {{post.pup_date}}
       </div>
     </a>
     {% endfor %}
@@ -76,18 +66,22 @@
   <p>no posts are available</p>
   {% endif %}
 </div>
-<!--        item list-->
-<!--        pagination-->
-<div class="wrap-pagination">
-  <div class="pagination">
-    <a href="#">&laquo;</a>
-    <a href="#">1</a>
-    <a href="#">2</a>
-    <a href="#">3</a>
-    <a href="#">4</a>
-    <a href="#">5</a>
-    <a href="#">6</a>
-    <a href="#">&raquo;</a>
-  </div>
+
+<div class="pagination" style="height: 100px; width: 1000px;">
+  <div class="step-links">
+      {% if page_obj.has_previous %}
+          <a href="?page=1">&laquo; first</a>
+          <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <div class="current">
+          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+      </div>
+
+      {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">next</a>
+          <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+    </div>
 </div>
 {% endblock %}

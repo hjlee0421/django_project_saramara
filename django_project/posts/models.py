@@ -1,14 +1,11 @@
-from django.db import models
-from django.contrib.auth.models import AbstractUser  # user defined "User" Model
-from django.conf import settings  # Foreign Key
 from datetime import datetime
+from django.db import models
+from django.conf import settings  # Foreign Key
 from django.utils import timezone
+from django.contrib.auth.models import AbstractUser  # user defined "User" Model
+
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
-
-# class User(AbstractUser):
-# class Post(models.Model):
-# class Comment(models.Model):
 
 
 class User(AbstractUser):

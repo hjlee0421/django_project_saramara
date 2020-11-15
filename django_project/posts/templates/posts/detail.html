@@ -34,20 +34,34 @@
   <h1>투표공간</h1>
 
   <!-- bootstrp 써서 색깔? 같은거 하고, a:click 은 색깔 칠해진걸로 해서 투표 한걸 보이게끔 버튼 변경 css 부분 -->
-  {{user.username}}
-  <br />
 
+
+  <br />
+  {% if user.is_authenticated %}
   <form method="POST" action=".">
     {% csrf_token %}
     <input type="submit" name="sara_button" value="이건사야지" class="btn btn-primary" />
   </form>
+  {% else %}
+  <form method="POST" action="{% url 'posts:signin' %}">
+    {% csrf_token %}
+    <input type="submit" name="sara_button" value="이건사야지" class="btn btn-primary" />
+  </form>
+{% endif %}
+
 
   <br />
-
+  {% if user.is_authenticated %}
   <form method="POST" action=".">
     {% csrf_token %}
     <input type="submit" name="mara_button" value="이건아니지" class="btn btn-primary" />
   </form>
+  {% else %}
+  <form method="POST" action="{% url 'posts:signin' %}">
+    {% csrf_token %}
+    <input type="submit" name="sara_button" value="이건아니지" class="btn btn-primary" />
+  </form>
+  {% endif %}
 
   <!-- <button onclick="location.href='?sara={{user.username}}';" class="sarabtn">
     사라
@@ -83,12 +97,13 @@
   user {{user.id}} <br>
   <strong>{{element.author}}</strong> <br>
     {{element.text}} - {{element.created_date}} <br>
-  {% if element.author.id == user.id %}
+  
+    
+    {% if element.author.id == user.id %}
   <form method="POST" action=".">
     {% csrf_token %}
      <button >수정</button> 
     <input type="hidden" value="{{element.id}}" name="delete_comment">
-
     <input type="submit" name="delete_comment_button" value="삭제" class="btn" />
      <br>
   </form>
@@ -111,12 +126,20 @@
     <p>No comments here yet :(</p>
 {% endfor %} -->
   <br />
+  {% if user.is_authenticated %}
   <h1>댓글작성창</h1>
   <form method="POST" action=".">
     {% csrf_token %}
     <input type="text" name="add_comment"><br><br>
     <input type="submit" name="add_comment_button" value="댓글달기" class="btn btn-primary" />
   </form>
+  {% else %}
+  <form method="POST" action="{% url 'posts:signin' %}">
+    {% csrf_token %}
+    <input type="text" name="add_comment"><br><br>
+    <input type="submit" name="add_comment_button" value="댓글달기" class="btn btn-primary" />
+  </form>
+  {% endif %}
 
   <!-- <form method="POST" action=".">
     {% csrf_token %} {{ form.media }} {{ form.as_p }}

@@ -3,10 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ㅅㄹㅁㄹ</title>
+    <title>사라마라</title>
 
-    <!--    link css file styles.css-->
-    <!-- <link rel="stylesheet" type="text/css" href="styles.css" /> -->
     {% load static %}
     <link
       rel="stylesheet"
@@ -26,48 +24,7 @@
     />
     <script src="myScript1.js"></script>
     <script src="demo.js"></script>
-
-
-    <!--    jquery hide p-->
-    <!-- <script>
-      $(document).ready(function () {
-        $("p").click(function () {
-          $(this).hide();
-        });
-      });
-    </script> -->
-
-    <!--    <script type="text/javascript">-->
-    <!--        $(document).ready(function() {-->
-    <!--            var myElement = $(".check1");-->
-    <!--            myElement.text("Hello Sweden!");-->
-    <!--        });-->
-    <!--    </script>-->
-
-    <!--    <script type="text/javascript">-->
-    <!--        function codeAddress() {-->
-    <!--            confirm('yes or no');-->
-    <!--        }-->
-    <!--        window.onload = codeAddress;-->
-    <!--    </script>-->
   </head>
-
-  <!-- <body>
-    {% if latest_post_list %}
-    <ul>
-      {% for post in latest_post_list %}
-      <li>
-        <a href="{% url 'posts:detail' post.id %}"
-          >title : {{post.title}} & content : {{post.content}} by
-          {{post.author}}
-        </a>
-      </li>
-      {% endfor %}
-    </ul>
-    {% else %}
-    <p>no posts are available</p>
-    {% endif %}
-  </body> -->
 
   <body style="background-color: black;">
     <!--    base layout-->
@@ -118,15 +75,6 @@
           {% endif %}
         </div>
       </div>
-      <!--        floating button nav-->
-      <br />
-      <!--        hot items-->
-      <!-- <div class="hot-items">
-        <h1 class="check1">이번주 사라마라 인기 아이템1</h1>
-        <h1>이번주 사라마라 인기 아이템2</h1>
-        <h1>이번주 사라마라 인기 아이템3</h1>
-      </div> -->
-      <!--        item filter-->
       {% block content %}
       {% endblock %}
       <footer>

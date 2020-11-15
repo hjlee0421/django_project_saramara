@@ -199,11 +199,15 @@ footer {
   margin: 0 auto;
 }
 
-.wrap-pagination {
-  text-align: center;
+.setp-link {
+  display: inline-block;
+  width: 1000px;
+  height: 100px;
 }
 
 .pagination {
+  margin: 0 auto;
+  text-align: center;
   display: inline-block;
 }
 

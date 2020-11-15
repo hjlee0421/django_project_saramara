@@ -11,6 +11,7 @@ from django.views.generic.edit import FormMixin
 
 from .forms import PostForm
 
+from django.core.paginator import Paginator
 
 # class IndexView(generic.ListView):
 #    def get_queryset(self):
@@ -55,11 +56,19 @@ from .forms import PostForm
 class IndexView(generic.ListView):
     model = Post
     template_name = 'posts/index.html'
-    context_object_name = 'latest_post_list'
-    # paginate_by = 10
+    context_object_name = 'post_objects'
+    paginate_by = 10
 
-    def get_queryset(self):
-        return Post.objects.all()
+    # def get_queryset(self):
+    # return Post.objects.all()
+
+    def listing(request):
+        post_objects = Post.objects.all()
+        paginator = Paginator(post_objects, 10)  # Show 10 contacts per page.
+
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'posts/index.html.html', {'page_obj': page_obj})
 
 
 class DetailView(generic.DetailView, FormMixin, View):
