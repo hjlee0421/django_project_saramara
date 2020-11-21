@@ -2,8 +2,22 @@
 <br />
 <div class="items-sort">
   <form method="GET" action=".">
+    <label for="keyword">검색어</label>
     <input type="text" name="keyword"><br><br>
-    <input type="submit" class="btn btn-primary" />
+
+      <label for="category">카테고리</label>
+      <select id="category" name="category">
+        <option value="전체">전체</option>
+        <option value="상의">상의</option>
+        <option value="하의">하의</option>
+        <option value="신발">신발</option>
+        <option value="기타">기타</option>
+      </select>
+
+    
+<br>
+<br>
+    <input type="submit" class="btn btn-primary" value="검색" />
   </form>
 </div>
 <br />

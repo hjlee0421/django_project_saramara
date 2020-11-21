@@ -13,6 +13,11 @@ from .forms import PostForm
 
 from django.core.paginator import Paginator
 
+
+# There is Q objects that allow to complex lookups. Example:
+# Item.objects.filter(Q(creator=owner) | Q(moderated=False))
+from django.db.models import Q
+
 # class IndexView(generic.ListView):
 #    def get_queryset(self):
 # TODO : IndeView를 활용해서 전체 리스트 볼때 1) 필터를 걸수있게 하고 2) pagination도 적용하기
@@ -65,8 +70,15 @@ class IndexView(generic.ListView):
     def get(self, request, *args, **kwargs):
         print('hello')
         keyword = request.GET.get('keyword')
+        category = request.GET.get('category')
+        category_list = ['상의', '하의', '신발', '기타']
+
+        if category in category_list:
+            self.queryset = self.get_queryset().filter(category=category)
         if keyword:
-            self.queryset = self.get_queryset().filter(title__icontains=keyword)
+            # Item.objects.filter(Q(creator=owner) | Q(moderated=False))
+            self.queryset = self.get_queryset().filter(Q(title__icontains=keyword)
+                                                       | Q(ckcontent__icontains=keyword))
             # filter 적용한 부분
             # TODO : filter 여러가지 기능 추가하기
             # https://docs.djangoproject.com/en/3.1/ref/models/querysets/
@@ -74,6 +86,7 @@ class IndexView(generic.ListView):
             # 쭉 살펴봐야 할듯
             # css부분 작업
             '''
+            $python manage.py shell_plus
             >>> Post.objects.all()
 <QuerySet [<Post: 새로운 유저>, <Post: xptm>, <Post: 색깔별 모자>, <Post: 나이키를 살까 말까>, <Post: 어 이게 되나? 위 하의 아래 기타>, <Post: 하의라고>, <Post: 카테고리가 되나? 하의>, <Post: dho>, <Post: 클래스가>, <Post: 제목입니다>, <Post: 테스트유저1>, <Post: 테스트2>, <Post: 사진이 올라가기는 하는데>, <Post: 이게>, <Post: 이건 뭐지?>, <Post: 이제>, <Post: 체크하기>, <Post: 22>, <Post: 리치텍스트>, <Post: 11>, '...(remaining elements truncated)...']>
 >>> Post.objects.all().count()
