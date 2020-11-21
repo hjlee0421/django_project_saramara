@@ -62,13 +62,48 @@ class IndexView(generic.ListView):
     # def get_queryset(self):
     # return Post.objects.all()
 
-    def listing(request):
-        post_objects = Post.objects.all()
-        paginator = Paginator(post_objects, 10)  # Show 10 contacts per page.
+    def get(self, request, *args, **kwargs):
+        print('hello')
+        keyword = request.GET.get('keyword')
+        if keyword:
+            self.queryset = self.get_queryset().filter(title__icontains=keyword)
+            # filter 적용한 부분
+            # TODO : filter 여러가지 기능 추가하기
+            # https://docs.djangoproject.com/en/3.1/ref/models/querysets/
+            # 위 주소에 다양한 필터 기능 있음
+            # 쭉 살펴봐야 할듯
+            # css부분 작업
+            '''
+            >>> Post.objects.all()
+<QuerySet [<Post: 새로운 유저>, <Post: xptm>, <Post: 색깔별 모자>, <Post: 나이키를 살까 말까>, <Post: 어 이게 되나? 위 하의 아래 기타>, <Post: 하의라고>, <Post: 카테고리가 되나? 하의>, <Post: dho>, <Post: 클래스가>, <Post: 제목입니다>, <Post: 테스트유저1>, <Post: 테스트2>, <Post: 사진이 올라가기는 하는데>, <Post: 이게>, <Post: 이건 뭐지?>, <Post: 이제>, <Post: 체크하기>, <Post: 22>, <Post: 리치텍스트>, <Post: 11>, '...(remaining elements truncated)...']>
+>>> Post.objects.all().count()
+21
+>>> Post.objects.filter(title__icontains='테스트')
+<QuerySet [<Post: 테스트유저1>, <Post: 테스트2>]>
+>>> Post.objects.filter(title__icontains='사진')
+<QuerySet [<Post: 사진이 올라가기는 하는데>]>
+>>> Post.objects.filter(title='테스트')
+<QuerySet []>
+>>> Post.objects.filter(title='테스트유저1')
+<QuerySet [<Post: 테스트유저1>]>
+>>> Post.objects.filter(title__icontains='테스트').values()
+<QuerySet [{'id': 25, 'author_id': 3, 'title': '테스트유저1', 'price': '1만원', 'brand': '나이키', 'link': '없음', 'pup_date': datetime.datetime(2020, 11, 1, 6, 28, 22, 682023, tzinfo=<UTC>), 'sara': None, 'mara': None, 'sara_cnt': 0, 'mara_cnt': 0, 'ckcontent': '<p>여기는 ck content</p>', 'category': '상의'}, {'id': 24, 'author_id': 1, 'title': '테스트2', 'price': '스', 'brand': '테', 'link': '트', 'pup_date': datetime.datetime(2020, 10, 21, 11, 45, 25, 310006, tzinfo=<UTC>), 'sara': None, 'mara': None, 'sara_cnt': 0, 'mara_cnt': 0, 'ckcontent': '<p>테스트2</p>', 'category': '상의'}]>
+>>> Post.objects.filter(title__icontains='테스트')
+'''
 
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        return render(request, 'posts/index.html.html', {'page_obj': page_obj})
+        # 부모클래스의 get 함수를 대신호출하는 방법
+        return super(IndexView, self).get(request, *args, **kwargs)
+#              <- ListView와 같음  ->
+
+    # def listing(request):
+    #     # post_objects = Post.objects.all()
+    #     post_objects = Post.objects.filter(title__icontains='테스트')
+    #     print(post_objects)
+    #     paginator = Paginator(post_objects, 10)  # Show 10 contacts per page.
+
+    #     page_number = request.GET.get('page')
+    #     page_obj = paginator.get_page(page_number)
+    #     return render(request, 'posts/index.html.html', {'page_obj': page_obj})
 
 
 class DetailView(generic.DetailView, FormMixin, View):

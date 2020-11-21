@@ -1,10 +1,10 @@
 {% extends 'posts/base.html' %} {% block content %}
 <br />
 <div class="items-sort">
-  <button class="accordion">Filter for itmes</button>
-  <div class="panel">
-    <p>Add js for DB</p>
-  </div>
+  <form method="GET" action=".">
+    <input type="text" name="keyword"><br><br>
+    <input type="submit" class="btn btn-primary" />
+  </form>
 </div>
 <br />
 

@@ -25,9 +25,7 @@ class User(AbstractUser):
 # blank = ui에서 빈칸 from valid check, null 은 db에서 빈값을 받는 개념
 class Post(models.Model):
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # 추천!
-    # author = models.ForeignKey(User) 		# 비추
-    # author = models.ForeignKey('auth.User') # 비추
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # settings.py 에 AUTH_USER_MODEL 확인 추천!
     title = models.CharField(max_length=128)
     price = models.CharField(max_length=128, blank=True,  null=True)
     brand = models.CharField(max_length=128, blank=True,  null=True)
