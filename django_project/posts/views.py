@@ -15,6 +15,9 @@ from django.core.paginator import Paginator
 
 from datetime import datetime, timedelta
 
+from rest_framework import generics
+from .serializers import PostSerializer
+
 
 # There is Q objects that allow to complex lookups. Example:
 # Item.objects.filter(Q(creator=owner) | Q(moderated=False))
@@ -58,6 +61,10 @@ from django.db.models import Q
 # class MypageView(View):
 #   def get(self, request):
 # TODO :
+
+class TestView(generics.ListAPIView):  # CreateAPIView
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
 
 class IndexView(generic.ListView):
