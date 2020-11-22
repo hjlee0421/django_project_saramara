@@ -62,6 +62,7 @@ from django.db.models import Q
 #   def get(self, request):
 # TODO :
 
+# add new
 class TestView(generics.ListAPIView):  # CreateAPIView
     queryset = Post.objects.all()
     serializer_class = PostSerializer
