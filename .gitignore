@@ -1,6 +1,6 @@
 /pro1_venv
 /django_project/static
-
+/django_project/frontend/node_modules
 /polls
 /susers
 /media
