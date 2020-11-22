@@ -55,7 +55,7 @@ class Post(models.Model):
         return self.title
 
     def was_published_recently(self):
-        return self.pup_date <= timezone.now() - datetime.timedelta(days=1)
+        return self.pub_date <= timezone.now() - datetime.timedelta(days=1)
 
     class Meta:
         ordering = ['-id']

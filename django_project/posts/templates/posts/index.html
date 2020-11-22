@@ -117,7 +117,11 @@
     {% for post in post_objects %}
     <a href="{% url 'posts:detail' post.id %}"
       ><div class="single-item">
-        title : {{post.title|upper}} by {{post.author}} - {{post.pup_date}}
+        title : {{post.title|upper}} by {{post.author}} <br>
+        댓글 : {{post.comment_cnt}} <br>
+        사라 : {{post.sara_cnt}} <br>
+        마라 : {{post.mara_cnt}} <br>
+        게시일 : {{post.pub_date}} <br>
       </div>
     </a>
     {% endfor %}

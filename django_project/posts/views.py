@@ -87,7 +87,7 @@ class IndexView(generic.ListView):
 
         if timerange in timerange_list:
             self.queryset = self.get_queryset().filter(
-                pub_date__gte=datetime.now()-timedelta(days=int(timerange[0])))
+                pub_date__gte=datetime.now()-timedelta(days=int(timerange[:-1])))
 
         if category in category_list:
             self.queryset = self.get_queryset().filter(category=category)
