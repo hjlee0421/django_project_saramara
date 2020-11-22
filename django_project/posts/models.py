@@ -31,12 +31,14 @@ class Post(models.Model):
     brand = models.CharField(max_length=128, blank=True,  null=True)
     link = models.CharField(
         max_length=128, blank=True, null=True)
-    pup_date = models.DateTimeField(auto_now_add=True,
+    pub_date = models.DateTimeField(auto_now_add=True,
                                     verbose_name='date published')
     sara = models.TextField(blank=True, null=True)
     mara = models.TextField(blank=True, null=True)
     sara_cnt = models.IntegerField(default=0)
     mara_cnt = models.IntegerField(default=0)
+    comment_cnt = models.IntegerField(default=0)
+    view_cnt = models.IntegerField(default=0)
     ckcontent = RichTextUploadingField(blank=True, null=True)
 
     CATEGORY_CHOICES = (
@@ -68,3 +70,14 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ['created_date']
+
+
+# Models.py
+# 게시글 조회 기록 저장
+# class HitCount(models.Model):
+#     ip = models.CharField(max_length=15, default=None,
+#                           null=True)  # ip 주소
+#     post = models.ForeignKey(
+#         Post, default=None, null=True, on_delete=models.CASCADE)  # 게시글
+#     date = models.DateField(default=timezone.now(),
+#                             null=True, blank=True)  # 조회수가 올라갔던 날짜

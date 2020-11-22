@@ -2,9 +2,11 @@
 <br />
 <div class="items-sort">
   <form method="GET" action=".">
+    <div class='items-sort'>
     <label for="keyword">검색어</label>
     <input type="text" name="keyword"><br><br>
-
+    </div>
+    <div class='items-sort'>
       <label for="category">카테고리</label>
       <select id="category" name="category">
         <option value="전체">전체</option>
@@ -13,8 +15,52 @@
         <option value="신발">신발</option>
         <option value="기타">기타</option>
       </select>
+    </div>
 
-    
+      <div class='items-sort'>
+        <div>
+          <input type="radio" id="전체" name="drone" value="전체"
+                checked>
+          <label for="전체">전체</label>
+        </div>
+        <div>
+          <input type="radio" id="조회수" name="drone" value="조회수">
+          <label for="조회수">조회수 not yet</label>
+        </div>
+        <div>
+          <input type="radio" id="댓글" name="drone" value="comment_cnt">
+          <label for="댓글">댓글</label>
+        </div>
+        <div>
+          <input type="radio" id="사라" name="drone" value="sara_cnt">
+          <label for="사라">사라</label>
+        </div>
+        <div>
+          <input type="radio" id="마라" name="drone" value="mara_cnt">
+          <label for="마라">마라</label>
+        </div>
+      </div>
+      <div class='items-sort'>
+      <div>
+        <input type="radio" id="전체" name="timerange" value="전체"
+               checked>
+        <label for="전체">전체</label>
+      </div>
+      <div>
+        <input type="radio" id="1일" name="timerange" value="1일">
+        <label for="1일">1일</label>
+      </div>
+      <div>
+        <input type="radio" id="7일" name="timerange" value="7일">
+        <label for="7일">7일</label>
+      </div>
+      <div>
+        <input type="radio" id="30일" name="timerange" value="30일">
+        <label for="30일">30일</label>
+      </div>
+    </div>
+
+      
 <br>
 <br>
     <input type="submit" class="btn btn-primary" value="검색" />

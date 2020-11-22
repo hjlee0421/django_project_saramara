@@ -1,4 +1,4 @@
-from .models import Post, User, Comment
+from .models import Post, User, Comment  # , HitCount
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import check_password
@@ -12,6 +12,8 @@ from django.views.generic.edit import FormMixin
 from .forms import PostForm
 
 from django.core.paginator import Paginator
+
+from datetime import datetime, timedelta
 
 
 # There is Q objects that allow to complex lookups. Example:
@@ -67,25 +69,39 @@ class IndexView(generic.ListView):
     # def get_queryset(self):
     # return Post.objects.all()
 
+    # 조회수순, 사라순, 마라순, 오늘, 이번주, 이번달.
+    # order_by는 마지막에 해줘야 함
+
     def get(self, request, *args, **kwargs):
-        print('hello')
-        keyword = request.GET.get('keyword')
+
+        timerange = request.GET.get('timerange')
+        timerange_list = ['1일', '7일', '30일']
+
+        drone = request.GET.get('drone')
+        drone_list = ['조회수', 'comment_cnt', 'sara_cnt', 'mara_cnt']
+
         category = request.GET.get('category')
         category_list = ['상의', '하의', '신발', '기타']
 
+        keyword = request.GET.get('keyword')
+
+        if timerange in timerange_list:
+            self.queryset = self.get_queryset().filter(
+                pub_date__gte=datetime.now()-timedelta(days=int(timerange[0])))
+
         if category in category_list:
             self.queryset = self.get_queryset().filter(category=category)
+
         if keyword:
-            # Item.objects.filter(Q(creator=owner) | Q(moderated=False))
             self.queryset = self.get_queryset().filter(Q(title__icontains=keyword)
                                                        | Q(ckcontent__icontains=keyword))
-            # filter 적용한 부분
             # TODO : filter 여러가지 기능 추가하기
             # https://docs.djangoproject.com/en/3.1/ref/models/querysets/
-            # 위 주소에 다양한 필터 기능 있음
-            # 쭉 살펴봐야 할듯
-            # css부분 작업
-            '''
+
+        if drone in drone_list:
+            self.queryset = self.get_queryset().order_by('-'+drone)
+
+        '''
             $python manage.py shell_plus
             >>> Post.objects.all()
 <QuerySet [<Post: 새로운 유저>, <Post: xptm>, <Post: 색깔별 모자>, <Post: 나이키를 살까 말까>, <Post: 어 이게 되나? 위 하의 아래 기타>, <Post: 하의라고>, <Post: 카테고리가 되나? 하의>, <Post: dho>, <Post: 클래스가>, <Post: 제목입니다>, <Post: 테스트유저1>, <Post: 테스트2>, <Post: 사진이 올라가기는 하는데>, <Post: 이게>, <Post: 이건 뭐지?>, <Post: 이제>, <Post: 체크하기>, <Post: 22>, <Post: 리치텍스트>, <Post: 11>, '...(remaining elements truncated)...']>
@@ -137,10 +153,12 @@ class DetailView(generic.DetailView, FormMixin, View):
 
     def post(self, request, *args, **kwargs):
 
+        self.object = self.get_object()
+
         user_id = request.session.get('user_id')
         suser = User.objects.get(pk=user_id)
 
-        post = Post(author=suser, title='test for POST')
+        # post = Post(author=suser, title='test for POST')
 
         if 'delete_comment_button' in request.POST:
             comment_id = request.POST['delete_comment']
@@ -148,7 +166,9 @@ class DetailView(generic.DetailView, FormMixin, View):
             if suser == comment.author:
                 comment.delete()
 
-        self.object = self.get_object()
+                self.object.comment_cnt = Comment.objects.filter(
+                    post=Post.objects.filter(title=self.object).values('id')[0]['id']).count()
+                self.object.save()
 
         context = self.get_context_data(object=self.object)
 
@@ -163,11 +183,17 @@ class DetailView(generic.DetailView, FormMixin, View):
 
     def add_comment(self, user_name, user_comment):
         post = self.object
+
         user_name = user_name
         comment = Comment(post=post, author=user_name, text=user_comment)
         comment.save()
 
+        post.comment_cnt = post.comment_cnt = Comment.objects.filter(
+            post=Post.objects.filter(title=post).values('id')[0]['id']).count()
+        post.save()
+
     def delete(self, request, *args, **kwargs):
+
         return HttpResponse('context')
 
     def sara_vote(self, user_name):
@@ -338,3 +364,26 @@ class SignoutView(View):
 class MypageView(View):
     def get(self, request):
         return render(request, 'posts/mypage.html')
+
+
+# views.py
+# try:
+#     # ip주소와 게시글 번호로 기록을 조회함
+#     hits = HitCount.objects.get(ip=ip, post=post)
+# except Exception as e:
+#     # 처음 게시글을 조회한 경우엔 조회 기록이 없음
+#     print(e)
+#     hits = HitCount(ip=ip, post=post)
+#     SummerNote.objects.filter(
+#         attachment_ptr_id=post_id).update(hits=post.hits + 1)
+#     hits.save()
+# else:
+#     # 조회 기록은 있으나, 날짜가 다른 경우
+#     if not hits.date == timezone.now().date():
+#         SummerNote.objects.filter(
+#             attachment_ptr_id=post_id).update(hits=post.hits + 1)
+#         hits.date = timezone.now()
+#         hits.save()
+#     # 날짜가 같은 경우
+#     else:
+#         print(str(ip) + ' has already hit this post.\n\n')
