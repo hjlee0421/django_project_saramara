@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'rest_framework',
     'django_extensions',
+    'frontend',
     # 'bootstrap_modal_forms',
 ]
 
