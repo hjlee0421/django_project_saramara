@@ -18,7 +18,7 @@ export default class HomePage extends Component {
     return (
       <Router>
         <Switch>
-          <Route exact path="/">
+          <Route path="/tt">
             <p>This is the home page</p>
           </Route>
           <Route path="/join" component={RoomJoinPage} />
