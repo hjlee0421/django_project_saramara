@@ -15,8 +15,10 @@ from django.core.paginator import Paginator
 
 from datetime import datetime, timedelta
 
-from rest_framework import generics
-from .serializers import PostSerializer
+from rest_framework import generics, status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import PostSerializer, AskSerializer
 
 
 # There is Q objects that allow to complex lookups. Example:
@@ -62,10 +64,60 @@ from django.db.models import Q
 #   def get(self, request):
 # TODO :
 
+##############################################################################################################################
 # add new
-class TestView(generics.ListAPIView):  # CreateAPIView
+class TestIndexView(generics.ListAPIView):  # CreateAPIView
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+
+class AskView(View):
+    def get(self, request):
+        form = PostForm()
+        return render(request, 'posts/ask.html', {'form': form})
+
+    def post(self, request):
+        form = PostForm(request.POST)
+        if form.is_valid():
+            user_id = request.session.get('_auth_user_id')
+            suser = User.objects.get(pk=user_id)
+            post = Post(**form.cleaned_data)
+            post.author = suser
+            post.save()
+            return redirect('/')
+        else:
+            return redirect('/')
+
+
+class TestAskView(APIView):
+    serializer_class = AskSerializer
+
+    def post(self, request, format=None):
+
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid():
+            print("###############")
+            print(serializer.data)
+
+            # TODO : change to post = Post(**form.cleaned_data) style
+
+            author = User.objects.get(pk=serializer.data.get('author'))
+            title = serializer.data.get('title')
+            price = serializer.data.get('price')
+            brand = serializer.data.get('brand')
+            link = serializer.data.get('link')
+            ckcontent = serializer.data.get('ckcontent')
+            category = serializer.data.get('category')
+
+            post = Post(author=author, title=title, price=price, brand=brand,
+                        link=link, ckcontent=ckcontent, category=category)
+            post.save()
+            return Response(AskSerializer(post).data, status=status.HTTP_201_CREATED)
+
+        return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
+
+##############################################################################################################################
 
 
 class IndexView(generic.ListView):
@@ -296,9 +348,9 @@ class AskView(View):
         form = PostForm(request.POST)
         if form.is_valid():
             user_id = request.session.get('_auth_user_id')
-            suser = User.objects.get(pk=user_id)
+            user = User.objects.get(pk=user_id)
             post = Post(**form.cleaned_data)
-            post.author = suser
+            post.author = user
             post.save()
             return redirect('/')
         else:

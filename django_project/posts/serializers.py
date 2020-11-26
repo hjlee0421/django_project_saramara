@@ -15,6 +15,13 @@ class PostSerializer(serializers.ModelSerializer):
                   'mara', 'sara_cnt', 'mara_cnt', 'comment_cnt', 'view_cnt', 'ckcontent', 'category')
 
 
+class AskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ('author', 'title', 'price', 'brand',
+                  'link', 'ckcontent', 'category')
+
+
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
