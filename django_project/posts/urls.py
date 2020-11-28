@@ -12,5 +12,5 @@ urlpatterns = [
     path('signin/', views.SigninView.as_view(), name='signin'),
     path('signout/', views.SignoutView.as_view(), name='signout'),
     path('test/', views.TestIndexView.as_view(), name='testindex'),
-    path('testask/', views.TestAskView.as_view(), name='testindex'),
+    path('testask/', views.TestAskView.as_view(), name='testask'),
 ]

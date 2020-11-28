@@ -71,22 +71,22 @@ class TestIndexView(generics.ListAPIView):  # CreateAPIView
     serializer_class = PostSerializer
 
 
-class AskView(View):
-    def get(self, request):
-        form = PostForm()
-        return render(request, 'posts/ask.html', {'form': form})
+# class AskView(View):
+#     def get(self, request):
+#         form = PostForm()
+#         return render(request, 'posts/ask.html', {'form': form})
 
-    def post(self, request):
-        form = PostForm(request.POST)
-        if form.is_valid():
-            user_id = request.session.get('_auth_user_id')
-            user = User.objects.get(pk=user_id)
-            post = Post(**form.cleaned_data)
-            post.author = user
-            post.save()
-            return redirect('/')
-        else:
-            return redirect('/')
+#     def post(self, request):
+#         form = PostForm(request.POST)
+#         if form.is_valid():
+#             user_id = request.session.get('_auth_user_id')
+#             user = User.objects.get(pk=user_id)
+#             post = Post(**form.cleaned_data)
+#             post.author = user
+#             post.save()
+#             return redirect('/')
+#         else:
+#             return redirect('/')
 
 
 class TestAskView(APIView):
