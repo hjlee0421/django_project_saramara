@@ -80,9 +80,9 @@ class AskView(View):
         form = PostForm(request.POST)
         if form.is_valid():
             user_id = request.session.get('_auth_user_id')
-            suser = User.objects.get(pk=user_id)
+            user = User.objects.get(pk=user_id)
             post = Post(**form.cleaned_data)
-            post.author = suser
+            post.author = user
             post.save()
             return redirect('/')
         else:
@@ -216,14 +216,14 @@ class DetailView(generic.DetailView, FormMixin, View):
         self.object = self.get_object()
 
         user_id = request.session.get('user_id')
-        suser = User.objects.get(pk=user_id)
+        user = User.objects.get(pk=user_id)
 
-        # post = Post(author=suser, title='test for POST')
+        # post = Post(author=user, title='test for POST')
 
         if 'delete_comment_button' in request.POST:
             comment_id = request.POST['delete_comment']
             comment = Comment.objects.get(id=comment_id)
-            if suser == comment.author:
+            if user == comment.author:
                 comment.delete()
 
                 self.object.comment_cnt = Comment.objects.filter(
@@ -233,11 +233,11 @@ class DetailView(generic.DetailView, FormMixin, View):
         context = self.get_context_data(object=self.object)
 
         if 'sara_button' in request.POST:
-            self.sara_vote(suser)
+            self.sara_vote(user)
         elif 'mara_button' in request.POST:
-            self.mara_vote(suser)
+            self.mara_vote(user)
         elif 'add_comment' in request.POST:
-            self.add_comment(suser, request.POST.get('add_comment'))
+            self.add_comment(user, request.POST.get('add_comment'))
         context['comment'] = self.object.comment_set.all()
         return self.render_to_response(context)
 
