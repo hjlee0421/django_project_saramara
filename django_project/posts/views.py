@@ -138,7 +138,7 @@ class IndexView(generic.ListView):
         timerange_list = ['1일', '7일', '30일']
 
         drone = request.GET.get('drone')
-        drone_list = ['조회수', 'comment_cnt', 'sara_cnt', 'mara_cnt']
+        drone_list = ['view_cnt', 'comment_cnt', 'sara_cnt', 'mara_cnt']
 
         category = request.GET.get('category')
         category_list = ['상의', '하의', '신발', '기타']
@@ -206,17 +206,17 @@ class DetailView(generic.DetailView, FormMixin, View):
 
         self.object = self.get_object()
 
-        context = self.get_context_data(object=self.object)
+        self.object.view_cnt = self.object.view_cnt + 1
+        self.object.save()
+        # TODO : 현재는 해당 페이지가 GET 요청할때마다 1씩 올라감, 하지만 하루에 한번으로 업데이트 해야함
 
+        context = self.get_context_data(object=self.object)
         context['comment'] = self.object.comment_set.all()
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
 
         self.object = self.get_object()
-
-        user_id = request.session.get('user_id')
-        user = User.objects.get(pk=user_id)
 
         # post = Post(author=user, title='test for POST')
 
