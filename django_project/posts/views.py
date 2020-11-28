@@ -64,8 +64,21 @@ from django.db.models import Q
 #   def get(self, request):
 # TODO :
 
+
+def kakao_login(request):
+    app_rest_api_key = os.environ.get("KAKAO_REST_API_KEY")
+    redirect_uri = "http://127.0.0.1:8000/"
+    return redirect(
+        f"https://kauth.kakao.com/oauth/authorize?client_id={app_rest_api_key}&redirect_uri={redirect_uri}&response_type=code"
+    )
+
+# https://developers.kakao.com/docs/restapi/user-management
+
+
 ##############################################################################################################################
 # add new
+
+
 class TestIndexView(generics.ListAPIView):  # CreateAPIView
     queryset = Post.objects.all()
     serializer_class = PostSerializer

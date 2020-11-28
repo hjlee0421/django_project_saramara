@@ -31,7 +31,10 @@ urlpatterns = [
     # CKEDITOR START
     path('ckeditor/', include(
         'ckeditor_uploader.urls')),
-    path('', include('frontend.urls'))
+    # frontend
+    path('', include('frontend.urls')),
+    # django-allauth
+    path('accounts/', include('allauth.urls')),
 ] + static(settings.MEDIA_URL,
            document_root=settings.MEDIA_ROOT)
 # CKEDITOR END
