@@ -66,13 +66,19 @@ from django.db.models import Q
 
 
 def kakao_login(request):
-    app_rest_api_key = os.environ.get("KAKAO_REST_API_KEY")
-    redirect_uri = "http://127.0.0.1:8000/"
+    app_rest_api_key = 'f306ff3015473b7cad78b446eec85d90'
+    redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
     return redirect(
         f"https://kauth.kakao.com/oauth/authorize?client_id={app_rest_api_key}&redirect_uri={redirect_uri}&response_type=code"
     )
 
 # https://developers.kakao.com/docs/restapi/user-management
+
+
+def kakao_callback(request):
+    return redirect(
+        f"http://127.0.0.1:8000/accounts/login/kakao/callback?code"
+    )
 
 
 ##############################################################################################################################
