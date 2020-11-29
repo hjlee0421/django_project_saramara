@@ -86,7 +86,7 @@ from django.db.models import Q
 
 # code 요청
 def kakao_login(request):
-    app_rest_api_key = 'f306ff3015473b7cad78b446eec85d90'
+    app_rest_api_key = '7c916da19e4ec046c291e806586395c0'
     redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
     return redirect(
         f"https://kauth.kakao.com/oauth/authorize?client_id={app_rest_api_key}&redirect_uri={redirect_uri}&response_type=code"
@@ -98,7 +98,7 @@ def kakao_callback(request):
 
     user_token = request.GET.get("code")
 
-    app_rest_api_key = 'f306ff3015473b7cad78b446eec85d90'
+    app_rest_api_key = '7c916da19e4ec046c291e806586395c0'
     url = 'https://kauth.kakao.com/oauth/token'
     redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
 
