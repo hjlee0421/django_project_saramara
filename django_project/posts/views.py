@@ -20,6 +20,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import PostSerializer, AskSerializer
 
+import urllib
+
 
 # There is Q objects that allow to complex lookups. Example:
 # Item.objects.filter(Q(creator=owner) | Q(moderated=False))
@@ -65,6 +67,23 @@ from django.db.models import Q
 # TODO :
 
 
+# def kakao_login(request):
+#     app_rest_api_key = 'f306ff3015473b7cad78b446eec85d90'
+#     redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
+#     return redirect(
+#         f"https://kauth.kakao.com/oauth/authorize?client_id={app_rest_api_key}&redirect_uri={redirect_uri}&response_type=code"
+#     )
+
+# # https://developers.kakao.com/docs/restapi/user-management
+
+
+# def kakao_callback(request):
+#     return redirect(
+#         f"http://127.0.0.1:8000/accounts/login/kakao/callback?code"
+#     )
+
+
+# code 요청
 def kakao_login(request):
     app_rest_api_key = 'f306ff3015473b7cad78b446eec85d90'
     redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
@@ -72,14 +91,40 @@ def kakao_login(request):
         f"https://kauth.kakao.com/oauth/authorize?client_id={app_rest_api_key}&redirect_uri={redirect_uri}&response_type=code"
     )
 
-# https://developers.kakao.com/docs/restapi/user-management
 
-
+# access token 요청
 def kakao_callback(request):
-    return redirect(
-        f"http://127.0.0.1:8000/accounts/login/kakao/callback?code"
-    )
+    # params = urllib.parse.urlencode(request.GET)
+    # user_token = request.GET.get("code")
 
+    user_token = request.GET.get("code")
+
+    app_rest_api_key = 'f306ff3015473b7cad78b446eec85d90'
+    url = 'https://kauth.kakao.com/oauth/token'
+    headers = {'Content-type': 'applications/x-www-form-urlencoded; charset=utf-8'}
+    body = {
+        'grant_type': 'authorization_code',
+        'client_id': app_rest_api_key,
+        'redirect_uri': 'http://127.0.0.1:800',
+        'code': user_token
+
+    }
+
+    # redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
+
+    # token_request = requests.post(
+    #     f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={app_rest_api_key}&redirect_uri={redirect_uri}&code={user_token}"
+    # )
+
+    token_request = request.POST(url, headers=headers, data=body)
+    print("###################################3")
+    print(token_request)
+    print(type(token_request))
+    print("###################################3")
+    return HttpResponse(f'{token_request.text}')
+    # token_response_json = token_request.json()
+    # return redirect('http://127.0.0.1:8000/')
+    # return redirect(f'http://127.0.0.1:8000/accounts/login/kakao/callback?code={user_token}')
 
 ##############################################################################################################################
 # add new

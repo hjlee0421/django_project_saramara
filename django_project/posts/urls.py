@@ -13,7 +13,8 @@ urlpatterns = [
     path('signout/', views.SignoutView.as_view(), name='signout'),
     path('test/', views.TestIndexView.as_view(), name='testindex'),
     path('testask/', views.TestAskView.as_view(), name='testask'),
-    path('login/kakao', views.kakao_login, name='kakaologin'),
-    path('login/kakao/callback', views.kakao_callback, name='kakaocallback'),
+    path('accounts/login/kakao', views.kakao_login, name='kakaologin'),
+    path('accounts/login/kakao/callback',
+         views.kakao_callback, name='kakaocallback'),
 
 ]
