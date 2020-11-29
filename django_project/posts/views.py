@@ -120,13 +120,7 @@ def kakao_callback(request):
         headers={"Authorization": f"Bearer {access_token}"},
     )
     profile_json = profile_request.json()
-    print("##########################################")
-    print("json type info")
-    print(profile_json)
     return HttpResponse(f'{profile_json}')
-    # token_response_json = token_request.json()
-    # return redirect('http://127.0.0.1:8000/')
-    # return redirect(f'http://127.0.0.1:8000/accounts/login/kakao/callback?code={user_token}')
 
 ##############################################################################################################################
 # add new
