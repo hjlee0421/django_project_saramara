@@ -11,11 +11,13 @@ from ckeditor_uploader.fields import RichTextUploadingField
 class User(AbstractUser):
     age = models.IntegerField(default=0)
     gender = models.CharField(
-        max_length=6, blank=True, null=True, default="")
+        max_length=128, blank=True, null=True, default="")
     email = models.EmailField(
         max_length=128, blank=True, null=True, default="")
     birthday = models.CharField(
-        max_length=8, blank=True, null=True, default="")
+        max_length=128, blank=True, null=True, default="")
+    kakao_access_token = models.CharField(
+        max_length=128, blank=True, null=True, default="")
     # birthyear
     # - birthyear : YYYY (string)
 

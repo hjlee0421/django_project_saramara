@@ -67,10 +67,13 @@ from django.db.models import Q
 #   def get(self, request):
 # TODO :
 
+
 # 회원탈퇴 해당 아이디에 대해서 access token 을 계속 추적가능해야 함
+
+
 def kakao_unlink(request):
-    # post request
-    access_token = 'li3opZnDgUNOoxiTRsjMwHIRHpZTIo8eiVBHDwopb7kAAAF2Ewn06Q'
+
+    access_token = 'YqY4ghTnrJglEySNp44at2oXv9wSQZ5NITh_yAopb1QAAAF2E1hnFQ'
     profile_request = requests.post(
         "https://kapi.kakao.com/v1/user/unlink",
         headers={"Authorization": f"Bearer {access_token}"},
@@ -81,15 +84,44 @@ def kakao_unlink(request):
 # 로그아웃 해당 아이디에 대해서 access token 을 계속 추적가능해야 함
 
 
+def my_view(request):
+    if request.method == 'GET':
+        # <view logic>
+        return HttpResponse('result')
+
+
 def kakao_logout(request):
-    # post request
-    access_token = 'QCuTE5lvx-JtUvPOkUdpJDfrvy9kk7JEEiTyXQo9dRsAAAF2EwscLA'
+    #     if request.method == 'GET':
+    #         if request.session.get('user_id'):
+    #             print(request.session.get('user_id'))
+    #             # access_token = User.object.filter()
+    #             profile_request = requests.post(
+    # "https://kapi.kakao.com/v1/user/logout",
+    #         headers={"Authorization": f"Bearer {access_token}"},
+    #     )
+    #             del(request.session['user_id'])
+
+    #         logout(request, backend='django.contrib.auth.backends.ModelBackend')
+
+    #         return redirect('/')
+
+    access_token = 'YqY4ghTnrJglEySNp44at2oXv9wSQZ5NITh_yAopb1QAAAF2E1hnFQ'
     profile_request = requests.post(
         "https://kapi.kakao.com/v1/user/logout",
         headers={"Authorization": f"Bearer {access_token}"},
     )
     profile_json = profile_request.json()
     return HttpResponse(f'{profile_json}')
+
+
+class SignoutView(View):
+    def get(self, request):
+        if request.session.get('user_id'):
+            del(request.session['user_id'])
+
+        logout(request)
+
+        return redirect('/')
 
 
 # 처음이라면 회원가입, 아니라면 로그인
@@ -120,8 +152,6 @@ def kakao_callback(request):
     if error is not None:
         raise KakaoException()
     access_token = token_response_json.get("access_token")
-    print("access token is")
-    print(access_token)
 
     # post request
     profile_request = requests.post(
@@ -129,7 +159,42 @@ def kakao_callback(request):
         headers={"Authorization": f"Bearer {access_token}"},
     )
     profile_json = profile_request.json()
-    return HttpResponse(f'{profile_json}')
+
+    username = str(profile_json['id'])+'@kakao'
+
+    gender = ""
+    email = ""
+    birthday = ""
+
+    if profile_json['kakao_account']['gender_needs_agreement'] == False:
+        gender = profile_json['kakao_account']['gender']
+
+    if profile_json['kakao_account']['email_needs_agreement'] == False:
+        email = profile_json['kakao_account']['email']
+
+    if profile_json['kakao_account']['birthday_needs_agreement'] == False:
+        birthday = profile_json['kakao_account']['birthday']
+
+    if not User.objects.filter(username=username).exists():
+        # 기존에 username 이 없다면
+        user = User(username=username, gender=gender, email=email,
+                    birthday=birthday, kakao_access_token=access_token)
+        user.save()
+        # login(request, user)
+        request.session['user_id'] = user.id
+        return redirect('/')
+    else:
+        # 기존에 username 이 있다면?
+        print("#######################")
+        user = User.objects.get(username=username)
+        # user = authenticate(username=username)
+        print(user)
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        request.session['user_id'] = user.id
+        return redirect('/')
+
+    # return HttpResponse(f'{profile_json}')
+    return redirect('/')
 
 ##############################################################################################################################
 # add new
@@ -465,9 +530,18 @@ class SigninView(View):
 class SignoutView(View):
     def get(self, request):
         if request.session.get('user_id'):
+            # print(request.session.get('user_id'))
+            # print(User.objects.get(pk=request.session.get('user_id')))
+            access_token = User.objects.get(pk=request.session.get(
+                'user_id')).kakao_access_token
+            profile_request = requests.post(
+                "https://kapi.kakao.com/v1/user/logout",
+                headers={"Authorization": f"Bearer {access_token}"},
+            )
             del(request.session['user_id'])
 
         logout(request)
+        # logout(request, backend='django.contrib.auth.backends.ModelBackend')
 
         return redirect('/')
 
