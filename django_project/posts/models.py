@@ -9,16 +9,15 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class User(AbstractUser):
-    # age = models.IntegerField(default=0)
-    gender = models.CharField(default="")
-    kakao_account
-    email = ""  # @###.com (string)
-    birthday
-    - birthday: MMDD(string)
+    age = models.IntegerField(default=0)
+    gender = models.CharField(
+        max_length=6, blank=True, null=True, default="")
+    email = models.EmailField(
+        max_length=128, blank=True, null=True, default="")
+    birthday = models.CharField(
+        max_length=8, blank=True, null=True, default="")
     # birthyear
     # - birthyear : YYYY (string)
-    gender
-    - gender: female/male(string)
 
 
 # blank = ui에서 빈칸 from valid check, null 은 db에서 빈값을 받는 개념
@@ -26,8 +25,8 @@ class Post(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # settings.py 에 AUTH_USER_MODEL 확인 추천!
     title = models.CharField(max_length=128)
-    price = models.CharField(max_length=128, blank=True,  null=True)
-    brand = models.CharField(max_length=128, blank=True,  null=True)
+    price = models.CharField(max_length=128, blank=True, null=True)
+    brand = models.CharField(max_length=128, blank=True, null=True)
     link = models.CharField(
         max_length=128, blank=True, null=True)
     pub_date = models.DateTimeField(auto_now_add=True,
