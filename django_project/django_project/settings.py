@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_extensions',
     'frontend',
-    # 'bootstrap_modal_forms',
 
     # django-allauth
     'django.contrib.sites',
@@ -54,7 +53,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.kakao',
 ]
 
-# django-allauth ???
+# django-allauth
 SITE_ID = 1
 # 앱 ID : 425741
 # 앱 이름 : saramara
@@ -64,7 +63,7 @@ SITE_ID = 1
 # JavaScript 키    7c916da19e4ec046c291e806586395c0
 # Admin 키    849781e50b6383e734dea266e3257d95
 
-# django-allauth /??
+# django-allauth
 # Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
     'kakao': {

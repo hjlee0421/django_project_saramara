@@ -67,24 +67,32 @@ from django.db.models import Q
 #   def get(self, request):
 # TODO :
 
+# 회원탈퇴 해당 아이디에 대해서 access token 을 계속 추적가능해야 함
+def kakao_unlink(request):
+    # post request
+    access_token = 'li3opZnDgUNOoxiTRsjMwHIRHpZTIo8eiVBHDwopb7kAAAF2Ewn06Q'
+    profile_request = requests.post(
+        "https://kapi.kakao.com/v1/user/unlink",
+        headers={"Authorization": f"Bearer {access_token}"},
+    )
+    profile_json = profile_request.json()
+    return HttpResponse(f'{profile_json}')
 
-# def kakao_login(request):
-#     app_rest_api_key = 'f306ff3015473b7cad78b446eec85d90'
-#     redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
-#     return redirect(
-#         f"https://kauth.kakao.com/oauth/authorize?client_id={app_rest_api_key}&redirect_uri={redirect_uri}&response_type=code"
-#     )
-
-# # https://developers.kakao.com/docs/restapi/user-management
-
-
-# def kakao_callback(request):
-#     return redirect(
-#         f"http://127.0.0.1:8000/accounts/login/kakao/callback?code"
-#     )
+# 로그아웃 해당 아이디에 대해서 access token 을 계속 추적가능해야 함
 
 
-# code 요청
+def kakao_logout(request):
+    # post request
+    access_token = 'QCuTE5lvx-JtUvPOkUdpJDfrvy9kk7JEEiTyXQo9dRsAAAF2EwscLA'
+    profile_request = requests.post(
+        "https://kapi.kakao.com/v1/user/logout",
+        headers={"Authorization": f"Bearer {access_token}"},
+    )
+    profile_json = profile_request.json()
+    return HttpResponse(f'{profile_json}')
+
+
+# 처음이라면 회원가입, 아니라면 로그인
 def kakao_login(request):
     app_rest_api_key = '7c916da19e4ec046c291e806586395c0'
     redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
@@ -93,7 +101,6 @@ def kakao_login(request):
     )
 
 
-# access token 요청
 def kakao_callback(request):
 
     user_token = request.GET.get("code")
@@ -113,6 +120,8 @@ def kakao_callback(request):
     if error is not None:
         raise KakaoException()
     access_token = token_response_json.get("access_token")
+    print("access token is")
+    print(access_token)
 
     # post request
     profile_request = requests.post(
@@ -129,24 +138,6 @@ def kakao_callback(request):
 class TestIndexView(generics.ListAPIView):  # CreateAPIView
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-
-
-# class AskView(View):
-#     def get(self, request):
-#         form = PostForm()
-#         return render(request, 'posts/ask.html', {'form': form})
-
-#     def post(self, request):
-#         form = PostForm(request.POST)
-#         if form.is_valid():
-#             user_id = request.session.get('_auth_user_id')
-#             user = User.objects.get(pk=user_id)
-#             post = Post(**form.cleaned_data)
-#             post.author = user
-#             post.save()
-#             return redirect('/')
-#         else:
-#             return redirect('/')
 
 
 class TestAskView(APIView):

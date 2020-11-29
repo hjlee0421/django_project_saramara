@@ -9,17 +9,16 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class User(AbstractUser):
-    gender = models.IntegerField(default=0)
-    age = models.IntegerField(default=0)
-    # kakao_account
-    # email
-    # - email : ####@###.com (string)
-    # birthday
-    # - birthday : MMDD (string)
+    # age = models.IntegerField(default=0)
+    gender = models.CharField(default="")
+    kakao_account
+    email = ""  # @###.com (string)
+    birthday
+    - birthday: MMDD(string)
     # birthyear
     # - birthyear : YYYY (string)
-    # gender
-    # - gender : female/male (string)
+    gender
+    - gender: female/male(string)
 
 
 # blank = ui에서 빈칸 from valid check, null 은 db에서 빈값을 받는 개념
