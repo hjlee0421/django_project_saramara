@@ -21,6 +21,7 @@ from rest_framework.response import Response
 from .serializers import PostSerializer, AskSerializer
 
 import urllib
+import requests
 
 
 # There is Q objects that allow to complex lookups. Example:
@@ -94,34 +95,35 @@ def kakao_login(request):
 
 # access token 요청
 def kakao_callback(request):
-    # params = urllib.parse.urlencode(request.GET)
-    # user_token = request.GET.get("code")
 
     user_token = request.GET.get("code")
 
     app_rest_api_key = 'f306ff3015473b7cad78b446eec85d90'
     url = 'https://kauth.kakao.com/oauth/token'
-    headers = {'Content-type': 'applications/x-www-form-urlencoded; charset=utf-8'}
-    body = {
-        'grant_type': 'authorization_code',
-        'client_id': app_rest_api_key,
-        'redirect_uri': 'http://127.0.0.1:800',
-        'code': user_token
+    redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
 
-    }
+    token_request = requests.post(
+        f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={app_rest_api_key}&redirect_uri={redirect_uri}&code={user_token}"
+    )
 
-    # redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
+    token_response_json = token_request.json()
+    error = token_response_json.get("error", None)
 
-    # token_request = requests.post(
-    #     f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={app_rest_api_key}&redirect_uri={redirect_uri}&code={user_token}"
-    # )
+    # if there is an error from token_request
+    if error is not None:
+        raise KakaoException()
+    access_token = token_response_json.get("access_token")
 
-    token_request = request.POST(url, headers=headers, data=body)
-    print("###################################3")
-    print(token_request)
-    print(type(token_request))
-    print("###################################3")
-    return HttpResponse(f'{token_request.text}')
+    # post request
+    profile_request = requests.post(
+        "https://kapi.kakao.com/v2/user/me",
+        headers={"Authorization": f"Bearer {access_token}"},
+    )
+    profile_json = profile_request.json()
+    print("##########################################")
+    print("json type info")
+    print(profile_json)
+    return HttpResponse(f'{profile_json}')
     # token_response_json = token_request.json()
     # return redirect('http://127.0.0.1:8000/')
     # return redirect(f'http://127.0.0.1:8000/accounts/login/kakao/callback?code={user_token}')
