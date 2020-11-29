@@ -73,14 +73,13 @@ from django.db.models import Q
 
 def kakao_unlink(request):
 
-    access_token = 'YqY4ghTnrJglEySNp44at2oXv9wSQZ5NITh_yAopb1QAAAF2E1hnFQ'
+    access_token = User.objects.get(
+        pk=request.session.get('user_id')).kakao_access_token
     profile_request = requests.post(
-        "https://kapi.kakao.com/v1/user/unlink",
-        headers={"Authorization": f"Bearer {access_token}"},
-    )
-    profile_json = profile_request.json()
-    return HttpResponse(f'{profile_json}')
-
+        "https://kapi.kakao.com/v1/user/unlink", headers={"Authorization": f"Bearer {access_token}"},)
+    # profile_json = profile_request.json()
+    # return HttpResponse(f'{profile_json}')
+    return redirect('/')
 # 로그아웃 해당 아이디에 대해서 access token 을 계속 추적가능해야 함
 
 
@@ -159,7 +158,7 @@ def kakao_callback(request):
         headers={"Authorization": f"Bearer {access_token}"},
     )
     profile_json = profile_request.json()
-
+    print(profile_json)
     username = str(profile_json['id'])+'@kakao'
 
     gender = ""
@@ -180,7 +179,7 @@ def kakao_callback(request):
         user = User(username=username, gender=gender, email=email,
                     birthday=birthday, kakao_access_token=access_token)
         user.save()
-        # login(request, user)
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         request.session['user_id'] = user.id
         return redirect('/')
     else:
