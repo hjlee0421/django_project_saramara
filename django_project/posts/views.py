@@ -1,3 +1,4 @@
+import os
 from .models import Post, User, Comment  # , HitCount
 
 from django.contrib.auth import authenticate, login, logout
@@ -125,7 +126,7 @@ class SignoutView(View):
 
 # 처음이라면 회원가입, 아니라면 로그인
 def kakao_login(request):
-    app_rest_api_key = '7c916da19e4ec046c291e806586395c0'
+    app_rest_api_key = os.getenv("APP_REST_API_KEY")
     redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
     return redirect(
         f"https://kauth.kakao.com/oauth/authorize?client_id={app_rest_api_key}&redirect_uri={redirect_uri}&response_type=code"
@@ -136,7 +137,7 @@ def kakao_callback(request):
 
     user_token = request.GET.get("code")
 
-    app_rest_api_key = '7c916da19e4ec046c291e806586395c0'
+    app_rest_api_key = os.getenv("APP_REST_API_KEY")
     url = 'https://kauth.kakao.com/oauth/token'
     redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
 
@@ -332,7 +333,7 @@ class DetailView(generic.DetailView, FormMixin, View):
     def post(self, request, *args, **kwargs):
 
         self.object = self.get_object()
-
+        user = request.user
         # post = Post(author=user, title='test for POST')
 
         if 'delete_comment_button' in request.POST:

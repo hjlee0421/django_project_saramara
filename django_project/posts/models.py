@@ -75,8 +75,7 @@ class Comment(models.Model):
 # Models.py
 # 게시글 조회 기록 저장
 # class HitCount(models.Model):
-#     ip = models.CharField(max_length=15, default=None,
-#                           null=True)  # ip 주소
+#     user =
 #     post = models.ForeignKey(
 #         Post, default=None, null=True, on_delete=models.CASCADE)  # 게시글
 #     date = models.DateField(default=timezone.now(),
