@@ -4,7 +4,7 @@ from .models import User, Post, Comment
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'kakao_unique_id',
-                    'profile_nickname', 'gender', 'birthyear', 'birthday', 'email',)
+                    'gender', 'birthyear', 'birthday', 'email',)
     list_filter = ('username',)
 
 

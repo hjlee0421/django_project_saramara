@@ -14,8 +14,6 @@ class User(AbstractUser):
         max_length=128, blank=True, null=True, default="")
     kakao_access_token = models.CharField(
         max_length=128, blank=True, null=True, default="")
-    profile_nickname = models.CharField(
-        max_length=128, blank=True, null=True, default="")
     # profile_image = models.CharField(
     # max_length=128, blank=True, null=True, default="")
     gender = models.CharField(
@@ -80,9 +78,11 @@ class Comment(models.Model):
 
 # Models.py
 # 게시글 조회 기록 저장
-# class HitCount(models.Model):
-#     user =
-#     post = models.ForeignKey(
-#         Post, default=None, null=True, on_delete=models.CASCADE)  # 게시글
-#     date = models.DateField(default=timezone.now(),
-#                             null=True, blank=True)  # 조회수가 올라갔던 날짜
+# HitCount 활용
+class ViewCount(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    post = models.ForeignKey(
+        Post, default=None, null=True, on_delete=models.CASCADE)  # 게시글
+    date = models.DateField(default=timezone.now(),
+                            null=True, blank=True)  # 조회수가 올라갔던 날짜
