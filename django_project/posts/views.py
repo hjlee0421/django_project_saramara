@@ -30,6 +30,7 @@ import requests
 from django.db.models import Q
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+print(BASE_DIR)
 with open(os.path.join(BASE_DIR, 'secrets'), 'rb') as secret_file:
     secrets = json.load(secret_file)
 
