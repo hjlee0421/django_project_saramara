@@ -29,8 +29,8 @@ import json
 # Item.objects.filter(Q(creator=owner) | Q(moderated=False))
 from django.db.models import Q
 
-# BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-BASE_DIR = os.path.dirname(os.path.dirname("C:\\django_project"))
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+# BASE_DIR = os.path.dirname(os.path.dirname("C:\\django_project"))
 # BASE_DIR = os.path.dirname("C:\\django_project\\django_project")
 with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
     secrets = json.load(secret_file)
@@ -132,10 +132,11 @@ class SignoutView(View):
 
 # 처음이라면 회원가입, 아니라면 로그인
 def kakao_login(request):
-    app_rest_api_key = os.getenv("APP_REST_API_KEY")
+    # app_rest_api_key = os.getenv("APP_REST_API_KEY") TODO : os.getenv 방법도 정리해 둘것
+    javascript_key = secrets["kakao"]["javascript_key"]
     redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
     return redirect(
-        f"https://kauth.kakao.com/oauth/authorize?client_id={app_rest_api_key}&redirect_uri={redirect_uri}&response_type=code"
+        f"https://kauth.kakao.com/oauth/authorize?client_id={javascript_key}&redirect_uri={redirect_uri}&response_type=code"
     )
 
 
@@ -143,12 +144,13 @@ def kakao_callback(request):
 
     user_token = request.GET.get("code")
 
-    app_rest_api_key = os.getenv("APP_REST_API_KEY")
+    # app_rest_api_key = os.getenv("APP_REST_API_KEY")
+    javascript_key = secrets["kakao"]["javascript_key"]
     url = 'https://kauth.kakao.com/oauth/token'
     redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
 
     token_request = requests.post(
-        f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={app_rest_api_key}&redirect_uri={redirect_uri}&code={user_token}"
+        f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={javascript_key}&redirect_uri={redirect_uri}&code={user_token}"
     )
 
     token_response_json = token_request.json()
@@ -243,9 +245,6 @@ class TestAskView(APIView):
 
 
 class IndexView(generic.ListView):
-
-    print(type(secrets))
-    print(secrets)
 
     model = Post
     template_name = 'posts/index.html'

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -55,13 +56,10 @@ INSTALLED_APPS = [
 
 # django-allauth
 SITE_ID = 1
-# 앱 ID : 425741
-# 앱 이름 : saramara
-# 앱 키 :
-# 네이티브 앱 키    d05ef6daad96d97e1dde8ffb13374c85
-# REST API 키    f306ff3015473b7cad78b446eec85d90
-# JavaScript 키    7c916da19e4ec046c291e806586395c0
-# Admin 키    849781e50b6383e734dea266e3257d95
+
+
+with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
+    secrets = json.load(secret_file)
 
 # django-allauth
 # Provider specific settings
@@ -71,8 +69,8 @@ SOCIALACCOUNT_PROVIDERS = {
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
         'APP': {
-            'client_id': '7c916da19e4ec046c291e806586395c0',
-            'secret': '',  # ??
+            'client_id': secrets['kakao']['javascript_key'],
+            'secret': '',
             'key': ''
         }
     }
