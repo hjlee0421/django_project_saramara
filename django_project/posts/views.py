@@ -1,5 +1,5 @@
 import os
-from .models import Post, User, Comment  # , HitCount
+from .models import Post, User, Comment, ViewCount
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import check_password
@@ -335,6 +335,35 @@ class DetailView(generic.DetailView, FormMixin, View):
         self.object.view_cnt = self.object.view_cnt + 1
         self.object.save()
         # TODO : 현재는 해당 페이지가 GET 요청할때마다 1씩 올라감, 하지만 하루에 한번으로 업데이트 해야함
+        print("###############################################")
+        print(request.session)
+        print(type(request.session))
+        print(request.session.get('user_id'))
+        print(type(User.objects.get(pk=request.session.get('user_id'))))
+        try:
+            # ip주소와 게시글 번호로 기록을 조회함
+            views = ViewCount.objects.get(
+                user=User.objects.get(pk=request.session.get('user_id')), post=self.object)
+
+        except Exception as e:
+            # 처음 게시글을 조회한 경우엔 조회 기록이 없음
+            print(e)
+            views = ViewCount(user=User.objects.get(
+                pk=request.session.get('user_id')), post=self.object)
+            self.object.view_cnt = self.object.view_cnt + 1
+            views.view_cnt = views.view_cnt + 1
+            views.save()
+        else:
+            # 조회 기록은 있으나, 날짜가 다른 경우
+            if not hits.date == timezone.now().date():
+
+                self.object.view_cnt = self.object.view_cnt + 1
+                views.view_cnt = views.view_cnt + 1
+                views.date = timezone.now()
+                views.save()
+            # 날짜가 같은 경우
+            else:
+                print(str(ip) + ' has already hit this post.\n\n')
 
         context = self.get_context_data(object=self.object)
         context['comment'] = self.object.comment_set.all()
@@ -560,26 +589,3 @@ class SignoutView(View):
 class MypageView(View):
     def get(self, request):
         return render(request, 'posts/mypage.html')
-
-
-# views.py
-# try:
-#     # ip주소와 게시글 번호로 기록을 조회함
-#     hits = HitCount.objects.get(ip=ip, post=post)
-# except Exception as e:
-#     # 처음 게시글을 조회한 경우엔 조회 기록이 없음
-#     print(e)
-#     hits = HitCount(ip=ip, post=post)
-#     SummerNote.objects.filter(
-#         attachment_ptr_id=post_id).update(hits=post.hits + 1)
-#     hits.save()
-# else:
-#     # 조회 기록은 있으나, 날짜가 다른 경우
-#     if not hits.date == timezone.now().date():
-#         SummerNote.objects.filter(
-#             attachment_ptr_id=post_id).update(hits=post.hits + 1)
-#         hits.date = timezone.now()
-#         hits.save()
-#     # 날짜가 같은 경우
-#     else:
-#         print(str(ip) + ' has already hit this post.\n\n')

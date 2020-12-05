@@ -80,9 +80,9 @@ class Comment(models.Model):
 # 게시글 조회 기록 저장
 # HitCount 활용
 class ViewCount(models.Model):
-    user = models.ForeignKey(
+    author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     post = models.ForeignKey(
         Post, default=None, null=True, on_delete=models.CASCADE)  # 게시글
-    date = models.DateField(default=timezone.now(),
-                            null=True, blank=True)  # 조회수가 올라갔던 날짜
+    view_cnt = models.IntegerField(default=0)
+    date = models.DateTimeField(default=timezone.now)  # 조회수가 올라갔던 날짜
