@@ -23,15 +23,16 @@ from .serializers import PostSerializer, AskSerializer
 
 import urllib
 import requests
-
+import json
 
 # There is Q objects that allow to complex lookups. Example:
 # Item.objects.filter(Q(creator=owner) | Q(moderated=False))
 from django.db.models import Q
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-print(BASE_DIR)
-with open(os.path.join(BASE_DIR, 'secrets'), 'rb') as secret_file:
+# BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname("C:\\django_project"))
+# BASE_DIR = os.path.dirname("C:\\django_project\\django_project")
+with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
     secrets = json.load(secret_file)
 
 # class IndexView(generic.ListView):
@@ -243,6 +244,7 @@ class TestAskView(APIView):
 
 class IndexView(generic.ListView):
 
+    print(type(secrets))
     print(secrets)
 
     model = Post
