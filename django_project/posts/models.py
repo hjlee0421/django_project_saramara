@@ -9,20 +9,26 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class User(AbstractUser):
-    age = models.IntegerField(default=0)
+    # age = models.IntegerField(default=0)
+    kakao_unique_id = models.CharField(
+        max_length=128, blank=True, null=True, default="")
+    kakao_access_token = models.CharField(
+        max_length=128, blank=True, null=True, default="")
+    profile_nickname = models.CharField(
+        max_length=128, blank=True, null=True, default="")
+    # profile_image = models.CharField(
+    # max_length=128, blank=True, null=True, default="")
     gender = models.CharField(
         max_length=128, blank=True, null=True, default="")
     email = models.EmailField(
         max_length=128, blank=True, null=True, default="")
     birthday = models.CharField(
-        max_length=128, blank=True, null=True, default="")
-    kakao_access_token = models.CharField(
-        max_length=128, blank=True, null=True, default="")
-    # birthyear
-    # - birthyear : YYYY (string)
-
-
+        max_length=128, blank=True, null=True, default="0101")
+    birthyear = models.CharField(
+        max_length=128, blank=True, null=True, default="1900")
 # blank = ui에서 빈칸 from valid check, null 은 db에서 빈값을 받는 개념
+
+
 class Post(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # settings.py 에 AUTH_USER_MODEL 확인 추천!
