@@ -29,6 +29,10 @@ import requests
 # Item.objects.filter(Q(creator=owner) | Q(moderated=False))
 from django.db.models import Q
 
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+with open(os.path.join(BASE_DIR, 'secrets'), 'rb') as secret_file:
+    secrets = json.load(secret_file)
+
 # class IndexView(generic.ListView):
 #    def get_queryset(self):
 # TODO : IndeView를 활용해서 전체 리스트 볼때 1) 필터를 걸수있게 하고 2) pagination도 적용하기
@@ -237,6 +241,9 @@ class TestAskView(APIView):
 
 
 class IndexView(generic.ListView):
+
+    print(secrets)
+
     model = Post
     template_name = 'posts/index.html'
     context_object_name = 'post_objects'
