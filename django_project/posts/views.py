@@ -249,6 +249,7 @@ class IndexView(generic.ListView):
     model = Post
     template_name = 'posts/index.html'
     context_object_name = 'post_objects'
+
     paginate_by = 10
 
     # def get_queryset(self):
@@ -337,6 +338,7 @@ class DetailView(generic.DetailView, FormMixin, View):
 
         context = self.get_context_data(object=self.object)
         context['comment'] = self.object.comment_set.all()
+
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):

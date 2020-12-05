@@ -13,11 +13,12 @@
 <div>
   <h1>제목, 작성자, 날짜, 사라, 마라, 댓글, 조회수</h1>
 </div>
+
 <!--        각 item detail 이 가지는 기본 정보, 혹은 보여지는 정보를 따로 표시-->
 <br />
 <!--        작성한 내용을 container 라는 div 안에 담아서 표현-->
 <div>
-  <h1>제목 : {{ post.title }} </h1>
+  <h1>제목 : {{ post.title }}</h1>
   <br />
   <p>카테고리 : {{ post.category }}</p>
   <br />
@@ -29,50 +30,68 @@
   <br />
   <p>{{ post.content }}</p>
 
-  <P>{{ post.ckcontent|safe }}</P>
+  <p>{{ post.ckcontent|safe }}</p>
 
   <h1>투표공간</h1>
 
   <!-- bootstrp 써서 색깔? 같은거 하고, a:click 은 색깔 칠해진걸로 해서 투표 한걸 보이게끔 버튼 변경 css 부분 -->
 
+  <br />
+  {% if user.is_authenticated %}
+  <form method="POST" action=".">
+    {% csrf_token %}
+    <input
+      type="submit"
+      name="sara_button"
+      value="이건사야지"
+      class="btn btn-primary"
+    />
+  </form>
+  {% else %}
+  <form method="POST" action="{% url 'posts:signin' %}">
+    {% csrf_token %}
+    <input
+      type="submit"
+      name="sara_button"
+      value="이건사야지"
+      class="btn btn-primary"
+    />
+  </form>
+  {% endif %}
 
   <br />
   {% if user.is_authenticated %}
   <form method="POST" action=".">
     {% csrf_token %}
-    <input type="submit" name="sara_button" value="이건사야지" class="btn btn-primary" />
+    <input
+      type="submit"
+      name="mara_button"
+      value="이건아니지"
+      class="btn btn-primary"
+    />
   </form>
   {% else %}
   <form method="POST" action="{% url 'posts:signin' %}">
     {% csrf_token %}
-    <input type="submit" name="sara_button" value="이건사야지" class="btn btn-primary" />
-  </form>
-{% endif %}
-
-
-  <br />
-  {% if user.is_authenticated %}
-  <form method="POST" action=".">
-    {% csrf_token %}
-    <input type="submit" name="mara_button" value="이건아니지" class="btn btn-primary" />
-  </form>
-  {% else %}
-  <form method="POST" action="{% url 'posts:signin' %}">
-    {% csrf_token %}
-    <input type="submit" name="sara_button" value="이건아니지" class="btn btn-primary" />
+    <input
+      type="submit"
+      name="sara_button"
+      value="이건아니지"
+      class="btn btn-primary"
+    />
   </form>
   {% endif %}
 
   <!-- <button onclick="location.href='?sara={{user.username}}';" class="sarabtn">
     사라
   </button> -->
-  <h2> count : {{ post.sara_cnt }}</h2>
+  <h2>count : {{ post.sara_cnt }}</h2>
   <br />
 
   <!-- <button onclick="location.href='?mara={{user.username}}';" class="marabtn">
     마라
   </button> -->
-  <h2> count : {{ post.mara_cnt }}</h2>
+  <h2>count : {{ post.mara_cnt }}</h2>
   <br />
 
   <br />
@@ -90,28 +109,27 @@
 <div>
   <h1>댓글창 with pagination</h1>
   <!-- {{comment}} -->
-  
-  
-  {% for element in comment %}
-  author {{element.author.id}} <br>
-  user {{user.id}} <br>
-  <strong>{{element.author}}</strong> <br>
-    {{element.text}} - {{element.created_date}} <br>
-  
-    
-    {% if element.author.id == user.id %}
+
+  {% for element in comment %} author {{element.author.id}} <br />
+  user {{user.id}} <br />
+  <strong>{{element.author}}</strong> <br />
+  {{element.text}} - {{element.created_date}} <br />
+
+  {% if element.author.id == user.id %}
   <form method="POST" action=".">
     {% csrf_token %}
-     <button >수정</button> 
-    <input type="hidden" value="{{element.id}}" name="delete_comment">
-    <input type="submit" name="delete_comment_button" value="삭제" class="btn" />
-     <br>
+    <button>수정</button>
+    <input type="hidden" value="{{element.id}}" name="delete_comment" />
+    <input
+      type="submit"
+      name="delete_comment_button"
+      value="삭제"
+      class="btn"
+    />
+    <br />
   </form>
-  {% endif %}
-    {% empty %}
-    <p>No comments here yet :(</p>
-  
-
+  {% endif %} {% empty %}
+  <p>No comments here yet :(</p>
 
   {% endfor %}
   <br />
@@ -131,17 +149,37 @@
   <form method="POST" action=".">
     {% csrf_token %}
     <!-- <input type="text" name="add_comment" size="100" height="100"><br><br> -->
-    <textarea rows="4" cols="130" name="add_comment" placeholder="당신의 의견을 말해주세요"></textarea>
-    <br>
-    <input type="submit" name="add_comment_button" value="댓글달기" class="btn btn-primary" />
+    <textarea
+      rows="4"
+      cols="130"
+      name="add_comment"
+      placeholder="당신의 의견을 말해주세요"
+    ></textarea>
+    <br />
+    <input
+      type="submit"
+      name="add_comment_button"
+      value="댓글달기"
+      class="btn btn-primary"
+    />
   </form>
   {% else %}
   <form method="POST" action="{% url 'posts:signin' %}">
     {% csrf_token %}
     <!-- <input type="text" name="add_comment" size="100" height="100"><br><br> -->
-    <textarea rows="4" cols="130" name="add_comment" placeholder="당신의 의견을 말해주세요"></textarea>
-    <br>
-    <input type="submit" name="add_comment_button" value="댓글달기" class="btn btn-primary" />
+    <textarea
+      rows="4"
+      cols="130"
+      name="add_comment"
+      placeholder="당신의 의견을 말해주세요"
+    ></textarea>
+    <br />
+    <input
+      type="submit"
+      name="add_comment_button"
+      value="댓글달기"
+      class="btn btn-primary"
+    />
   </form>
   {% endif %}
 
