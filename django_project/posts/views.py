@@ -78,16 +78,16 @@ with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
 # 회원탈퇴 해당 아이디에 대해서 access token 을 계속 추적가능해야 함
 
 
-def kakao_unlink(request):
+# def kakao_unlink(request):
 
-    access_token = User.objects.get(
-        pk=request.session.get('user_id')).kakao_access_token
-    profile_request = requests.post(
-        "https://kapi.kakao.com/v1/user/unlink", headers={"Authorization": f"Bearer {access_token}"},)
-    # profile_json = profile_request.json()
-    # return HttpResponse(f'{profile_json}')
-    return redirect('/')
-# 로그아웃 해당 아이디에 대해서 access token 을 계속 추적가능해야 함
+#     access_token = User.objects.get(
+#         pk=request.session.get('user_id')).kakao_access_token
+#     profile_request = requests.post(
+#         "https://kapi.kakao.com/v1/user/unlink", headers={"Authorization": f"Bearer {access_token}"},)
+#     # profile_json = profile_request.json()
+#     # return HttpResponse(f'{profile_json}')
+#     return redirect('/')
+# # 로그아웃 해당 아이디에 대해서 access token 을 계속 추적가능해야 함
 
 
 def my_view(request):
@@ -96,28 +96,28 @@ def my_view(request):
         return HttpResponse('result')
 
 
-def kakao_logout(request):
-    #     if request.method == 'GET':
-    #         if request.session.get('user_id'):
-    #             print(request.session.get('user_id'))
-    #             # access_token = User.object.filter()
-    #             profile_request = requests.post(
-    # "https://kapi.kakao.com/v1/user/logout",
-    #         headers={"Authorization": f"Bearer {access_token}"},
-    #     )
-    #             del(request.session['user_id'])
+# def kakao_logout(request):
+#     #     if request.method == 'GET':
+#     #         if request.session.get('user_id'):
+#     #             print(request.session.get('user_id'))
+#     #             # access_token = User.object.filter()
+#     #             profile_request = requests.post(
+#     # "https://kapi.kakao.com/v1/user/logout",
+#     #         headers={"Authorization": f"Bearer {access_token}"},
+#     #     )
+#     #             del(request.session['user_id'])
 
-    #         logout(request, backend='django.contrib.auth.backends.ModelBackend')
+#     #         logout(request, backend='django.contrib.auth.backends.ModelBackend')
 
-    #         return redirect('/')
+#     #         return redirect('/')
 
-    access_token = 'YqY4ghTnrJglEySNp44at2oXv9wSQZ5NITh_yAopb1QAAAF2E1hnFQ'
-    profile_request = requests.post(
-        "https://kapi.kakao.com/v1/user/logout",
-        headers={"Authorization": f"Bearer {access_token}"},
-    )
-    profile_json = profile_request.json()
-    return HttpResponse(f'{profile_json}')
+#     access_token = 'YqY4ghTnrJglEySNp44at2oXv9wSQZ5NITh_yAopb1QAAAF2E1hnFQ'
+#     profile_request = requests.post(
+#         "https://kapi.kakao.com/v1/user/logout",
+#         headers={"Authorization": f"Bearer {access_token}"},
+#     )
+#     profile_json = profile_request.json()
+#     return HttpResponse(f'{profile_json}')
 
 
 class SignoutView(View):
@@ -130,7 +130,7 @@ class SignoutView(View):
         return redirect('/')
 
 
-# 처음이라면 회원가입, 아니라면 로그인
+# # 처음이라면 회원가입, 아니라면 로그인
 def kakao_login(request):
     # app_rest_api_key = os.getenv("APP_REST_API_KEY") TODO : os.getenv 방법도 정리해 둘것
     javascript_key = secrets["kakao"]["javascript_key"]
@@ -160,7 +160,7 @@ def kakao_callback(request):
     if error is not None:
         raise KakaoException()
     access_token = token_response_json.get("access_token")
-
+    print(access_token)
     # post request
     profile_request = requests.post(
         "https://kapi.kakao.com/v2/user/me",
@@ -204,8 +204,8 @@ def kakao_callback(request):
     # return HttpResponse(f'{profile_json}')
     return redirect('/')
 
-##############################################################################################################################
-# add new
+# ##############################################################################################################################
+# # add new
 
 
 class TestIndexView(generics.ListAPIView):  # CreateAPIView

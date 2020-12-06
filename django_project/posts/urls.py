@@ -16,8 +16,8 @@ urlpatterns = [
     path('accounts/login/kakao', views.kakao_login, name='kakaologin'),
     path('accounts/login/kakao/callback',
          views.kakao_callback, name='kakaocallback'),
-    path('accounts/logout/kakao', views.kakao_logout, name='kakaologout'),
-    path('accounts/unlink/kakao', views.kakao_unlink, name='kakaounlink'),
+    # path('accounts/logout/kakao', views.kakao_logout, name='kakaologout'),
+    # path('accounts/unlink/kakao', views.kakao_unlink, name='kakaounlink'),
 
 
 ]
