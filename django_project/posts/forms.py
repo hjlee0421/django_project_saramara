@@ -19,7 +19,7 @@ class PostForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
         self.fields['title'].required = True
-        self.fields['title'].required = True
+        self.fields['category'].required = True
         self.fields['brand'].required = True
         self.fields['price'].required = True
         self.fields['ckcontent'].required = True

@@ -123,6 +123,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # django-allauth
                 'django.template.context_processors.request',
+                'posts.context_processors.kakao_login_key',
             ],
         },
     },

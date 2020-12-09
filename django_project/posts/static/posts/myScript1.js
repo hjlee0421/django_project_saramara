@@ -72,3 +72,10 @@ $(document).ready(function () {
   var myElement = $(".check1");
   myElement.text("Hello Sweden!");
 });
+
+
+$(document).ready(function () {
+  $("#search-button").click(function () {
+    $("div.items-sort-all").toggle();
+  });
+});
