@@ -11,14 +11,21 @@
 <br />
 <!--        각 item detail 이 가지는 기본 정보, 혹은 보여지는 정보를 따로 표시-->
 <div>
-  <h1>제목, 작성자, 날짜, 사라, 마라, 댓글, 조회수</h1>
+  <h1>
+    {{ post.title | upper}} <br />
+    {{ post.author }} | 사라-{{post.sara_cnt}} 마라-{{post.mara_cnt}} 댓글수
+    조회수-{{post.view_cnt}} <br />
+    작성일 {{post.pub_date}}
+  </h1>
 </div>
 
 <!--        각 item detail 이 가지는 기본 정보, 혹은 보여지는 정보를 따로 표시-->
 <br />
 <!--        작성한 내용을 container 라는 div 안에 담아서 표현-->
 <div>
-  <h1>제목 : {{ post.title }}</h1>
+  <p>작성자 : {{ post.author }}</p>
+  <br />
+  <p>제목 : {{ post.title }}</p>
   <br />
   <p>카테고리 : {{ post.category }}</p>
   <br />
@@ -48,6 +55,7 @@
     />
   </form>
   {% else %}
+  {% comment %} alert 로그인하세요 OR 카카오로그인 자동연결 {% endcomment %}
   <form method="POST" action="{% url 'posts:signin' %}">
     {% csrf_token %}
     <input
@@ -71,6 +79,7 @@
     />
   </form>
   {% else %}
+  {% comment %} alert 로그인하세요 OR 카카오로그인 자동연결 {% endcomment %}
   <form method="POST" action="{% url 'posts:signin' %}">
     {% csrf_token %}
     <input
@@ -85,7 +94,7 @@
   <!-- <button onclick="location.href='?sara={{user.username}}';" class="sarabtn">
     사라
   </button> -->
-  <h2>count : {{ post.sara_cnt }}</h2>
+  {% comment %} <h2>count : {{ post.sara_cnt }}</h2>
   <br />
 
   <!-- <button onclick="location.href='?mara={{user.username}}';" class="marabtn">
@@ -93,7 +102,43 @@
   </button> -->
   <h2>count : {{ post.mara_cnt }}</h2>
   <br />
+  <br />{% endcomment %}
+  <br />
+  <br />
+  <br /> 
 
+  <script>
+    $(document).ready(function () {
+      $("#vote-result").click(function () {
+        $("div.vote-result-area").slideToggle(1000);
+      });
+    });
+  </script>
+
+  <input
+    type="submit"
+    class="btn btn-primary"
+    id="vote-result"
+    value="결과보기"
+  />
+
+  <div class="vote-result-area" style="display: none">
+    <form method="GET" action=".">
+      <div class="items-sort">
+        <h2>사라!! : {{ post.sara_cnt }}</h2>
+        <h2>마라!! : {{ post.mara_cnt }}</h2>
+        <h3>사라한사람 : {{ post.sara }}</h3>
+        <h3>마라한사람 : {{ post.mara }}</h3>
+        <h3여기 아이디 적히는 사람들의 유저 정보중 성별/생년월일을 가져와야 함</h3>
+      </div>
+      <br />
+      <br />
+    </form>
+  </div>
+
+  <br />
+  <br />
+  <br />
   <br />
   <h1>공유하기</h1>
 </div>

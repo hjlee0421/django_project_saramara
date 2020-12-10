@@ -14,7 +14,17 @@
   id="search-button"
   value="검색설정"
 />
-<br /><br /><br />
+
+<div class="ask-list">
+  {% if user.is_authenticated %}
+  <a href="{% url 'posts:ask' %}">질문하기</a>
+  {% comment %} forward to ask page {% endcomment %} {% else %}
+  <a href="{% url 'posts:signin' %}">질문하기</a>
+  {% comment %} run kakao_login_javascript OR alert "You should log in to ask"
+  {% endcomment %} {% endif %}
+</div>
+
+<br /><br /><br /><br />
 
 <div class="items-sort-all" style="display: none">
   <form method="GET" action=".">
@@ -73,7 +83,6 @@
         <label for="30일">30일</label>
       </div>
     </div>
-
     <br />
     <br />
     <input type="submit" class="btn btn-primary" value="검색" />
@@ -82,14 +91,7 @@
 <br />
 
 <!--        item filter-->
-<div class="ask-list">
-  {% if user.is_authenticated %}
-  <a href="{% url 'posts:ask' %}">질문하기</a>
-  {% else %}
-  <a href="{% url 'posts:signin' %}">질문하기</a>
-  {% endif %}
-</div>
-<br />
+
 <!--        item list-->
 
 <div class="items-wrap">
