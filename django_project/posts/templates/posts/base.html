@@ -94,8 +94,10 @@
                 success: function(res){
                   var LOGIN_INFO = JSON.stringify(authObj);
                   var USER_INFO = JSON.stringify(res);
+                  var current_url = $(location).attr("pathname") + "kakao_login/";
+                  console.log(current_url);
                   $.ajax({
-                    url: "kakao_login/",
+                    url: current_url,
                     data: { LOGIN_INFO: LOGIN_INFO,
                             USER_INFO: USER_INFO },
                   });

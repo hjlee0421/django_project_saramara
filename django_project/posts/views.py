@@ -39,9 +39,10 @@ with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
 # https://stackoverflow.com/questions/52510586/how-to-filter-a-generic-listview
 
 
-def add_comment(request):
+def add_comment(request, pk):
     comment_input = request.GET['comment_input']
     print(comment_input)
+    return render(request, 'posts/detail.html')
 
 
 def kakao_logout(request):
@@ -52,7 +53,7 @@ def kakao_logout(request):
     return redirect('/')
 
 
-def kakao_login(request):
+def kakao_login(request, pk):
     LOGIN_INFO = json.loads(request.GET['LOGIN_INFO'])
     USER_INFO = json.loads(request.GET['USER_INFO'])
 
@@ -161,11 +162,20 @@ class DetailView(generic.DetailView, View):
     model = Post
     form_class = PostForm
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, pk, *args, **kwargs):
         # if request.method == 'GET':
+
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
         context['comment'] = self.object.comment_set.all()
+
+        if len(request.GET):
+            comment_input = request.GET["comment_input"]
+            print(comment_input)
+            user = request.user
+            print(user)
+            # user = 현재 로그인한 username
+            self.add_comment(user, comment_input)
 
         self.object.view_cnt = self.object.view_cnt + 1
         self.object.save()
@@ -204,7 +214,7 @@ class DetailView(generic.DetailView, View):
         #     else:
         #         print(str(ip) + ' has already hit this post.\n\n')
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, pk, *args, **kwargs):
         # if request.method == 'POST':
 
         self.object = self.get_object()
@@ -227,13 +237,13 @@ class DetailView(generic.DetailView, View):
         elif 'mara_button' in request.POST:
             self.mara_vote(user)
         elif 'add_comment' in request.POST:
-            pass
-            # self.add_comment(user, request.POST.get('add_comment'))
+            self.add_comment(user, request.POST.get('add_comment'))
 
         return render(request, 'posts/detail.html', context=context, content_type=None, status=None, using=None)
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
 
     def add_comment(self, user_name, user_comment):
+
         post = self.object
 
         comment = Comment(post=post, author=user_name, text=user_comment)

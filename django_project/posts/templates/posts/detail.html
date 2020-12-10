@@ -204,21 +204,23 @@
     class="btn btn-primary"
   />
 
+  {% comment %}
   <fieldset id="search_fieldset">
     <input id="search_input" type="search" />
     <button id="search_button" type="submit">
       <i class="fa fa-search"></i>
     </button>
   </fieldset>
+  {% endcomment %}
 
   <script>
     $("#add_comment_button").click(function () {
       var comment_input = $("#comment_input").val();
-      var current_url = $(location).attr("pathname");
+      var current_url = $(location).attr("pathname") + "add_comment/";
       console.log(comment_input);
       console.log(current_url);
       $.ajax({
-        url: "add_comment/",
+        url: current_url,
         data: { pk: current_url, comment_input: comment_input },
       });
     });
