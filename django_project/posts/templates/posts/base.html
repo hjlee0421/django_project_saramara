@@ -99,7 +99,9 @@
                     var current_url = $(location).attr("pathname") + "kakao_login/";
                     console.log(current_url);
                     $.ajax({
+                      //type: "POST",
                       url: current_url,
+                      //csrfmiddlewaretoken: '{{ csrf_token }}',
                       data: { LOGIN_INFO: LOGIN_INFO,
                               USER_INFO: USER_INFO },
                     });

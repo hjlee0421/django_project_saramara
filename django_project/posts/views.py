@@ -65,6 +65,9 @@ def kakao_login_home(request):
     LOGIN_INFO = json.loads(request.GET['LOGIN_INFO'])
     USER_INFO = json.loads(request.GET['USER_INFO'])
 
+    # LOGIN_INFO = json.loads(request.POST['LOGIN_INFO'])
+    # USER_INFO = json.loads(request.POST['USER_INFO'])
+    # print(USER_INFO)
     access_token = LOGIN_INFO["access_token"]
     profile_json = USER_INFO
     username = str(profile_json['id'])+'@kakao'
