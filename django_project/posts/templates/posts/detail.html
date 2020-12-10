@@ -54,8 +54,8 @@
       class="btn btn-primary"
     />
   </form>
-  {% else %}
-  {% comment %} alert 로그인하세요 OR 카카오로그인 자동연결 {% endcomment %}
+  {% else %} {% comment %} alert 로그인하세요 {% endcomment %} {% comment %}
+  카카오로그인 자동연결 {% endcomment %}
   <form method="POST" action="{% url 'posts:signin' %}">
     {% csrf_token %}
     <input
@@ -78,8 +78,9 @@
       class="btn btn-primary"
     />
   </form>
-  {% else %}
-  {% comment %} alert 로그인하세요 OR 카카오로그인 자동연결 {% endcomment %}
+  {% else %} {% comment %} alert 로그인하세요 {% endcomment %} {% comment %}
+  카카오로그인 자동연결 {% endcomment %}
+
   <form method="POST" action="{% url 'posts:signin' %}">
     {% csrf_token %}
     <input
@@ -91,10 +92,31 @@
   </form>
   {% endif %}
 
+
+
+  {% comment %} <form action="{% url guestbook-post %}" method="POST" onsubmit="return validate()">
+
+  <script>
+  function validate()
+  {
+  // do some validation here to decide whether the post is going to be successful or not.
+  if (valid)
+  {
+    alert("Going to post your data now!");
+    return true;
+  }
+  else
+  {
+    return false; // form won't post
+  }
+  }
+  </script> {% endcomment %}
+
   <!-- <button onclick="location.href='?sara={{user.username}}';" class="sarabtn">
     사라
   </button> -->
-  {% comment %} <h2>count : {{ post.sara_cnt }}</h2>
+  {% comment %}
+  <h2>count : {{ post.sara_cnt }}</h2>
   <br />
 
   <!-- <button onclick="location.href='?mara={{user.username}}';" class="marabtn">
@@ -105,7 +127,7 @@
   <br />{% endcomment %}
   <br />
   <br />
-  <br /> 
+  <br />
 
   <script>
     $(document).ready(function () {
@@ -129,7 +151,9 @@
         <h2>마라!! : {{ post.mara_cnt }}</h2>
         <h3>사라한사람 : {{ post.sara }}</h3>
         <h3>마라한사람 : {{ post.mara }}</h3>
-        <h3여기 아이디 적히는 사람들의 유저 정보중 성별/생년월일을 가져와야 함</h3>
+        <h3>
+          여기 아이디 적히는 사람들의 유저 정보중 성별/생년월일을 가져와야 함
+        </h3>
       </div>
       <br />
       <br />
@@ -143,6 +167,68 @@
   <h1>공유하기</h1>
 </div>
 <!--        작성한 내용을 container 라는 div 안에 담아서 표현-->
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<a id="create-kakao-link-btn" href="javascript:;">
+  <img
+    src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"
+  />
+</a>
+<script type="text/javascript">
+  var current_url = $(location).attr("href");
+  console.log(current_url);
+  Kakao.Link.createDefaultButton({
+    container: "#create-kakao-link-btn",
+    objectType: "feed",
+    content: {
+      title: "포스트 제목을 여기에 가져와야 함",
+      description:
+        "여기에는 포스트 ckcontent 가져와야 함 #사라 #마라 #사이트 #테스트 #해쉬태그를 해야하나",
+      imageUrl:
+        "https://cdn.pixabay.com/photo/2018/06/04/00/29/women-3452067_1280.jpg",
+      link: {
+        // mobileWebUrl: "https://developers.kakao.com",
+        // webUrl: "https://developers.kakao.com",
+        mobileWebUrl: current_url,
+        webUrl: current_url,
+      },
+    },
+    social: {
+      likeCount: 286, // 이걸 사라, 마라, 댓글, 조회수, 공유수 로 바꿀수가 있나?
+      commentCount: 45,
+      sharedCount: 845,
+    },
+    /*buttons: [
+      {
+        title: "웹으로 보기",
+        link: {
+          mobileWebUrl: "https://developers.kakao.com",
+          webUrl: "https://developers.kakao.com",
+        },
+      },
+      {
+        title: "앱으로 보기",
+        link: {
+          mobileWebUrl: "https://developers.kakao.com",
+          webUrl: "https://developers.kakao.com",
+        },
+      },
+    ],*/
+  });
+</script>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 <br />
 <!--        현재의 빈 공간 / 미래의 광고창-->
 <div>

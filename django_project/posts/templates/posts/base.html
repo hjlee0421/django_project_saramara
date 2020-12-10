@@ -40,11 +40,13 @@
         <a href="{% url 'posts:index' %}">사라마라</a>
         {% if user.is_authenticated %}
           
-          <div style="font-size: 2rem;">"{{ user.username}}"</div>
+          <a href="{% url 'posts:mypage' %}">
+            <div style="font-size: 2rem;"> {{ user.username}} </div>
+          </a>
           {% comment %} <a style="font-size: 2rem;" href="{% url 'posts:signout' %}">로그아웃</a> {% endcomment %}
-          <Button onclick="javascript:logoutWithKakao()">카카오Logout</Button>
+          <Button style="font-size: 2rem;" onclick="javascript:logoutWithKakao()">카카오Logout</Button>
           {% comment %} <Button onclick="javascript:unlinkWithKakao()">카카오Unlink</Button> {% endcomment %}
-          <a style="font-size: 2rem;" href="{% url 'posts:ask' %}">물어보기</a>
+          {% comment %} <a style="font-size: 2rem;" href="{% url 'posts:ask' %}">물어보기</a> {% endcomment %}
           {% comment %} 
           <p style="float: right;">
             <div style="font-size: 2rem; color: green; display: inline; float: right;"> {{ user.username }} 님 환영합니다.
@@ -77,155 +79,149 @@
 
 
 
-    {% csrf_token %}
-    <script type="text/javascript">
-      function loginWithKakao() {
-        console.log(Kakao.isInitialized());
-        
-        if(!Kakao.Auth.getAccessToken()){
-          // 로그인
-          Kakao.Auth.login({
-            // authObj : accessToken, type, expires_in, scope 등 포함
-            success: function(authObj) {
-              // alert('login success: ' + JSON.stringify(authObj)),
-              // 유저 인포 불러오기
-              Kakao.API.request({
-                url: '/v2/user/me',
-                success: function(res){
-                  var LOGIN_INFO = JSON.stringify(authObj);
-                  var USER_INFO = JSON.stringify(res);
-                  var current_url = $(location).attr("pathname") + "kakao_login/";
-                  console.log(current_url);
-                  $.ajax({
-                    url: current_url,
-                    data: { LOGIN_INFO: LOGIN_INFO,
-                            USER_INFO: USER_INFO },
-                  });
-                  // alert('login success: ' + JSON.stringify(authObj) + '\n user info: ' + JSON.stringify(res))
-                  // location.reload();
-                }
-              })
-            },
-            fail: function(err) {
-                  alert('failed to login: ' + JSON.stringify(err))},
-          })
+      {% csrf_token %}
+      <script type="text/javascript">
+        function loginWithKakao() {
+          console.log(Kakao.isInitialized());
+          
+          if(!Kakao.Auth.getAccessToken()){
+            // 로그인
+            Kakao.Auth.login({
+              // authObj : accessToken, type, expires_in, scope 등 포함
+              success: function(authObj) {
+                // alert('login success: ' + JSON.stringify(authObj)),
+                // 유저 인포 불러오기
+                Kakao.API.request({
+                  url: '/v2/user/me',
+                  success: function(res){
+                    var LOGIN_INFO = JSON.stringify(authObj);
+                    var USER_INFO = JSON.stringify(res);
+                    var current_url = $(location).attr("pathname") + "kakao_login/";
+                    console.log(current_url);
+                    $.ajax({
+                      url: current_url,
+                      data: { LOGIN_INFO: LOGIN_INFO,
+                              USER_INFO: USER_INFO },
+                    });
+                    // alert('login success: ' + JSON.stringify(authObj) + '\n user info: ' + JSON.stringify(res))
+                    // location.reload();
+                  }
+                })
+              },
+              fail: function(err) {
+                    alert('failed to login: ' + JSON.stringify(err))},
+            })
+          }
+          // 로그인이 되어있으면 메세지 전송으로 넘어감
+          else{
+            Kakao.API.request({
+              url: '/v2/user/me',
+              success: function(res){
+                alert('logged in user info: ' + JSON.stringify(res))
+                //var LOGIN_INFO = JSON.stringify(authObj);
+                var USER_INFO = JSON.stringify(res);
+                var current_url = $(location).attr("pathname") + "kakao_login/";
+                console.log(current_url);
+                $.ajax({
+                  url: current_url, //"kakao_login/",
+                  data: { //LOGIN_INFO: LOGIN_INFO,
+                          USER_INFO: USER_INFO },
+                });
+                // alert('login success: ' + JSON.stringify(authObj) + '\n user info: ' + JSON.stringify(res))
+              }
+            })
+          }
         }
-        // 로그인이 되어있으면 메세지 전송으로 넘어감
-        else{
+        //$(document).ready(function(){
+        //  location.reload();
+        //})
+
+
+
+
+
+
+
+
+
+
+
+
+
+        function logoutWithKakao() {
+          if (!Kakao.Auth.getAccessToken()) {
+              console.log('Not logged in.');
+              alert('Not logged in.');
+              return;
+          }
+          console.log(Kakao.Auth.getAccessToken()); //before Logout
+          Kakao.Auth.logout(function () {
+              console.log(Kakao.Auth.getAccessToken()); //after Logout
+              //★ 추가 할 것 : 로그아웃 성공 후 처리 
+              // session 부분도 delete 시켜주고 홈으로 redirect 
+              $.ajax({
+                  url: "kakao_logout/",
+                });
+          });
+        }
+        
+
+
+
+
+
+
+
+
+
+
+
+        // unlink 기능은 마이페이지로 옮겨야 함
+        function unlinkWithKakao() {
+          Kakao.API.request({
+              url: '/v1/user/unlink',
+              success: function (response) {
+                  console.log(response);
+              },
+              fail: function (error) {
+                  console.log(error);
+              }
+          });
+          logoutWithKakao();
+        }
+        
+
+
+
+
+
+
+
+
+
+        function profileWithKakao() {
           Kakao.API.request({
             url: '/v2/user/me',
-            success: function(res){
-              alert('logged in user info: ' + JSON.stringify(res))
-              //var LOGIN_INFO = JSON.stringify(authObj);
-              var USER_INFO = JSON.stringify(res);
-              var current_url = $(location).attr("pathname") + "kakao_login/";
-              console.log(current_url);
-              $.ajax({
-                url: current_url, //"kakao_login/",
-                data: { //LOGIN_INFO: LOGIN_INFO,
-                        USER_INFO: USER_INFO },
-              });
-              // alert('login success: ' + JSON.stringify(authObj) + '\n user info: ' + JSON.stringify(res))
-            }
-          })
-        }
-      }
-      //$(document).ready(function(){
-      //  location.reload();
-      //})
-
-
-
-
-
-
-
-
-
-
-
-
-
-      function logoutWithKakao() {
-        if (!Kakao.Auth.getAccessToken()) {
-            console.log('Not logged in.');
-            alert('Not logged in.');
-            return;
-        }
-        console.log(Kakao.Auth.getAccessToken()); //before Logout
-        Kakao.Auth.logout(function () {
-            console.log(Kakao.Auth.getAccessToken()); //after Logout
-            //★ 추가 할 것 : 로그아웃 성공 후 처리 
-            // session 부분도 delete 시켜주고 홈으로 redirect 
-            $.ajax({
-                url: "kakao_logout/",
-              });
-        });
-      }
-      
-
-
-
-
-
-
-
-
-
-
-
-      // unlink 기능은 마이페이지로 옮겨야 함
-      function unlinkWithKakao() {
-        Kakao.API.request({
-            url: '/v1/user/unlink',
             success: function (response) {
                 console.log(response);
+                document.getElementById("userid").innerText = response.id;
+                document.getElementById("nickname").innerText = response.kakao_account.profile.nickname;
+                document.getElementById("profile_image").src = response.properties.profile_image;
+                document.getElementById("thumbnail_image").src = response.properties.thumbnail_image;
             },
             fail: function (error) {
                 console.log(error);
             }
-        });
-        logoutWithKakao();
-      }
-      
-
-
-
-
-
-
-
-
-
-      function profileWithKakao() {
-        Kakao.API.request({
-          url: '/v2/user/me',
-          success: function (response) {
-              console.log(response);
-              document.getElementById("userid").innerText = response.id;
-              document.getElementById("nickname").innerText = response.kakao_account.profile.nickname;
-              document.getElementById("profile_image").src = response.properties.profile_image;
-              document.getElementById("thumbnail_image").src = response.properties.thumbnail_image;
-          },
-          fail: function (error) {
-              console.log(error);
-          }
-        });
-      }
-
-
-
-
-
-      
-
-    </script>
+          });
+        }
+      </script>
 
       {% block content %}
       {% endblock %}
       
       <footer>
-        <h1>copyright 사라마라</h1>
+        <h1>copyright 사라마라<br/>
+        saramara@kakao.com</h1>
       </footer>
 
     </div>
