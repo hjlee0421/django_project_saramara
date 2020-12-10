@@ -18,9 +18,10 @@ urlpatterns = [
     path('testask/', views.TestAskView.as_view(), name='testask'),
     # url(r'^table/$',views.table),
     # url(r'^search/$', views.search_table, name="search_table"),
-    path('kakao_login/', views.kakao_login, name="kakao_login"),
+    path('kakao_login/', views.kakao_login_home, name="kakao_login_home"),
     path('<int:pk>/kakao_login/', views.kakao_login, name="kakao_login"),
-    path('kakao_logout/', views.kakao_logout, name="kakao_logout"),
+    path('kakao_logout/', views.kakao_logout_home, name="kakao_logout_home"),
+    path('<int:pk>/kakao_logout/', views.kakao_logout, name="kakao_logout"),
     # url(r'^<int:pk>/search/$', views.search_table, name="search_table"),
     path('<int:pk>/search/', views.kakao_login, name="kakao_login"),
     # 왜 이거는 안될까?

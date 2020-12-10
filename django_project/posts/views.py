@@ -45,12 +45,65 @@ def add_comment(request, pk):
     return render(request, 'posts/detail.html')
 
 
-def kakao_logout(request):
+def kakao_logout_home(request):
     if request.session.get('user_id'):
         del(request.session['user_id'])
     logout(request)
     # logout(request, backend='django.contrib.auth.backends.ModelBackend')
     return redirect('/')
+
+
+def kakao_logout(request, pk):
+    if request.session.get('user_id'):
+        del(request.session['user_id'])
+    logout(request)
+    # logout(request, backend='django.contrib.auth.backends.ModelBackend')
+    return redirect('/')
+
+
+def kakao_login_home(request):
+    LOGIN_INFO = json.loads(request.GET['LOGIN_INFO'])
+    USER_INFO = json.loads(request.GET['USER_INFO'])
+
+    access_token = LOGIN_INFO["access_token"]
+    profile_json = USER_INFO
+    username = str(profile_json['id'])+'@kakao'
+
+    gender = ""
+    email = ""
+    birthday = ""
+
+    if profile_json['kakao_account']['gender_needs_agreement'] == False:
+        gender = profile_json['kakao_account']['gender']
+
+    if profile_json['kakao_account']['email_needs_agreement'] == False:
+        email = profile_json['kakao_account']['email']
+
+    if profile_json['kakao_account']['birthday_needs_agreement'] == False:
+        birthday = profile_json['kakao_account']['birthday']
+
+    if not User.objects.filter(username=username).exists():
+        # 기존에 username 이 없다면
+        user = User(username=username, gender=gender, email=email,
+                    birthday=birthday, kakao_access_token=access_token)
+        user.save()
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        request.session['user_id'] = user.id
+        return render(request, 'posts/ask.html')
+        # return redirect('/')
+    else:
+        # 기존에 username 이 있다면?
+        print("#######################")
+        user = User.objects.get(username=username)
+        # user = authenticate(username=username)
+        print(user)
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        request.session['user_id'] = user.id
+        return render(request, 'posts/ask.html')
+        # return redirect('/')
+
+    # return redirect('/')
+    return render(request, 'posts/ask.html')
 
 
 def kakao_login(request, pk):

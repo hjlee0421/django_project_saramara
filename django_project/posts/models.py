@@ -1,5 +1,6 @@
-from datetime import datetime
+from random import randint
 from django.db import models
+from datetime import datetime
 from django.conf import settings  # Foreign Key
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser  # user defined "User" Model
@@ -23,7 +24,7 @@ class User(AbstractUser):
     birthday = models.CharField(
         max_length=128, blank=True, null=True, default="0101")
     birthyear = models.CharField(
-        max_length=128, blank=True, null=True, default="1900")
+        max_length=128, blank=True, null=True, default=str(randint(1950, 2010)))
 # blank = ui에서 빈칸 from valid check, null 은 db에서 빈값을 받는 개념
 
 

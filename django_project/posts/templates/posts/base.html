@@ -116,11 +116,13 @@
             url: '/v2/user/me',
             success: function(res){
               alert('logged in user info: ' + JSON.stringify(res))
-              var LOGIN_INFO = JSON.stringify(authObj);
+              //var LOGIN_INFO = JSON.stringify(authObj);
               var USER_INFO = JSON.stringify(res);
+              var current_url = $(location).attr("pathname") + "kakao_login/";
+              console.log(current_url);
               $.ajax({
-                url: "kakao_login/",
-                data: { LOGIN_INFO: LOGIN_INFO,
+                url: current_url, //"kakao_login/",
+                data: { //LOGIN_INFO: LOGIN_INFO,
                         USER_INFO: USER_INFO },
               });
               // alert('login success: ' + JSON.stringify(authObj) + '\n user info: ' + JSON.stringify(res))
