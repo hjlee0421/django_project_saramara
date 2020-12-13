@@ -48,8 +48,8 @@
           </a>
           {% comment %} <a style="font-size: 2rem;" href="{% url 'posts:signout' %}">로그아웃</a> {% endcomment %}
           <Button style="font-size: 2rem;" onclick="javascript:logoutWithKakao()">카카오Logout</Button>
-          <Button onclick="javascript:unlinkWithKakao()">카카오Unlink</Button>
-          <button class="api-btn" onclick="unlinkApp()">앱 탈퇴하기</button>
+          {% comment %} <Button onclick="javascript:unlinkWithKakao()">카카오Unlink</Button> {% endcomment %}
+          {% comment %} <button class="api-btn" onclick="unlinkApp()">앱 탈퇴하기</button> {% endcomment %}
           {% comment %} <a style="font-size: 2rem;" href="{% url 'posts:ask' %}">물어보기</a> {% endcomment %}
           {% comment %} 
           <p style="float: right;">

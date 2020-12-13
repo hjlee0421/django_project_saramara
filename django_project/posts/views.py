@@ -43,12 +43,13 @@ def user_info(request):
     user_id = request.session.get('user_id')
     user = User.objects.get(pk=user_id)
     '''
-    POST 로 값을 전달받아서,
+    POST 로 값을 전달받아서,(x)
+    ajax로 값을 전달 받아서 아래 내용을 확인하고
     if User.objects.filter(username=username).exists():
         raise forms.ValidationError('아이디가 이미 사용중입니다')
         username 이 존재함을 return
     else
-        user.username = 전달받은 값
+        username 이 사용가능함을 return
     '''
 
     '''
@@ -57,6 +58,10 @@ def user_info(request):
     해당 html 에서 바로 올린 이미지가 보이게끔 처리
     '''
 
+    '''
+    마지막에 시작하기 버튼을 누르면 위 변경사항들을 모두 적용해서 save 후 redirect
+    user.username = 전달받은 값
+    '''
     return render(request, 'posts/user_info.html')
 
 

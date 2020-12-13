@@ -27,12 +27,12 @@
   <div class="tab-right-wrap">
     <div id="회원정보" class="tabcontent">
       <h3>회원정보</h3>
-      <p>카카오 아이콘 loginid@gamail.com</p>
-      <p>Member Since 2020년 06월 15일</p>
+      <img src="{{ user.profile_image.url }}" width="30" height="30" />
+      <h4 style="font-size: 2rem">Nickname : {{ user.username }}</h4>
+      <h4 style="font-size: 2rem">
+        Member Since : {{ user.date_joined|date:"Y년 m월 d일" }}
+      </h4>
       <div class="tab-right-out">
-        <h1 id="logout">로그아웃</h1>
-        <h1 id="logout">회원탈퇴</h1>
-        <button onclick="javascript:unlinkWithKakao()">카카오Unlink</button>
         <button class="api-btn" onclick="unlinkApp()">앱 탈퇴하기</button>
       </div>
     </div>

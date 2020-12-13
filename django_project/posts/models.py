@@ -16,7 +16,8 @@ class User(AbstractUser):
     kakao_access_token = models.CharField(
         max_length=128, blank=True, null=True, default="")
     profile_image = models.ImageField(
-        blank=True, null=True, upload_to='profile_image', default="C:\django_project\django_project\media\profile_image\saramara_default.jpg")
+        blank=True, null=True, upload_to='profile_image', default="C:\django_project\django_project\media\profile_image\saramara_defaults.jpg")
+
     gender = models.CharField(
         max_length=128, blank=True, null=True, default="")
     email = models.EmailField(
