@@ -39,13 +39,51 @@ with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
 # https://stackoverflow.com/questions/52510586/how-to-filter-a-generic-listview
 
 
+def user_info(request):
+    user_id = request.session.get('user_id')
+    user = User.objects.get(pk=user_id)
+    '''
+    POST 로 값을 전달받아서,
+    if User.objects.filter(username=username).exists():
+        raise forms.ValidationError('아이디가 이미 사용중입니다')
+        username 이 존재함을 return
+    else
+        user.username = 전달받은 값
+    '''
+
+    '''
+    profile 이미지의 경우 ajax로 처리해야 업로드 후 이미지 바로 표현
+    사진을 업로드 하면 이미지 사이즈를 resize 해서,
+    해당 html 에서 바로 올린 이미지가 보이게끔 처리
+    '''
+
+    return render(request, 'posts/user_info.html')
+
+
 def add_comment(request, pk):
     comment_input = request.GET['comment_input']
     print(comment_input)
     return render(request, 'posts/detail.html')
 
 
-def kakao_logout_home(request):
+def kakao_unlink(request):
+    user_id = request.session.get('user_id')
+    print(user_id)
+    if request.session.get('user_id'):
+
+        del(request.session['user_id'])
+    logout(request)
+    print(user_id)
+    user = User.objects.get(pk=user_id)
+    print(user)
+    print("delete user")
+    user.delete()
+    print(User.objects.filter(pk=user_id))
+    # logout(request, backend='django.contrib.auth.backends.ModelBackend')
+    return redirect('/')
+
+
+def kakao_logout(request):
     if request.session.get('user_id'):
         del(request.session['user_id'])
     logout(request)
@@ -53,63 +91,7 @@ def kakao_logout_home(request):
     return redirect('/')
 
 
-def kakao_logout(request, pk):
-    if request.session.get('user_id'):
-        del(request.session['user_id'])
-    logout(request)
-    # logout(request, backend='django.contrib.auth.backends.ModelBackend')
-    return redirect('/')
-
-
-def kakao_login_home(request):
-    LOGIN_INFO = json.loads(request.GET['LOGIN_INFO'])
-    USER_INFO = json.loads(request.GET['USER_INFO'])
-
-    # LOGIN_INFO = json.loads(request.POST['LOGIN_INFO'])
-    # USER_INFO = json.loads(request.POST['USER_INFO'])
-    # print(USER_INFO)
-    access_token = LOGIN_INFO["access_token"]
-    profile_json = USER_INFO
-    username = str(profile_json['id'])+'@kakao'
-
-    gender = ""
-    email = ""
-    birthday = ""
-
-    if profile_json['kakao_account']['gender_needs_agreement'] == False:
-        gender = profile_json['kakao_account']['gender']
-
-    if profile_json['kakao_account']['email_needs_agreement'] == False:
-        email = profile_json['kakao_account']['email']
-
-    if profile_json['kakao_account']['birthday_needs_agreement'] == False:
-        birthday = profile_json['kakao_account']['birthday']
-
-    if not User.objects.filter(username=username).exists():
-        # 기존에 username 이 없다면
-        user = User(username=username, gender=gender, email=email,
-                    birthday=birthday, kakao_access_token=access_token)
-        user.save()
-        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-        request.session['user_id'] = user.id
-        return render(request, 'posts/ask.html')
-        # return redirect('/')
-    else:
-        # 기존에 username 이 있다면?
-        print("#######################")
-        user = User.objects.get(username=username)
-        # user = authenticate(username=username)
-        print(user)
-        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-        request.session['user_id'] = user.id
-        return render(request, 'posts/ask.html')
-        # return redirect('/')
-
-    # return redirect('/')
-    return render(request, 'posts/ask.html')
-
-
-def kakao_login(request, pk):
+def kakao_login(request):  # , pk
     LOGIN_INFO = json.loads(request.GET['LOGIN_INFO'])
     USER_INFO = json.loads(request.GET['USER_INFO'])
 
@@ -132,12 +114,14 @@ def kakao_login(request, pk):
 
     if not User.objects.filter(username=username).exists():
         # 기존에 username 이 없다면
-        user = User(username=username, gender=gender, email=email,
-                    birthday=birthday, kakao_access_token=access_token)
+        user = User(username=username, gender=gender, email=email, password=profile_json['id'],
+                    birthday=birthday, kakao_access_token=access_token, kakao_unique_id=profile_json['id'])
+        user.is_staff = True
         user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         request.session['user_id'] = user.id
-        return render(request, 'posts/ask.html')
+        return JsonResponse({'created': True})
+        # return render(request, 'posts/ask.html')
         # return redirect('/')
     else:
         # 기존에 username 이 있다면?
@@ -147,7 +131,8 @@ def kakao_login(request, pk):
         print(user)
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         request.session['user_id'] = user.id
-        return render(request, 'posts/ask.html')
+        # return render(request, 'posts/ask.html')
+        return JsonResponse(data={'created': False, 'len': '2'})
         # return redirect('/')
 
     # return redirect('/')
@@ -245,18 +230,22 @@ class DetailView(generic.DetailView, View):
         # print(type(request.session))
         # print(request.session.get('user_id'))
         # print(type(User.objects.get(pk=request.session.get('user_id'))))
+
+        # # 나이 성별은 나중에 view 에서 작업을 해서 html 에서 보여주는 방법으로 해야 함
+
         # try:
         #     # ip주소와 게시글 번호로 기록을 조회함
         #     views = ViewCount.objects.get(
-        #         user=User.objects.get(pk=request.session.get('user_id')), post=self.object)
-
+        #         author=User.objects.get(pk=request.session.get('user_id')), post=self.object)
         # except Exception as e:
         #     # 처음 게시글을 조회한 경우엔 조회 기록이 없음
         #     print(e)
-        #     views = ViewCount(user=User.objects.get(
+        #     views = ViewCount(author=User.objects.get(
         #         pk=request.session.get('user_id')), post=self.object)
         #     self.object.view_cnt = self.object.view_cnt + 1
         #     views.view_cnt = views.view_cnt + 1
+        #     posts.view_cnt = posts.view_cnt + 1
+        #     # TODO: ㅇ정리 후 업데이트
         #     views.save()
         # else:
         #     # 조회 기록은 있으나, 날짜가 다른 경우
@@ -265,6 +254,7 @@ class DetailView(generic.DetailView, View):
         #         self.object.view_cnt = self.object.view_cnt + 1
         #         views.view_cnt = views.view_cnt + 1
         #         views.date = timezone.now()
+        #         posts.view_cnt = posts.view_cnt + 1
         #         views.save()
         #     # 날짜가 같은 경우
         #     else:
@@ -293,7 +283,8 @@ class DetailView(generic.DetailView, View):
         elif 'mara_button' in request.POST:
             self.mara_vote(user)
         elif 'add_comment' in request.POST:
-            self.add_comment(user, request.POST.get('add_comment'))
+            pass
+            # self.add_comment(user, request.POST.get('add_comment'))
 
         return render(request, 'posts/detail.html', context=context, content_type=None, status=None, using=None)
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
@@ -305,7 +296,7 @@ class DetailView(generic.DetailView, View):
         comment = Comment(post=post, author=user_name, text=user_comment)
         comment.save()
 
-        post.comment_cnt = post.comment_cnt = Comment.objects.filter(
+        post.comment_cnt = Comment.objects.filter(
             post=Post.objects.filter(title=post).values('id')[0]['id']).count()
         post.save()
 

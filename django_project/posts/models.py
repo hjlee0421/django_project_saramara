@@ -15,8 +15,8 @@ class User(AbstractUser):
         max_length=128, blank=True, null=True, default="")
     kakao_access_token = models.CharField(
         max_length=128, blank=True, null=True, default="")
-    # profile_image = models.CharField(
-    # max_length=128, blank=True, null=True, default="")
+    profile_image = models.ImageField(
+        blank=True, null=True, upload_to='profile_image', default="C:\django_project\django_project\media\profile_image\saramara_default.jpg")
     gender = models.CharField(
         max_length=128, blank=True, null=True, default="")
     email = models.EmailField(
@@ -31,6 +31,7 @@ class User(AbstractUser):
 class Post(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # settings.py 에 AUTH_USER_MODEL 확인 추천!
+
     title = models.CharField(max_length=128)
     price = models.CharField(max_length=128, blank=True, null=True)
     brand = models.CharField(max_length=128, blank=True, null=True)
@@ -40,6 +41,7 @@ class Post(models.Model):
                                     verbose_name='date published')
     sara = models.TextField(blank=True, null=True)
     mara = models.TextField(blank=True, null=True)
+    # sara mara 는 모델을 many to many 로 변경해야 함
     sara_cnt = models.IntegerField(default=0)
     mara_cnt = models.IntegerField(default=0)
     comment_cnt = models.IntegerField(default=0)
@@ -81,6 +83,7 @@ class Comment(models.Model):
 # 게시글 조회 기록 저장
 # HitCount 활용
 class ViewCount(models.Model):
+    # TODO: author 가 아니라 session 에 로그인 된 유저를 기준으로 정리 해야 함
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     post = models.ForeignKey(

@@ -1,6 +1,6 @@
 from django import forms
 from .models import User, Post, Comment
-from ckeditor.widgets import CKEditorWidget
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 
 class UserForm(forms.ModelForm):
@@ -12,6 +12,9 @@ class UserForm(forms.ModelForm):
 
 
 class PostForm(forms.ModelForm):
+    ckcontent = forms.CharField(
+        widget=CKEditorUploadingWidget())
+
     class Meta:
         model = Post
         fields = ('title', 'category', 'brand', 'price', 'link', 'ckcontent')

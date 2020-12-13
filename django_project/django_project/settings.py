@@ -187,3 +187,21 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media/'
+
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Font', 'FontSize'],
+            ['Bold', 'Italic', 'Underline', 'Strike'],
+            ['TextColor', 'BGColor'],
+            ['Image', 'Smiley']
+            # ['Bold', 'Italic', 'Underline'],
+            # ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            # ['Link', 'Unlink'],
+            # ['RemoveFormat', 'Source']
+        ]
+    }
+}
