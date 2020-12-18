@@ -59,17 +59,17 @@
             </div>
           </p> {% endcomment %}
         {% else %}
-          <div style="float: right;">
+          <div >
           {% comment %} <a class="btn btn-default" href="{% url 'posts:signup' %}">Sign up</a> {% endcomment %}
           {% comment %} <a class="btn btn-default" href="{% url 'posts:signin' %}">SignIn</a> {% endcomment %}
           {% comment %} 카카오 로그인 버튼 {% endcomment %}
-          <a id="custom-login-btn" href="javascript:loginWithKakao()">
-            <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="150"/>
-          </a>
+            <a id="custom-login-btn" href="javascript:loginWithKakao()">
+              <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="150"/>
+            </a>
           {% comment %} <Button onclick="javascript:logoutWithKakao()">카카오Logout</Button> {% endcomment %}
           {% comment %} <Button onclick="javascript:unlinkWithKakao()">카카오Unlink</Button> {% endcomment %}
           {% comment %} 카카오 로그인 버튼 {% endcomment %}
-        </div>
+          </div>
         {% endif %}
       </header>
       {% comment %} site header {% endcomment %}

@@ -46,26 +46,16 @@
 
   <script>
     $("#saramarabutton").click(function () {
-      var current_url = $(location).attr("pathname") + "add_comment/";
+      var current_url = $(location).attr("pathname") + "sara/";
       $.ajax({
         url: current_url, //"/add_comment/",
         data: { comment_input: comment_input },
       }).done(function() {
         location.reload();
-        $("#comment_input").val("");
+        //$("#comment_input").val("");
       });
     });
   </script>
-
-  <script>
-    $("#plz_login").click(function () {
-      var current_url = $(location).attr("pathname") + "add_comment/";
-      $.ajax({
-        alert("사라 마라 하려면 로그인을 해주세요")
-      });
-    });
-  </script>
-  
 
 
   <br />
@@ -79,15 +69,51 @@
     />
   {% else %}
     <input
-      id="plz_login"
+      id="plz_login_sara"
       type="submit"
       name="sara_button"
       value="이건사야지"
       class="btn btn-primary"
     />  
   {% endif %}
-
-
+  <script>
+    $("#plz_login_sara").click(function () {
+      //var current_url = $(location).attr("pathname") + "add_comment/";
+      console.log("뭐지?")
+      alert("이건 사야한다!! 투표하려면 로그인을 해주세요");
+      //$.ajax({
+      //  alert("사라 마라 하려면 로그인을 해주세요");
+      //});
+    });
+  </script>
+  <br />
+  {% if user.is_authenticated %}
+    <input
+      id = "saramarabutton"
+      type="submit"
+      name="mara_button"
+      value="이건아니지"
+      class="btn btn-primary"
+    />
+  {% else %}
+    <input
+      id="plz_login_mara"
+      type="submit"
+      name="mara_button"
+      value="이건아니지"
+      class="btn btn-primary"
+    />  
+  {% endif %}
+<script>
+    $("#plz_login_mara").click(function () {
+      //var current_url = $(location).attr("pathname") + "add_comment/";
+      console.log("뭐지?")
+      alert("이건 절대아니다!! 투표하려면 로그인을 해주세요");
+      //$.ajax({
+      //  alert("사라 마라 하려면 로그인을 해주세요");
+      //});
+    });
+  </script>
 
 
   <br />
