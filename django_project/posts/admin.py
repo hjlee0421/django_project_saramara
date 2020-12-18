@@ -19,7 +19,7 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 class ViewCountAdmin(admin.ModelAdmin):
-    list_display = ('id', 'author', 'post', 'view_cnt', 'date')
+    list_display = ('id', 'loggedin_user', 'post', 'view_cnt', 'date')
     list_filter = ('post',)
 
 

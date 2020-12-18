@@ -228,10 +228,10 @@ class DetailView(generic.DetailView, View):
         try:
             # ip주소와 게시글 번호로 기록을 조회함
             views = ViewCount.objects.get(
-                author=User.objects.get(pk=request.session.get('user_id')), post=self.object)
+                loggedin_user=User.objects.get(pk=request.session.get('user_id')), post=self.object)
         except Exception as e:
             # 처음 게시글을 조회한 경우엔 조회 기록이 없음
-            views = ViewCount(author=User.objects.get(
+            views = ViewCount(loggedin_user=User.objects.get(
                 pk=request.session.get('user_id')), post=self.object)
             self.object.view_cnt = self.object.view_cnt + 1
             views.view_cnt = views.view_cnt + 1

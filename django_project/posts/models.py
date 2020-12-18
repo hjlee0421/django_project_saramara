@@ -26,7 +26,7 @@ class User(AbstractUser):
         max_length=128, blank=True, null=True, default="0101")
     birthyear = models.CharField(
         max_length=128, blank=True, null=True, default=str(randint(1950, 2010)))
-# blank = ui에서 빈칸 from valid check, null 은 db에서 빈값을 받는 개념
+    # blank = ui에서 빈칸 from valid check, null 은 db에서 빈값을 받는 개념
 
 
 class Post(models.Model):
@@ -42,7 +42,7 @@ class Post(models.Model):
                                     verbose_name='date published')
     sara = models.TextField(blank=True, null=True)
     mara = models.TextField(blank=True, null=True)
-    # sara mara 는 모델을 many to many 로 변경해야 함
+    # TODO: sara mara 는 모델을 many to many 로 변경해야 함
     sara_cnt = models.IntegerField(default=0)
     mara_cnt = models.IntegerField(default=0)
     comment_cnt = models.IntegerField(default=0)
@@ -80,12 +80,8 @@ class Comment(models.Model):
         ordering = ['created_date']
 
 
-# Models.py
-# 게시글 조회 기록 저장
-# HitCount 활용
 class ViewCount(models.Model):
-    # TODO: author 가 아니라 session 에 로그인 된 유저를 기준으로 정리 해야 함
-    author = models.ForeignKey(
+    loggedin_user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     post = models.ForeignKey(
         Post, default=None, null=True, on_delete=models.CASCADE)  # 게시글
