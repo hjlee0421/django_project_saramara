@@ -218,23 +218,10 @@ class DetailView(generic.DetailView, View):
 
         if len(request.GET):
             comment_input = request.GET["comment_input"]
-            print(comment_input)
             user = request.user
-            print(user)
-            # user = 현재 로그인한 username
             self.add_comment(user, comment_input)
 
-        # self.object.view_cnt = self.object.view_cnt + 1
-        # self.object.save()
-
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
-
-        # TODO : 현재는 해당 페이지가 GET 요청할때마다 1씩 올라감, 하지만 하루에 한번으로 업데이트 해야함
-        # print("###############################################")
-        # print(request.session)
-        # print(type(request.session))
-        # print(request.session.get('user_id'))
-        # print(type(User.objects.get(pk=request.session.get('user_id'))))
 
         # # 나이 성별은 나중에 view 에서 작업을 해서 html 에서 보여주는 방법으로 해야 함
 
@@ -244,26 +231,14 @@ class DetailView(generic.DetailView, View):
                 author=User.objects.get(pk=request.session.get('user_id')), post=self.object)
         except Exception as e:
             # 처음 게시글을 조회한 경우엔 조회 기록이 없음
-            print(e)
-            print("exception")
             views = ViewCount(author=User.objects.get(
                 pk=request.session.get('user_id')), post=self.object)
-            print(self.object.view_cnt)
             self.object.view_cnt = self.object.view_cnt + 1
-            print(self.object.view_cnt)
-            print(views.view_cnt)
             views.view_cnt = views.view_cnt + 1
-            print(views.view_cnt)
-            # posts.view_cnt = posts.view_cnt + 1
-            # TODO: ㅇ정리 후 업데이트
             views.save()
             self.object.save()
         else:
             # 조회 기록은 있으나, 날짜가 다른 경우
-            print("enter else")
-            print(views.date.date())
-            print(type(views.date))
-            print(timezone.now().date())
             if not views.date.date() == timezone.now().date():
 
                 self.object.view_cnt = self.object.view_cnt + 1
@@ -274,7 +249,7 @@ class DetailView(generic.DetailView, View):
                 self.object.save()
             # 날짜가 같은 경우
             else:
-                print(' has already hit this post.\n\n')
+                pass
 
         return render(request, 'posts/detail.html', context=context, content_type=None, status=None, using=None)
 
@@ -420,7 +395,6 @@ class AskView(View):
             post = Post(**form.cleaned_data)
             post.author = user
             post.save()
-            print(post.pk)
             return redirect('/'+str(post.pk))
         else:
             return render(request, 'posts/ask.html', {'form': form})
