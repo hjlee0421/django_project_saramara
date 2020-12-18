@@ -13,7 +13,7 @@
 <div>
   <h1>
     {{ post.title | upper}} <br />
-    {{ post.author }} | 사라-{{post.sara_cnt}} 마라-{{post.mara_cnt}} 댓글수
+    {{ post.author }} | 사라-{{post.sara_cnt}} 마라-{{post.mara_cnt}} 댓글수-{% comment %} post별로 댓글 수 도 확인해야함{% endcomment %}
     조회수-{{post.view_cnt}} <br />
     작성일 {{post.pub_date}}
   </h1>
@@ -44,24 +44,13 @@
   <!-- bootstrp 써서 색깔? 같은거 하고, a:click 은 색깔 칠해진걸로 해서 투표 한걸 보이게끔 버튼 변경 css 부분 -->
 
 
-  <script>
-    $("#saramarabutton").click(function () {
-      var current_url = $(location).attr("pathname") + "sara/";
-      $.ajax({
-        url: current_url, //"/add_comment/",
-        data: { comment_input: comment_input },
-      }).done(function() {
-        location.reload();
-        //$("#comment_input").val("");
-      });
-    });
-  </script>
+  
 
 
   <br />
   {% if user.is_authenticated %}
     <input
-      id = "saramarabutton"
+      id = "sarabutton"
       type="submit"
       name="sara_button"
       value="이건사야지"
@@ -89,7 +78,7 @@
   <br />
   {% if user.is_authenticated %}
     <input
-      id = "saramarabutton"
+      id = "marabutton"
       type="submit"
       name="mara_button"
       value="이건아니지"
@@ -117,6 +106,32 @@
 
 
   <br />
+  <script>
+    $("#sarabutton").click(function () {
+      var current_url = $(location).attr("pathname") + "sara/";
+      var saramara_data = "sara"
+      $.ajax({
+        url: current_url, 
+        data: { saramara_input: saramara_data },
+      }).done(function() {
+        location.reload();
+        //$("#comment_input").val("");
+      });
+    });
+  </script>
+  <script>
+    $("#marabutton").click(function () {
+      var current_url = $(location).attr("pathname") + "mara/";
+      var saramara_data = "mara"
+      $.ajax({
+        url: current_url, 
+        data: { saramara_input: saramara_data },
+      }).done(function() {
+        location.reload();
+        //$("#comment_input").val("");
+      });
+    });
+  </script>
   {% comment %} {% if user.is_authenticated %}
   <form method="POST" action=".">
     {% csrf_token %}

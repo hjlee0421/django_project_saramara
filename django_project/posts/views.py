@@ -40,6 +40,13 @@ with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
 # https://stackoverflow.com/questions/52510586/how-to-filter-a-generic-listview
 
 
+def changes(request):
+    if request.method == 'POST':
+        image = request.FILES['image']
+        # .profilepic = image
+        # userprofile.save()
+
+
 def user_info(request):
     user_id = request.session.get('user_id')
     user = User.objects.get(pk=user_id)
@@ -66,10 +73,10 @@ def user_info(request):
     return render(request, 'posts/user_info.html')
 
 
-def add_comment(request, pk):
-    comment_input = request.GET['comment_input']
-    print(comment_input)
-    return render(request, 'posts/detail.html')
+# def add_comment(request, pk):
+#     comment_input = request.GET['comment_input']
+#     print(comment_input)
+#     return render(request, 'posts/detail.html')
 
 
 def kakao_unlink(request):
@@ -215,11 +222,18 @@ class DetailView(generic.DetailView, View):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
         context['comment'] = self.object.comment_set.all()
-
-        if len(request.GET):
+        print(request.GET)
+        if 'comment_input' in request.GET:
             comment_input = request.GET["comment_input"]
             user = request.user
             self.add_comment(user, comment_input)
+        if 'saramara_input' in request.GET:
+            saramara_input = request.GET["saramara_input"]
+            user = request.user
+            if saramara_input == "sara":
+                self.sara_vote(user)
+            elif saramara_input == "mara":
+                self.mara_vote(user)
 
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
 

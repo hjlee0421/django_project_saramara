@@ -92,6 +92,19 @@
           <br />
           <br />
 
+          {% comment %}
+          <form
+            method="POST"
+            action="{% url user_info %}"
+            enctype="multipart/form-data"
+          >
+            <div class="controls">
+              <input type="file" name="image" />
+            </div>
+            <input type="submit" />
+          </form>
+          {% endcomment %}
+
           <form method="POST" enctype="multipart/form-data" action=".">
             <div class="form-group">
               {% csrf_token %} {{ form.media }} {{ form.as_p }}
@@ -139,7 +152,8 @@
             <br />
 
             <button type="submit" class="btn btn-primary">
-              사라마라 시작하러 가기
+              사라마라 시작하러 가기 {% comment %} form POST 로 바꿔서 보내서
+              여기에서 저장해야함 {% endcomment %}
             </button>
           </form>
         </div>
