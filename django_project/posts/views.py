@@ -33,12 +33,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
     secrets = json.load(secret_file)
 
-# class IndexView(generic.ListView):
-#    def get_queryset(self):
-# TODO : IndeView를 활용해서 전체 리스트 볼때 1) 필터를 걸수있게 하고 2) pagination도 적용하기
-# https://wayhome25.github.io/django/2017/05/02/CBV/
-# https://stackoverflow.com/questions/52510586/how-to-filter-a-generic-listview
-
 
 def UploadImage(request):
     print(request.method)
@@ -62,32 +56,18 @@ def addImage_view(request):
 def user_info(request):
     user_id = request.session.get('user_id')
     username = User.objects.get(pk=user_id)
-    print(username)
-
-    newForm = UserForm()
-    context = {"form": newForm, }
 
     if "username_input" in request.GET:
         new_username = request.GET["username_input"]
-        print(new_username)
-        # new_username = json.loads(request.GET['username_input'])
-        # print(new_username)
 
-        if User.objects.filter(username=new_username).exists():
-            # raise forms.ValidationError('아이디가 이미 사용중입니다')
-            # username 이 존재함을 return
-
-            return JsonResponse(data={'created': False, 'len': '2'})
-
-        else:
+        if not User.objects.filter(username=new_username).exists():
             user = User.objects.get(pk=user_id)
             user.username = new_username
             user.save()
             return JsonResponse({'created': True})
-        # username 이 사용가능함을 return
 
-    # return render(request, 'posts/user_info.html')
-    return render(request, 'posts/user_info.html', context)
+    return render(request, 'posts/user_info.html')
+    # return render(request, 'posts/user_info.html', context)
 
     '''
     POST 로 값을 전달받아서,(x)
@@ -113,17 +93,13 @@ def user_info(request):
 
 def kakao_unlink(request):
     user_id = request.session.get('user_id')
-    print(user_id)
-    if request.session.get('user_id'):
 
+    if request.session.get('user_id'):
         del(request.session['user_id'])
+
     logout(request)
-    print(user_id)
     user = User.objects.get(pk=user_id)
-    print(user)
-    print("delete user")
     user.delete()
-    print(User.objects.filter(pk=user_id))
     # logout(request, backend='django.contrib.auth.backends.ModelBackend')
     return redirect('/')
 
@@ -170,17 +146,11 @@ def kakao_login(request):  # , pk
         # return redirect('/')
     else:
         # 기존에 username 이 있다면?
-        print("#######################")
         user = User.objects.get(username=username)
-        # user = authenticate(username=username)
-        print(user)
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         request.session['user_id'] = user.id
-        # return render(request, 'posts/ask.html')
         return JsonResponse(data={'created': False, 'len': '2'})
-        # return redirect('/')
 
-    # return redirect('/')
     return render(request, 'posts/ask.html')
 
 
@@ -191,9 +161,6 @@ class IndexView(generic.ListView):
     context_object_name = 'post_objects'
 
     paginate_by = 10
-
-    # def get_queryset(self):
-    # return Post.objects.all()
 
     # 조회수순, 사라순, 마라순, 오늘, 이번주, 이번달.
     # order_by는 마지막에 해줘야 함
@@ -230,16 +197,6 @@ class IndexView(generic.ListView):
         # 부모클래스의 get 함수를 대신호출하는 방법
         return super(IndexView, self).get(request, *args, **kwargs)
 #              <- ListView와 같음  ->
-
-    # def listing(request):
-    #     # post_objects = Post.objects.all()
-    #     post_objects = Post.objects.filter(title__icontains='테스트')
-    #     print(post_objects)
-    #     paginator = Paginator(post_objects, 10)  # Show 10 contacts per page.
-
-    #     page_number = request.GET.get('page')
-    #     page_obj = paginator.get_page(page_number)
-    #     return render(request, 'posts/index.html.html', {'page_obj': page_obj})
 
 
 class DetailView(generic.DetailView, View):
@@ -280,22 +237,18 @@ class DetailView(generic.DetailView, View):
                 views = ViewCount(loggedin_user=User.objects.get(
                     pk=request.session.get('user_id')), post=self.object)
                 self.object.view_cnt = self.object.view_cnt + 1
+                self.object.save()
                 views.view_cnt = views.view_cnt + 1
                 views.save()
-                self.object.save()
             else:
                 # 조회 기록은 있으나, 날짜가 다른 경우
                 if not views.date.date() == timezone.now().date():
 
                     self.object.view_cnt = self.object.view_cnt + 1
+                    self.object.save()
                     views.view_cnt = views.view_cnt + 1
                     views.date = timezone.now().date()
-                    # posts.view_cnt = posts.view_cnt + 1
                     views.save()
-                    self.object.save()
-                # 날짜가 같은 경우
-                else:
-                    pass
 
         return render(request, 'posts/detail.html', context=context, content_type=None, status=None, using=None)
 
@@ -447,88 +400,99 @@ class AskView(View):
             # render(request, template_name, context=None, content_type=None, status=None, using=None)
 
 
-class SignupView(View):
-    def get(self, request):
-        # if request.method == 'GET':
-        return render(request, 'posts/signup.html')
-        # render(request, template_name, context=None, content_type=None, status=None, using=None)
-
-    def post(self, request):
-        # if request.method == 'POST':
-
-        username = request.POST.get('username', None)
-        password = request.POST.get('password', None)
-        re_password = request.POST.get('re-password', None)
-
-        res_data = {}
-
-        if not(username and password and re_password):
-            res_data['error'] = "모든값을 입려해주세요."
-        elif password != re_password:
-            res_data['error'] = "비밀번호가 다릅니다."
-        else:
-            # 여기가 결국 회원가입 포인트
-            user = User.objects.create_user(
-                username, email=None, password=password)
-            login(request, user)
-            user = User.objects.get(username=username)
-            request.session['user_id'] = user.id
-            return redirect('/')
-
-        return render(request, 'posts/signup.html', res_data)
-
-
-class SigninView(View):
-    def get(self, request):
-        # if request.method == 'GET':
-        return render(request, 'posts/signin.html')
-
-    def post(self, request):
-        # if request.method == 'POST':
-
-        username = request.POST.get('username', None)
-        password = request.POST.get('password', None)
-
-        res_data = {}
-
-        if not(username and password):
-            res_data['error'] = "모든값을 입려해주세요."
-        elif not(authenticate(username=username, password=password)):
-            res_data['error'] = "모든값을 입려해주세요."
-        else:
-            # 여기가 결국 로그인 포인트
-            user = authenticate(username=username, password=password)
-            login(request, user)
-            user = User.objects.get(username=username)
-            if check_password(password, user.password):
-                request.session['user_id'] = user.id
-                return redirect('/')
-            else:
-                res_data['error'] = "비밀번호가 틀렸습니다."
-        return render(request, 'posts/signin.html', res_data)
-
-
-class SignoutView(View):
-    def get(self, request):
-        # if request.method == 'GET':
-        if request.session.get('user_id'):
-            access_token = User.objects.get(pk=request.session.get(
-                'user_id')).kakao_access_token
-            profile_request = requests.post(
-                "https://kapi.kakao.com/v1/user/logout",
-                headers={"Authorization": f"Bearer {access_token}"},
-            )
-            del(request.session['user_id'])
-
-        logout(request)
-        # logout(request, backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('/')
-
-
 class MypageView(View):
     def get(self, request):
         # if request.method == 'GET':
         return render(request, 'posts/mypage.html')
+
+
+# def listing(request):
+#     # post_objects = Post.objects.all()
+#     post_objects = Post.objects.filter(title__icontains='테스트')
+#     print(post_objects)
+#     paginator = Paginator(post_objects, 10)  # Show 10 contacts per page.
+
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+#     return render(request, 'posts/index.html.html', {'page_obj': page_obj})
+
+
+# class SignupView(View):
+#     def get(self, request):
+#         # if request.method == 'GET':
+#         return render(request, 'posts/signup.html')
+#         # render(request, template_name, context=None, content_type=None, status=None, using=None)
+
+#     def post(self, request):
+#         # if request.method == 'POST':
+
+#         username = request.POST.get('username', None)
+#         password = request.POST.get('password', None)
+#         re_password = request.POST.get('re-password', None)
+
+#         res_data = {}
+
+#         if not(username and password and re_password):
+#             res_data['error'] = "모든값을 입려해주세요."
+#         elif password != re_password:
+#             res_data['error'] = "비밀번호가 다릅니다."
+#         else:
+#             # 여기가 결국 회원가입 포인트
+#             user = User.objects.create_user(
+#                 username, email=None, password=password)
+#             login(request, user)
+#             user = User.objects.get(username=username)
+#             request.session['user_id'] = user.id
+#             return redirect('/')
+
+#         return render(request, 'posts/signup.html', res_data)
+
+
+# class SigninView(View):
+#     def get(self, request):
+#         # if request.method == 'GET':
+#         return render(request, 'posts/signin.html')
+
+#     def post(self, request):
+#         # if request.method == 'POST':
+
+#         username = request.POST.get('username', None)
+#         password = request.POST.get('password', None)
+
+#         res_data = {}
+
+#         if not(username and password):
+#             res_data['error'] = "모든값을 입려해주세요."
+#         elif not(authenticate(username=username, password=password)):
+#             res_data['error'] = "모든값을 입려해주세요."
+#         else:
+#             # 여기가 결국 로그인 포인트
+#             user = authenticate(username=username, password=password)
+#             login(request, user)
+#             user = User.objects.get(username=username)
+#             if check_password(password, user.password):
+#                 request.session['user_id'] = user.id
+#                 return redirect('/')
+#             else:
+#                 res_data['error'] = "비밀번호가 틀렸습니다."
+#         return render(request, 'posts/signin.html', res_data)
+
+
+# class SignoutView(View):
+#     def get(self, request):
+#         # if request.method == 'GET':
+#         if request.session.get('user_id'):
+#             access_token = User.objects.get(pk=request.session.get(
+#                 'user_id')).kakao_access_token
+#             profile_request = requests.post(
+#                 "https://kapi.kakao.com/v1/user/logout",
+#                 headers={"Authorization": f"Bearer {access_token}"},
+#             )
+#             del(request.session['user_id'])
+
+#         logout(request)
+#         # logout(request, backend='django.contrib.auth.backends.ModelBackend')
+#         return redirect('/')
 
 
 # def Unread(request):

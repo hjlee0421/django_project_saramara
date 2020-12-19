@@ -46,16 +46,6 @@
     </div>
     <div class="row mt-5">
       <div class="col-12 text-center">
-        {% comment %} 프로필 사진 변경 {% endcomment %} {% comment %}
-        <input
-          type="file"
-          id="images"
-          name="images[]"
-          multiple
-          accept="image/jpg,image/png,image/jpeg,image/gif"
-        />
-        <a onclick="uploadWithAjax()"> Upload Images </a> {% endcomment %}
-
         <div class="file-upload">
           <button
             class="file-upload-btn"
@@ -107,47 +97,25 @@
           <br />
           <br />
 
-          {% comment %}
-          <form
-            method="POST"
-            action="{% url user_info %}"
-            enctype="multipart/form-data"
-          >
-            <div class="controls">
-              <input type="file" name="image" />
-            </div>
-            <input type="submit" />
-          </form>
-          {% endcomment %} {% comment %}
-          <form method="POST" enctype="multipart/form-data" action=".">
-            {% endcomment %} {% comment %}
-            <div class="form-group">
-              {% endcomment %} {% comment %} {% csrf_token %} {{ form.media }}
-              {{ form.as_p }} {% endcomment %}
-              <input
-                type="text"
-                class="form-control"
-                id="username_input"
-                placeholder="{{ user.username }}"
-                name="username"
-                value="{{ user.username }}"
-                style="width: 240px; margin: 0 auto"
-              />
-              <p id="check_duplicated">사용가능한 닉네임인지 확인해주세요</p>
-              <br />
+          <input
+            type="text"
+            class="form-control"
+            id="username_input"
+            placeholder="{{ user.username }}"
+            name="username"
+            value="{{ user.username }}"
+            style="width: 240px; margin: 0 auto"
+          />
+          <p id="check_duplicated">사용가능한 닉네임인지 확인해주세요</p>
+          <br />
 
-              <input
-                id="change_username"
-                type="submit"
-                name="change_username"
-                value="사용하기"
-                class="btn btn-primary"
-              />
-              {% comment %}
-            </div>
-            {% endcomment %} {% comment %}
-          </form>
-          {% endcomment %}
+          <input
+            id="change_username"
+            type="submit"
+            name="change_username"
+            value="사용하기"
+            class="btn btn-primary"
+          />
 
           <script type="text/javascript">
             $("#change_username").click(function () {
@@ -159,14 +127,14 @@
                 //if else 로 username 아래쪽에 가능하면 사용가능한 닉네임입니다.
                 // 불가능하면, 이미 사용중인 닉네임입니다. 를 띄우기
                 //location.reload();
-                if (Object.keys(res).length == 2) {
+                if (Object.keys(res).length == 1) {
                   // 이미 사용중인 아이디
-                  $("#check_duplicated").text("이미 사용중에요 :(");
-                } else {
-                  // 사용 가능한 아이디
                   $("#check_duplicated").text(
                     "원하시는 아이디로 등록해드렸어요 :)"
                   );
+                } else {
+                  // 사용 가능한 아이디
+                  $("#check_duplicated").text("이미 사용중에요 :(");
                 }
               });
             });

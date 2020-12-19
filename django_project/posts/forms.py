@@ -4,9 +4,6 @@ from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 
 class UserForm(forms.ModelForm):
-    profile_image = forms.ImageField(
-        widget=forms.FileInput(attrs={"id": "image"}))
-
     class Meta:
         model = User
         fields = ('username', 'email', 'password', 'profile_image')
