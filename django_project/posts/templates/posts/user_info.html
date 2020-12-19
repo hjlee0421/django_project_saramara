@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    {% load static %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ㅅㄹㅁㄹ</title>
@@ -37,14 +38,7 @@
           <h1>프로필 사진과 닉네임을 설정해주세요</h1>
         </div>
       </div>
-
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-      {% comment %}
-      <script
-        class="jsbin"
-        src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"
-      ></script>
-      {% endcomment %}
     </div>
 
     <div class="row mt-5">
@@ -52,17 +46,28 @@
     </div>
     <div class="row mt-5">
       <div class="col-12 text-center">
-        {% comment %} 프로필 사진 변경 {% endcomment %}
+        {% comment %} 프로필 사진 변경 {% endcomment %} {% comment %}
+        <input
+          type="file"
+          id="images"
+          name="images[]"
+          multiple
+          accept="image/jpg,image/png,image/jpeg,image/gif"
+        />
+        <a onclick="uploadWithAjax()"> Upload Images </a> {% endcomment %}
+
         <div class="file-upload">
           <button
             class="file-upload-btn"
             type="button"
             onclick="$('.file-upload-input').trigger( 'click' )"
           >
-            프로필사진 변경하기
+            프로필사진 선택하기
           </button>
+
           <div class="image-upload-wrap">
             <input
+              id="image"
               class="file-upload-input"
               type="file"
               onchange="readURL(this);"
@@ -70,6 +75,7 @@
               style="display: none"
             />
           </div>
+
           <div class="file-upload-content">
             <img
               class="file-upload-image"
@@ -80,14 +86,23 @@
             <div class="image-title-wrap">
               <button
                 type="button"
+                onclick="uploadWithAjax()"
+                class="remove-image"
+              >
+                선택한 사진 등록하기
+              </button>
+            </div>
+            <div class="image-title-wrap">
+              <button
+                type="button"
                 onclick="removeUpload()"
                 class="remove-image"
               >
-                프로필사진 삭제하기 {% comment %}
-                <span class="image-title">Uploaded Image</span> {% endcomment %}
+                프로필사진 삭제하기
               </button>
             </div>
           </div>
+
           {% comment %} 프로필 사진 변경 {% endcomment %}
           <br />
           <br />
@@ -103,11 +118,12 @@
             </div>
             <input type="submit" />
           </form>
-          {% endcomment %}
-
+          {% endcomment %} {% comment %}
           <form method="POST" enctype="multipart/form-data" action=".">
+            {% endcomment %} {% comment %}
             <div class="form-group">
-              {% csrf_token %} {{ form.media }} {{ form.as_p }}
+              {% endcomment %} {% comment %} {% csrf_token %} {{ form.media }}
+              {{ form.as_p }} {% endcomment %}
               <input
                 type="text"
                 class="form-control"
@@ -117,40 +133,52 @@
                 value="{{ user.username }}"
                 style="width: 240px; margin: 0 auto"
               />
-              <p>사용가능한 닉네임인지 확인해주세요</p>
+              <p id="check_duplicated">사용가능한 닉네임인지 확인해주세요</p>
               <br />
 
               <input
                 id="change_username"
                 type="submit"
                 name="change_username"
-                value="중복확인"
+                value="사용하기"
                 class="btn btn-primary"
               />
+              {% comment %}
             </div>
+            {% endcomment %} {% comment %}
+          </form>
+          {% endcomment %}
 
-            <script>
-              $("#change_username").click(function () {
-                var username_input = $("#username_input").val();
-                $.ajax({
-                  url: "user_info/", //"/add_comment/",
-                  data: { username_input: username_input },
-                }).done(function () {
-                  //if else 로 username 아래쪽에 가능하면 사용가능한 닉네임입니다.
-                  // 불가능하면, 이미 사용중인 닉네임입니다. 를 띄우기
-                  //location.reload();
-                  //$("#comment_input").val("");
-                });
+          <script type="text/javascript">
+            $("#change_username").click(function () {
+              var username_input = $("#username_input").val();
+              $.ajax({
+                url: "/user_info/",
+                data: { username_input: username_input },
+              }).done(function (res) {
+                //if else 로 username 아래쪽에 가능하면 사용가능한 닉네임입니다.
+                // 불가능하면, 이미 사용중인 닉네임입니다. 를 띄우기
+                //location.reload();
+                if (Object.keys(res).length == 2) {
+                  // 이미 사용중인 아이디
+                  $("#check_duplicated").text("이미 사용중에요 :(");
+                } else {
+                  // 사용 가능한 아이디
+                  $("#check_duplicated").text(
+                    "원하시는 아이디로 등록해드렸어요 :)"
+                  );
+                }
               });
-            </script>
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-
+            });
+          </script>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <form action="http://127.0.0.1:8000/">
             <button type="submit" class="btn btn-primary">
               사라마라 시작하러 가기 {% comment %} form POST 로 바꿔서 보내서
               여기에서 저장해야함 {% endcomment %}
@@ -198,4 +226,31 @@
   $(".image-upload-wrap").bind("dragleave", function () {
     $(".image-upload-wrap").removeClass("image-dropping");
   });
+
+  form_data = new FormData();
+
+  function uploadWithAjax() {
+    console.log("called");
+    console.log($("#image"));
+    var file = $("#image").prop("files");
+    console.log(file);
+
+    form_data.append("image", file);
+
+    $.ajax({
+      type: "POST",
+      url: "/UploadImage/",
+      data: form_data, //{ images: file },
+      //contentType: false,
+      cache: false,
+      method: "POST",
+      contentType: "multipart/form-data",
+      processData: false,
+      dataType: "multipart/form-data",
+
+      success: function (result) {
+        alert("IMAGES UPLOADED");
+      },
+    });
+  }
 </script>

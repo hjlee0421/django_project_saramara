@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import os
 from .models import Post, User, Comment, ViewCount
-from .forms import PostForm
+from .forms import UserForm, PostForm, UploadFileForm
 from django.views import generic, View
 
 from django.contrib.auth import authenticate, login, logout
@@ -40,16 +40,55 @@ with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
 # https://stackoverflow.com/questions/52510586/how-to-filter-a-generic-listview
 
 
-def changes(request):
-    if request.method == 'POST':
-        image = request.FILES['image']
-        # .profilepic = image
-        # userprofile.save()
+def UploadImage(request):
+    print(request.method)
+    # print(request.FILES)
+    form = UploadFileForm(request.GET, request.FILES)
+    print(form)
+    if form.is_valid():
+        print("please")
+        print(request.FILES)
+    return JsonResponse(data={'created': False, 'len': '2'})
+    # pic = request.FILES['image']  # I don't know if this is correct
+
+
+def addImage_view(request):
+    form = UserForm(request.POST, request.FILES)
+    if(form.is_valid()):
+        form.save()
+    return HttpResponse("success")
 
 
 def user_info(request):
     user_id = request.session.get('user_id')
-    user = User.objects.get(pk=user_id)
+    username = User.objects.get(pk=user_id)
+    print(username)
+
+    newForm = UserForm()
+    context = {"form": newForm, }
+
+    if "username_input" in request.GET:
+        new_username = request.GET["username_input"]
+        print(new_username)
+        # new_username = json.loads(request.GET['username_input'])
+        # print(new_username)
+
+        if User.objects.filter(username=new_username).exists():
+            # raise forms.ValidationError('아이디가 이미 사용중입니다')
+            # username 이 존재함을 return
+
+            return JsonResponse(data={'created': False, 'len': '2'})
+
+        else:
+            user = User.objects.get(pk=user_id)
+            user.username = new_username
+            user.save()
+            return JsonResponse({'created': True})
+        # username 이 사용가능함을 return
+
+    # return render(request, 'posts/user_info.html')
+    return render(request, 'posts/user_info.html', context)
+
     '''
     POST 로 값을 전달받아서,(x)
     ajax로 값을 전달 받아서 아래 내용을 확인하고
@@ -70,13 +109,6 @@ def user_info(request):
     마지막에 시작하기 버튼을 누르면 위 변경사항들을 모두 적용해서 save 후 redirect
     user.username = 전달받은 값
     '''
-    return render(request, 'posts/user_info.html')
-
-
-# def add_comment(request, pk):
-#     comment_input = request.GET['comment_input']
-#     print(comment_input)
-#     return render(request, 'posts/detail.html')
 
 
 def kakao_unlink(request):
@@ -238,32 +270,32 @@ class DetailView(generic.DetailView, View):
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
 
         # # 나이 성별은 나중에 view 에서 작업을 해서 html 에서 보여주는 방법으로 해야 함
-
-        try:
-            # ip주소와 게시글 번호로 기록을 조회함
-            views = ViewCount.objects.get(
-                loggedin_user=User.objects.get(pk=request.session.get('user_id')), post=self.object)
-        except Exception as e:
-            # 처음 게시글을 조회한 경우엔 조회 기록이 없음
-            views = ViewCount(loggedin_user=User.objects.get(
-                pk=request.session.get('user_id')), post=self.object)
-            self.object.view_cnt = self.object.view_cnt + 1
-            views.view_cnt = views.view_cnt + 1
-            views.save()
-            self.object.save()
-        else:
-            # 조회 기록은 있으나, 날짜가 다른 경우
-            if not views.date.date() == timezone.now().date():
-
+        if request.session.get('user_id'):
+            try:
+                # ip주소와 게시글 번호로 기록을 조회함
+                views = ViewCount.objects.get(
+                    loggedin_user=User.objects.get(pk=request.session.get('user_id')), post=self.object)
+            except Exception as e:
+                # 처음 게시글을 조회한 경우엔 조회 기록이 없음
+                views = ViewCount(loggedin_user=User.objects.get(
+                    pk=request.session.get('user_id')), post=self.object)
                 self.object.view_cnt = self.object.view_cnt + 1
                 views.view_cnt = views.view_cnt + 1
-                views.date = timezone.now().date()
-                # posts.view_cnt = posts.view_cnt + 1
                 views.save()
                 self.object.save()
-            # 날짜가 같은 경우
             else:
-                pass
+                # 조회 기록은 있으나, 날짜가 다른 경우
+                if not views.date.date() == timezone.now().date():
+
+                    self.object.view_cnt = self.object.view_cnt + 1
+                    views.view_cnt = views.view_cnt + 1
+                    views.date = timezone.now().date()
+                    # posts.view_cnt = posts.view_cnt + 1
+                    views.save()
+                    self.object.save()
+                # 날짜가 같은 경우
+                else:
+                    pass
 
         return render(request, 'posts/detail.html', context=context, content_type=None, status=None, using=None)
 

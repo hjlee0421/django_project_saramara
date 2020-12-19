@@ -21,4 +21,5 @@ urlpatterns = [
     path('kakao_logout/', views.kakao_logout, name="kakao_logout"),
     path('kakao_unlink/', views.kakao_unlink, name='kakao_unlink'),
     path('user_info/', views.user_info, name='user_info'),
+    path('UploadImage/', views.UploadImage, name='UploadImage'),
 ]
