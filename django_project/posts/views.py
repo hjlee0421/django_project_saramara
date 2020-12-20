@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import os
 from .models import Post, User, Comment, ViewCount
-from .forms import UserForm, PostForm, UploadFileForm
+from .forms import PostForm, UploadFileForm  # UserForm,
 from django.views import generic, View
 
 from django.contrib.auth import authenticate, login, logout
@@ -32,6 +32,8 @@ from django.db.models import Q
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
     secrets = json.load(secret_file)
+
+# 안됨 TODO: 해결해야 함
 
 
 def UploadImage(request):
