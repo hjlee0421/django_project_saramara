@@ -294,10 +294,9 @@ class DetailView(generic.DetailView, View):
             post=Post.objects.filter(title=post).values('id')[0]['id']).count()
         post.save()
 
-    def sara_vote(self, user_name):
+    def sara_vote(self, user):
         post = self.object
-        print(user_name)
-        user_name = user_name.username
+        kakao_id = user.kakao_unique_id
 
         sara_str = post.sara
         mara_str = post.mara
@@ -312,15 +311,15 @@ class DetailView(generic.DetailView, View):
         else:
             mara_list = mara_str.split(' ')
 
-        if user_name in sara_list:
-            sara_list.remove(user_name)
+        if kakao_id in sara_list:
+            sara_list.remove(kakao_id)
 
-        elif user_name in mara_list:
-            mara_list.remove(user_name)
-            sara_list.append(user_name)
+        elif kakao_id in mara_list:
+            mara_list.remove(kakao_id)
+            sara_list.append(kakao_id)
 
         else:
-            sara_list.append(user_name)
+            sara_list.append(kakao_id)
 
         if '' in sara_list:
             sara_list.remove('')
@@ -338,9 +337,9 @@ class DetailView(generic.DetailView, View):
 
         post.save()
 
-    def mara_vote(self, user_name):
+    def mara_vote(self, user):
         post = self.object
-        user_name = user_name.username
+        kakao_id = user.kakao_unique_id
 
         mara_str = post.mara
         sara_str = post.sara
@@ -355,13 +354,13 @@ class DetailView(generic.DetailView, View):
         else:
             sara_list = sara_str.split(' ')
 
-        if user_name in mara_list:
-            mara_list.remove(user_name)
-        elif user_name in sara_list:
-            sara_list.remove(user_name)
-            mara_list.append(user_name)
+        if kakao_id in mara_list:
+            mara_list.remove(kakao_id)
+        elif kakao_id in sara_list:
+            sara_list.remove(kakao_id)
+            mara_list.append(kakao_id)
         else:
-            mara_list.append(user_name)
+            mara_list.append(kakao_id)
 
         if '' in mara_list:
             mara_list.remove('')
