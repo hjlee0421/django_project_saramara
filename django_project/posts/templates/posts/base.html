@@ -10,16 +10,26 @@
     <script>Kakao.init("{{ javascript_sdk_key | safe }}");</script>
     {% comment %} 카카오 로그인 javascript {% endcomment %}
 
+
+    {% comment %} 내 CSS 파일 가져오기 {% endcomment %}
     {% load static %}
     <link
       rel="stylesheet"
       type="text/css"
       href="{% static 'posts/style.css' %}"
     />
-    
+    {% comment %} 내 CSS 파일 가져오기 {% endcomment %}
+
+
     {% comment %} <script src="{% static 'posts/myScript1.js' %}"></script> {% endcomment %}
 
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    
+    
+    
+    
     <link
       rel="stylesheet"
       href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
@@ -28,11 +38,16 @@
       rel="stylesheet"
       href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"
     />
+    
+    
+    
+    
+    
     {% comment %} <script src="myScript1.js"></script> {% endcomment %}
     {% comment %} <script src="demo.js"></script> {% endcomment %}
   </head>
 
-  <body style="background-color: black;">
+  <body style="background-color:black; width:1000px; margin:0 auto; padding:10px; font-size:5vw;">
     <!--    base layout-->
     <div class="mylayout" style="background-color: white;">
       <!--        site header-->
@@ -43,11 +58,11 @@
           
           <a href="{% url 'posts:mypage' %}">
             <img src="{{ user.profile_image.url }}" width="30" height="30" />
-            <h2 style="font-size: 2rem;"> {{ user.username}} </h2>
+            <h2 style="font-size: 2vw;"> {{ user.username}} </h2>
             {% comment %} <div style="font-size: 2rem;"> {{ user.username}} </div> {% endcomment %}
           </a>
           {% comment %} <a style="font-size: 2rem;" href="{% url 'posts:signout' %}">로그아웃</a> {% endcomment %}
-          <Button style="font-size: 2rem;" onclick="javascript:logoutWithKakao()">카카오Logout</Button>
+          <Button style="font-size: 2vw;" onclick="javascript:logoutWithKakao()">카카오Logout</Button>
           {% comment %} <Button onclick="javascript:unlinkWithKakao()">카카오Unlink</Button> {% endcomment %}
           {% comment %} <button class="api-btn" onclick="unlinkApp()">앱 탈퇴하기</button> {% endcomment %}
           {% comment %} <a style="font-size: 2rem;" href="{% url 'posts:ask' %}">물어보기</a> {% endcomment %}
@@ -74,11 +89,11 @@
       </header>
       {% comment %} site header {% endcomment %}
 
-    {% comment %} <Button onclick="javascript:profileWithKakao()">Profile</Button>
-    <p id="userid"></p>
-    <p id="nickname"></p>
-    <img id="profile_image" />
-    <img id="thumbnail_image" /> {% endcomment %}
+      {% comment %} <Button onclick="javascript:profileWithKakao()">Profile</Button>
+      <p id="userid"></p>
+      <p id="nickname"></p>
+      <img id="profile_image" />
+      <img id="thumbnail_image" /> {% endcomment %}
 
 
 

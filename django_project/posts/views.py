@@ -296,6 +296,7 @@ class DetailView(generic.DetailView, View):
 
     def sara_vote(self, user_name):
         post = self.object
+        print(user_name)
         user_name = user_name.username
 
         sara_str = post.sara
@@ -450,51 +451,51 @@ class MypageView(View):
 #         return render(request, 'posts/signup.html', res_data)
 
 
-# class SigninView(View):
-#     def get(self, request):
-#         # if request.method == 'GET':
-#         return render(request, 'posts/signin.html')
+class SigninView(View):
+    def get(self, request):
+        # if request.method == 'GET':
+        return render(request, 'posts/signin.html')
 
-#     def post(self, request):
-#         # if request.method == 'POST':
+    def post(self, request):
+        # if request.method == 'POST':
 
-#         username = request.POST.get('username', None)
-#         password = request.POST.get('password', None)
+        username = request.POST.get('username', None)
+        password = request.POST.get('password', None)
 
-#         res_data = {}
+        res_data = {}
 
-#         if not(username and password):
-#             res_data['error'] = "모든값을 입려해주세요."
-#         elif not(authenticate(username=username, password=password)):
-#             res_data['error'] = "모든값을 입려해주세요."
-#         else:
-#             # 여기가 결국 로그인 포인트
-#             user = authenticate(username=username, password=password)
-#             login(request, user)
-#             user = User.objects.get(username=username)
-#             if check_password(password, user.password):
-#                 request.session['user_id'] = user.id
-#                 return redirect('/')
-#             else:
-#                 res_data['error'] = "비밀번호가 틀렸습니다."
-#         return render(request, 'posts/signin.html', res_data)
+        if not(username and password):
+            res_data['error'] = "모든값을 입려해주세요."
+        elif not(authenticate(username=username, password=password)):
+            res_data['error'] = "모든값을 입려해주세요."
+        else:
+            # 여기가 결국 로그인 포인트
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            user = User.objects.get(username=username)
+            if check_password(password, user.password):
+                request.session['user_id'] = user.id
+                return redirect('/')
+            else:
+                res_data['error'] = "비밀번호가 틀렸습니다."
+        return render(request, 'posts/signin.html', res_data)
 
 
-# class SignoutView(View):
-#     def get(self, request):
-#         # if request.method == 'GET':
-#         if request.session.get('user_id'):
-#             access_token = User.objects.get(pk=request.session.get(
-#                 'user_id')).kakao_access_token
-#             profile_request = requests.post(
-#                 "https://kapi.kakao.com/v1/user/logout",
-#                 headers={"Authorization": f"Bearer {access_token}"},
-#             )
-#             del(request.session['user_id'])
+class SignoutView(View):
+    def get(self, request):
+        # if request.method == 'GET':
+        if request.session.get('user_id'):
+            access_token = User.objects.get(pk=request.session.get(
+                'user_id')).kakao_access_token
+            profile_request = requests.post(
+                "https://kapi.kakao.com/v1/user/logout",
+                headers={"Authorization": f"Bearer {access_token}"},
+            )
+            del(request.session['user_id'])
 
-#         logout(request)
-#         # logout(request, backend='django.contrib.auth.backends.ModelBackend')
-#         return redirect('/')
+        logout(request)
+        # logout(request, backend='django.contrib.auth.backends.ModelBackend')
+        return redirect('/')
 
 
 # def Unread(request):
