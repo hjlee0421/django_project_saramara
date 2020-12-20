@@ -135,7 +135,7 @@ def kakao_login(request):  # , pk
     if profile_json['kakao_account']['birthday_needs_agreement'] == False:
         birthday = profile_json['kakao_account']['birthday']
 
-    if not User.objects.filter(username=username).exists():
+    if not User.objects.filter(kakao_unique_id=str(profile_json['id'])).exists():
         # 기존에 username 이 없다면
         user = User(username=username, gender=gender, email=email, password=profile_json['id'],
                     birthday=birthday, kakao_access_token=access_token, kakao_unique_id=profile_json['id'])
@@ -148,7 +148,7 @@ def kakao_login(request):  # , pk
         # return redirect('/')
     else:
         # 기존에 username 이 있다면?
-        user = User.objects.get(username=username)
+        user = User.objects.get(kakao_unique_id=profile_json['id'])
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         request.session['user_id'] = user.id
         return JsonResponse(data={'created': False, 'len': '2'})
