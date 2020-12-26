@@ -195,29 +195,33 @@
     $(".image-upload-wrap").removeClass("image-dropping");
   });
 
-  form_data = new FormData();
-
   function uploadWithAjax() {
     console.log("called");
     console.log($("#image"));
     var file = $("#image").prop("files");
     console.log(file);
 
+    form_data = new FormData();
     form_data.append("image", file);
+    console.log(form_data);
 
     $.ajax({
       type: "POST",
       url: "/UploadImage/",
       data: form_data, //{ images: file },
       //contentType: false,
-      cache: false,
-      method: "POST",
-      contentType: "multipart/form-data",
+      //cache: false,
+      //method: "POST",
+      //contentType: "multipart/form-data",
       processData: false,
-      dataType: "multipart/form-data",
+      //dataType: "multipart/form-data",
 
       success: function (result) {
         alert("IMAGES UPLOADED");
+      },
+      error: function (data) {
+        console.log("error");
+        console.log(data);
       },
     });
   }

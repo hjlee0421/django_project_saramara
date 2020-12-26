@@ -1,3 +1,4 @@
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 import os
 from .models import Post, User, Comment, ViewCount
@@ -36,10 +37,13 @@ with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
 # 안됨 TODO: 해결해야 함
 
 
+@csrf_exempt
 def UploadImage(request):
     print(request.method)
+    print("################################")
+    print(request.POST)
     # print(request.FILES)
-    form = UploadFileForm(request.GET, request.FILES)
+    form = UploadFileForm(request.POST, request.FILES)
     print(form)
     if form.is_valid():
         print("please")
@@ -209,22 +213,24 @@ class DetailView(generic.DetailView, View):
 
     def get(self, request, pk, *args, **kwargs):
         # if request.method == 'GET':
+        #  self.object 는 post 로 변경하기
 
+        post = self.get_object()
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
-        context['comment'] = self.object.comment_set.all()
-        print(request.GET)
+        context['comment'] = post.comment_set.all()
+        user = request.user
+
         if 'comment_input' in request.GET:
             comment_input = request.GET["comment_input"]
-            user = request.user
             self.add_comment(user, comment_input)
         if 'saramara_input' in request.GET:
             saramara_input = request.GET["saramara_input"]
-            user = request.user
             if saramara_input == "sara":
-                self.sara_vote(user)
+                print("sara works till here")
+                post.sara_vote(user)
             elif saramara_input == "mara":
-                self.mara_vote(user)
+                post.mara_vote(user)
 
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
 
@@ -232,22 +238,24 @@ class DetailView(generic.DetailView, View):
         if request.session.get('user_id'):
             try:
                 # ip주소와 게시글 번호로 기록을 조회함
+                # TODO: post.view_set.all() 방식으로 수정해야 함
                 views = ViewCount.objects.get(
-                    loggedin_user=User.objects.get(pk=request.session.get('user_id')), post=self.object)
+                    loggedin_user=User.objects.get(pk=request.session.get('user_id')), post=post)
             except Exception as e:
                 # 처음 게시글을 조회한 경우엔 조회 기록이 없음
+                # TODO: post.view_set.all() 방식으로 수정해야 함
                 views = ViewCount(loggedin_user=User.objects.get(
-                    pk=request.session.get('user_id')), post=self.object)
-                self.object.view_cnt = self.object.view_cnt + 1
-                self.object.save()
+                    pk=request.session.get('user_id')), post=post)
+                post.view_cnt = post.view_cnt + 1
+                post.save()
                 views.view_cnt = views.view_cnt + 1
                 views.save()
             else:
                 # 조회 기록은 있으나, 날짜가 다른 경우
                 if not views.date.date() == timezone.now().date():
 
-                    self.object.view_cnt = self.object.view_cnt + 1
-                    self.object.save()
+                    post.view_cnt = post.view_cnt + 1
+                    post.save()
                     views.view_cnt = views.view_cnt + 1
                     views.date = timezone.now().date()
                     views.save()
@@ -257,9 +265,10 @@ class DetailView(generic.DetailView, View):
     def post(self, request, pk, *args, **kwargs):
         # if request.method == 'POST':
 
+        post = self.get_object()
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
-        context['comment'] = self.object.comment_set.all()
+        context['comment'] = post.comment_set.all()
 
         user = request.user
         # user = 현재 로그인한 username
@@ -269,15 +278,17 @@ class DetailView(generic.DetailView, View):
             comment = Comment.objects.get(id=comment_id)
             if user == comment.author:
                 comment.delete()
-                self.object.comment_cnt = Comment.objects.filter(
-                    post=Post.objects.filter(title=self.object).values('id')[0]['id']).count()
-                self.object.save()
-        if 'sara_button' in request.POST:
-            self.sara_vote(user)
-        elif 'mara_button' in request.POST:
-            self.mara_vote(user)
-        elif 'add_comment' in request.POST:
-            pass
+                post.comment_cnt = post.comment_set.all().count()
+                post.save()
+
+        # delete comment도 ajax로 처리가능할듯
+        # if 'sara_button' in request.POST:
+        #     self.sara_vote(user)
+        # elif 'mara_button' in request.POST:
+        #     self.mara_vote(user)
+        # elif 'add_comment' in request.POST:
+        #     pass
+        # 추후삭제
             # self.add_comment(user, request.POST.get('add_comment'))
 
         return render(request, 'posts/detail.html', context=context, content_type=None, status=None, using=None)
@@ -290,92 +301,7 @@ class DetailView(generic.DetailView, View):
         comment = Comment(post=post, author=user_name, text=user_comment)
         comment.save()
 
-        post.comment_cnt = Comment.objects.filter(
-            post=Post.objects.filter(title=post).values('id')[0]['id']).count()
-        post.save()
-
-    def sara_vote(self, user):
-        post = self.object
-        kakao_id = user.kakao_unique_id
-
-        sara_str = post.sara
-        mara_str = post.mara
-
-        if sara_str is None:
-            sara_list = []
-        else:
-            sara_list = sara_str.split(' ')
-
-        if mara_str is None:
-            mara_list = []
-        else:
-            mara_list = mara_str.split(' ')
-
-        if kakao_id in sara_list:
-            sara_list.remove(kakao_id)
-
-        elif kakao_id in mara_list:
-            mara_list.remove(kakao_id)
-            sara_list.append(kakao_id)
-
-        else:
-            sara_list.append(kakao_id)
-
-        if '' in sara_list:
-            sara_list.remove('')
-        if '' in mara_list:
-            mara_list.remove('')
-
-        post.sara_cnt = len(sara_list)
-        post.mara_cnt = len(mara_list)
-
-        sara_str = ' '.join(sara_list)
-        mara_str = ' '.join(mara_list)
-
-        post.sara = sara_str
-        post.mara = mara_str
-
-        post.save()
-
-    def mara_vote(self, user):
-        post = self.object
-        kakao_id = user.kakao_unique_id
-
-        mara_str = post.mara
-        sara_str = post.sara
-
-        if mara_str is None:
-            mara_list = []
-        else:
-            mara_list = mara_str.split(' ')
-
-        if sara_str is None:
-            sara_list = []
-        else:
-            sara_list = sara_str.split(' ')
-
-        if kakao_id in mara_list:
-            mara_list.remove(kakao_id)
-        elif kakao_id in sara_list:
-            sara_list.remove(kakao_id)
-            mara_list.append(kakao_id)
-        else:
-            mara_list.append(kakao_id)
-
-        if '' in mara_list:
-            mara_list.remove('')
-        if '' in sara_list:
-            sara_list.remove('')
-
-        post.mara_cnt = len(mara_list)
-        post.sara_cnt = len(sara_list)
-
-        mara_str = ' '.join(mara_list)
-        sara_str = ' '.join(sara_list)
-
-        post.mara = mara_str
-        post.sara = sara_str
-
+        post.comment_cnt = post.comment_set.all().count()
         post.save()
 
 
@@ -406,48 +332,6 @@ class MypageView(View):
     def get(self, request):
         # if request.method == 'GET':
         return render(request, 'posts/mypage.html')
-
-
-# def listing(request):
-#     # post_objects = Post.objects.all()
-#     post_objects = Post.objects.filter(title__icontains='테스트')
-#     print(post_objects)
-#     paginator = Paginator(post_objects, 10)  # Show 10 contacts per page.
-
-#     page_number = request.GET.get('page')
-#     page_obj = paginator.get_page(page_number)
-#     return render(request, 'posts/index.html.html', {'page_obj': page_obj})
-
-
-# class SignupView(View):
-#     def get(self, request):
-#         # if request.method == 'GET':
-#         return render(request, 'posts/signup.html')
-#         # render(request, template_name, context=None, content_type=None, status=None, using=None)
-
-#     def post(self, request):
-#         # if request.method == 'POST':
-
-#         username = request.POST.get('username', None)
-#         password = request.POST.get('password', None)
-#         re_password = request.POST.get('re-password', None)
-
-#         res_data = {}
-
-#         if not(username and password and re_password):
-#             res_data['error'] = "모든값을 입려해주세요."
-#         elif password != re_password:
-#             res_data['error'] = "비밀번호가 다릅니다."
-#         else:
-#             # 여기가 결국 회원가입 포인트
-#             user = User.objects.create_user(
-#                 username, email=None, password=password)
-#             login(request, user)
-#             user = User.objects.get(username=username)
-#             request.session['user_id'] = user.id
-#             return redirect('/')
-
-#         return render(request, 'posts/signup.html', res_data)
 
 
 class SigninView(View):
@@ -495,6 +379,47 @@ class SignoutView(View):
         logout(request)
         # logout(request, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('/')
+
+# def listing(request):
+#     # post_objects = Post.objects.all()
+#     post_objects = Post.objects.filter(title__icontains='테스트')
+#     print(post_objects)
+#     paginator = Paginator(post_objects, 10)  # Show 10 contacts per page.
+
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+#     return render(request, 'posts/index.html.html', {'page_obj': page_obj})
+
+
+# class SignupView(View):
+#     def get(self, request):
+#         # if request.method == 'GET':
+#         return render(request, 'posts/signup.html')
+#         # render(request, template_name, context=None, content_type=None, status=None, using=None)
+
+#     def post(self, request):
+#         # if request.method == 'POST':
+
+#         username = request.POST.get('username', None)
+#         password = request.POST.get('password', None)
+#         re_password = request.POST.get('re-password', None)
+
+#         res_data = {}
+
+#         if not(username and password and re_password):
+#             res_data['error'] = "모든값을 입려해주세요."
+#         elif password != re_password:
+#             res_data['error'] = "비밀번호가 다릅니다."
+#         else:
+#             # 여기가 결국 회원가입 포인트
+#             user = User.objects.create_user(
+#                 username, email=None, password=password)
+#             login(request, user)
+#             user = User.objects.get(username=username)
+#             request.session['user_id'] = user.id
+#             return redirect('/')
+
+#         return render(request, 'posts/signup.html', res_data)
 
 
 # def Unread(request):

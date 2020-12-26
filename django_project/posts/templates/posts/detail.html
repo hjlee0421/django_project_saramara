@@ -13,7 +13,8 @@
 <div>
   <h1>
     {{ post.title | upper}} <br />
-    {{ post.author }} | 사라-{{post.sara_cnt}} 마라-{{post.mara_cnt}} 댓글수-{% comment %} post별로 댓글 수 도 확인해야함{% endcomment %}
+    {{ post.author }} | 사라-{{post.sara_cnt}} 마라-{{post.mara_cnt}} 댓글수-{%
+    comment %} post별로 댓글 수 도 확인해야함{% endcomment %}
     조회수-{{post.view_cnt}} <br />
     작성일 {{post.pub_date}}
   </h1>
@@ -43,60 +44,51 @@
 
   <!-- bootstrp 써서 색깔? 같은거 하고, a:click 은 색깔 칠해진걸로 해서 투표 한걸 보이게끔 버튼 변경 css 부분 -->
 
-
-  
-
-
   <br />
   {% if user.is_authenticated %}
-    <input
-      id = "sarabutton"
-      type="submit"
-      name="sara_button"
-      value="이건사야지"
-      class="btn btn-primary"
-    />
+  <input
+    id="sarabutton"
+    type="submit"
+    name="sara_button"
+    value="이건사야지"
+    class="btn btn-primary"
+  />
   {% else %}
-    <input
-      id="plz_login_sara"
-      type="submit"
-      name="sara_button"
-      value="이건사야지"
-      class="btn btn-primary"
-    />  
+  <input
+    id="plz_login_sara"
+    type="submit"
+    name="sara_button"
+    value="이건사야지"
+    class="btn btn-primary"
+  />
   {% endif %}
   <script>
     $("#plz_login_sara").click(function () {
-      //var current_url = $(location).attr("pathname") + "add_comment/";
-      console.log("뭐지?")
       alert("이건 사야한다!! 투표하려면 로그인을 해주세요");
-      //$.ajax({
-      //  alert("사라 마라 하려면 로그인을 해주세요");
-      //});
     });
   </script>
   <br />
   {% if user.is_authenticated %}
-    <input
-      id = "marabutton"
-      type="submit"
-      name="mara_button"
-      value="이건아니지"
-      class="btn btn-primary"
-    />
+  <input
+    id="marabutton"
+    type="submit"
+    name="mara_button"
+    value="이건아니지"
+    class="btn btn-primary"
+  />
   {% else %}
-    <input
-      id="plz_login_mara"
-      type="submit"
-      name="mara_button"
-      value="이건아니지"
-      class="btn btn-primary"
-    />  
+  <input
+    id="plz_login_mara"
+    type="submit"
+    name="mara_button"
+    value="이건아니지"
+    class="btn btn-primary"
+  />
   {% endif %}
-<script>
+  <script>
     $("#plz_login_mara").click(function () {
       //var current_url = $(location).attr("pathname") + "add_comment/";
-      console.log("뭐지?")
+      console.log("뭐지?");
       alert("이건 절대아니다!! 투표하려면 로그인을 해주세요");
       //$.ajax({
       //  alert("사라 마라 하려면 로그인을 해주세요");
@@ -104,91 +96,32 @@
     });
   </script>
 
-
   <br />
   <script>
     $("#sarabutton").click(function () {
       var current_url = $(location).attr("pathname") + "sara/";
-      var saramara_data = "sara"
+      var saramara_data = "sara";
       $.ajax({
-        url: current_url, 
+        url: current_url,
         data: { saramara_input: saramara_data },
-      }).done(function() {
+      }).done(function () {
         location.reload();
-        //$("#comment_input").val("");
       });
     });
   </script>
   <script>
     $("#marabutton").click(function () {
       var current_url = $(location).attr("pathname") + "mara/";
-      var saramara_data = "mara"
+      var saramara_data = "mara";
       $.ajax({
-        url: current_url, 
+        url: current_url,
         data: { saramara_input: saramara_data },
-      }).done(function() {
+      }).done(function () {
         location.reload();
-        //$("#comment_input").val("");
       });
     });
   </script>
-  {% comment %} {% if user.is_authenticated %}
-  <form method="POST" action=".">
-    {% csrf_token %}
-    <input
-      type="submit"
-      name="mara_button"
-      value="이건아니지"
-      class="btn btn-primary"
-    />
-  </form>
-  {% else %}alert 로그인하세요 
-  카카오로그인 자동연결 
 
-  <form method="POST" action="{% url 'posts:signin' %}">
-    {% csrf_token %}
-    <input
-      type="submit"
-      name="sara_button"
-      value="이건아니지"
-      class="btn btn-primary"
-    />
-  </form>
-  {% endif %} {% endcomment %}
-
-
-
-  {% comment %} <form action="{% url guestbook-post %}" method="POST" onsubmit="return validate()">
-
-  <script>
-  function validate()
-  {
-  // do some validation here to decide whether the post is going to be successful or not.
-  if (valid)
-  {
-    alert("Going to post your data now!");
-    return true;
-  }
-  else
-  {
-    return false; // form won't post
-  }
-  }
-  </script> {% endcomment %}
-
-  <!-- <button onclick="location.href='?sara={{user.username}}';" class="sarabtn">
-    사라
-  </button> -->
-  {% comment %}
-  <h2>count : {{ post.sara_cnt }}</h2>
-  <br />
-
-  <!-- <button onclick="location.href='?mara={{user.username}}';" class="marabtn">
-    마라
-  </button> -->
-  <h2>count : {{ post.mara_cnt }}</h2>
-  <br />
-  <br />{% endcomment %}
   <br />
   <br />
   <br />
@@ -324,9 +257,8 @@
     />
     <br />
   </form>
-  {% endif %}
-  {% empty %} 
-    <p>살지 말지 고민을 해결해주세요 :)</p>
+  {% endif %} {% empty %}
+  <p>살지 말지 고민을 해결해주세요 :)</p>
 
   {% endfor %}
   <br />
@@ -334,47 +266,44 @@
   <br />
   <br />
   <br />
- 
+
   {% if user.is_authenticated %}
-    <h1>댓글작성창</h1>
-    <!-- <input type="text" name="add_comment" size="100" height="100"><br><br> -->
-    <textarea
+  <h1>댓글작성창</h1>
+  <!-- <input type="text" name="add_comment" size="100" height="100"><br><br> -->
+  <textarea
     id="comment_input"
     rows="4"
     cols="3"
     name="add_comment"
     placeholder="당신의 의견을 말해주세요"
-    ></textarea>
-    <br />
-    <input
-      id="add_comment_button"
-      type="submit"
-      name="add_comment_button"
-      value="댓글달기"
-      class="btn btn-primary"
-    />    
+  ></textarea>
+  <br />
+  <input
+    id="add_comment_button"
+    type="submit"
+    name="add_comment_button"
+    value="댓글달기"
+    class="btn btn-primary"
+  />
   {% else %}
-  
-    <!-- <input type="text" name="add_comment" size="100" height="100"><br><br> -->
-    <textarea
+
+  <!-- <input type="text" name="add_comment" size="100" height="100"><br><br> -->
+  <textarea
     id="comment_input"
     rows="4"
     cols="130"
     name="add_comment"
     placeholder="로그인 후 당신의 의견을 말해주세요"
-    ></textarea>
-    <br />
-    <a id="custom-login-btn" href="javascript:loginWithKakao()">
+  ></textarea>
+  <br />
+  <a id="custom-login-btn" href="javascript:loginWithKakao()">
     <img
       src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg"
       width="150"
     />
-    </a>
-  
-  {% endif %}
+  </a>
 
-
-
+  {% endif %} {% comment %} ajax method 는 POST로 바꿔줘야 함 {% endcomment %}
   <script>
     $("#add_comment_button").click(function () {
       var comment_input = $("#comment_input").val();
@@ -382,14 +311,13 @@
       $.ajax({
         url: current_url, //"/add_comment/",
         data: { comment_input: comment_input },
-      }).done(function() {
+      }).done(function () {
         location.reload();
         $("#comment_input").val("");
       });
     });
   </script>
 
-
   <br />
   <br />
   <br />
@@ -410,7 +338,6 @@
   <br />
   <br />
   <br />
-
 </div>
 
 {% endblock %}

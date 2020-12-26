@@ -4,32 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>사라마라</title>
-
-    {% comment %} 카카오 로그인 javascript {% endcomment %}
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-    <script>Kakao.init("{{ javascript_sdk_key | safe }}");</script>
-    {% comment %} 카카오 로그인 javascript {% endcomment %}
-
-
-    {% comment %} 내 CSS 파일 가져오기 {% endcomment %}
+    <script>
+      Kakao.init("{{ javascript_sdk_key | safe }}");
+    </script>
     {% load static %}
     <link
       rel="stylesheet"
       type="text/css"
       href="{% static 'posts/style.css' %}"
     />
-    {% comment %} 내 CSS 파일 가져오기 {% endcomment %}
-
-
-    {% comment %} <script src="{% static 'posts/myScript1.js' %}"></script> {% endcomment %}
-
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    
-    
-    
-    
-    
     <link
       rel="stylesheet"
       href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
@@ -38,121 +23,85 @@
       rel="stylesheet"
       href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"
     />
-    
-    
-    
-    
-    
-    {% comment %} <script src="myScript1.js"></script> {% endcomment %}
-    {% comment %} <script src="demo.js"></script> {% endcomment %}
   </head>
 
-  <body style="background-color:black; width:1000px; margin:0 auto; padding:10px; font-size:5vw;">
-    <!--    base layout-->
-    <div class="mylayout" style="background-color: white;">
-      <!--        site header-->
+  <body
+    style="
+      background-color: black;
+      width: 1000px;
+      margin: 0 auto;
+      padding: 10px;
+      font-size: 5vw;
+    "
+  >
+    <div class="mylayout" style="background-color: white">
       <header>
         <a href="{% url 'posts:index' %}">사라마라</a>
-        <br/>
+        <br />
         {% if user.is_authenticated %}
-          
-          <a href="{% url 'posts:mypage' %}">
-            <img src="{{ user.profile_image.url }}" width="30" height="30" />
-            <h2 style="font-size: 2vw;"> {{ user.username}} </h2>
-            {% comment %} <div style="font-size: 2rem;"> {{ user.username}} </div> {% endcomment %}
-          </a>
-          {% comment %} <a style="font-size: 2rem;" href="{% url 'posts:signout' %}">로그아웃</a> {% endcomment %}
-          <Button style="font-size: 2vw;" onclick="javascript:logoutWithKakao()">카카오Logout</Button>
-          {% comment %} <Button onclick="javascript:unlinkWithKakao()">카카오Unlink</Button> {% endcomment %}
-          {% comment %} <button class="api-btn" onclick="unlinkApp()">앱 탈퇴하기</button> {% endcomment %}
-          {% comment %} <a style="font-size: 2rem;" href="{% url 'posts:ask' %}">물어보기</a> {% endcomment %}
-          {% comment %} 
-          <p style="float: right;">
-            <div style="font-size: 2rem; color: green; display: inline; float: right;"> {{ user.username }} 님 환영합니다.
-                <small>(<a href="{% url 'posts:signout' %}">LogOut</a>)</small>
-                &nbsp;&nbsp;
-            </div>
-          </p> {% endcomment %}
+        <a href="{% url 'posts:mypage' %}">
+          <img src="{{ user.profile_image.url }}" width="30" height="30" />
+          <h2 style="font-size: 2vw">{{ user.username}}</h2>
+        </a>
+        <button style="font-size: 2vw" onclick="javascript:logoutWithKakao()">
+          카카오Logout
+        </button>
         {% else %}
-          <div >
-          {% comment %} <a class="btn btn-default" href="{% url 'posts:signup' %}">Sign up</a> {% endcomment %}
-          {% comment %} <a class="btn btn-default" href="{% url 'posts:signin' %}">SignIn</a> {% endcomment %}
-          {% comment %} 카카오 로그인 버튼 {% endcomment %}
-            <a id="custom-login-btn" href="javascript:loginWithKakao()">
-              <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="150"/>
-            </a>
-          {% comment %} <Button onclick="javascript:logoutWithKakao()">카카오Logout</Button> {% endcomment %}
-          {% comment %} <Button onclick="javascript:unlinkWithKakao()">카카오Unlink</Button> {% endcomment %}
-          {% comment %} 카카오 로그인 버튼 {% endcomment %}
-          </div>
+        <div>
+          <a id="custom-login-btn" href="javascript:loginWithKakao()">
+            <img
+              src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg"
+              width="150"
+            />
+          </a>
+        </div>
         {% endif %}
       </header>
-      {% comment %} site header {% endcomment %}
-
-      {% comment %} <Button onclick="javascript:profileWithKakao()">Profile</Button>
-      <p id="userid"></p>
-      <p id="nickname"></p>
-      <img id="profile_image" />
-      <img id="thumbnail_image" /> {% endcomment %}
-
-
-
 
       {% csrf_token %}
       <script type="text/javascript">
         function loginWithKakao() {
           console.log(Kakao.isInitialized());
-          console.log(Kakao.Auth.getAccessToken())
-          if(!Kakao.Auth.getAccessToken()){
+          console.log(Kakao.Auth.getAccessToken());
+          if (!Kakao.Auth.getAccessToken()) {
             // 로그인
             Kakao.Auth.login({
               // authObj : accessToken, type, expires_in, scope 등 포함
-              success: function(authObj) {
+              success: function (authObj) {
                 // alert('login success: ' + JSON.stringify(authObj)),
                 // 유저 인포 불러오기
                 Kakao.API.request({
-                  url: '/v2/user/me',
-                  success: function(res){
+                  url: "/v2/user/me",
+                  success: function (res) {
                     var LOGIN_INFO = JSON.stringify(authObj);
                     var USER_INFO = JSON.stringify(res);
-                    var current_url = $(location).attr("pathname") + "kakao_login/";
+                    var current_url =
+                      $(location).attr("pathname") + "kakao_login/";
                     console.log(current_url);
                     $.ajax({
                       //type: "POST",
                       // url: current_url,
-                      url:"/kakao_login/",
-                      dataType: 'json',
+                      url: "/kakao_login/",
+                      dataType: "json",
                       //csrfmiddlewaretoken: '{{ csrf_token }}',
-                      data: { LOGIN_INFO: LOGIN_INFO,
-                              USER_INFO: USER_INFO },
-                    }).done(function(res) {
-                      // var returnedData = JSON.parse(res);
-                      //alert(res)
+                      data: { LOGIN_INFO: LOGIN_INFO, USER_INFO: USER_INFO },
+                    }).done(function (res) {
                       alert(Object.keys(res).length);
-
-                      if(Object.keys(res).length==1){
-                        window.location.replace("http://127.0.0.1:8000/user_info/");
+                      if (Object.keys(res).length == 1) {
+                        window.location.replace(
+                          "http://127.0.0.1:8000/user_info/"
+                        );
                       } else {
                         location.reload();
                       }
-                      // res 값을 받기 위해서 view 에서 확인해야 할지 jquery에서 확인해야할지 확인
-                      // if res.created == true:
-                      //window.location.replace("https://www.tutorialrepublic.com/");
-                      
-                      //alert( res(true false) );
-                      // 아래 방법 잘 작동함
-                      //window.location.replace("https://www.tutorialrepublic.com/");
-                      //location.reload();
-
                     });
-                    // alert('login success: ' + JSON.stringify(authObj) + '\n user info: ' + JSON.stringify(res))
-                    // location.reload();
-                  }
-                })
+                  },
+                });
               },
-              fail: function(err) {
-                    alert('failed to login: ' + JSON.stringify(err))},
-            })
+              fail: function (err) {
+                alert("failed to login: " + JSON.stringify(err));
+              },
+            });
           }
         }
 
@@ -160,12 +109,9 @@
           console.log(Kakao.Auth.getAccessToken()); //before Logout
           Kakao.Auth.logout(function () {
             console.log(Kakao.Auth.getAccessToken()); //after Logout
-            //★ 추가 할 것 : 로그아웃 성공 후 처리 
-            // session 부분도 delete 시켜주고 홈으로 redirect 
             $.ajax({
-                url: "/kakao_logout/",
-            }).done(function() {
-              //alert( "success" );
+              url: "/kakao_logout/",
+            }).done(function () {
               location.reload();
             });
           });
@@ -174,89 +120,51 @@
         function unlinkApp() {
           console.log(Kakao.Auth.getAccessToken());
           Kakao.API.request({
-            url: '/v1/user/unlink',
-            success: function(res) {
+            url: "/v1/user/unlink",
+            success: function (res) {
               Kakao.Auth.setAccessToken(undefined);
               console.log(Kakao.Auth.getAccessToken());
               $.ajax({
-                url:"/kakao_unlink/",
-              }).done(function() {
-                //alert( "success" );
+                url: "/kakao_unlink/",
+              }).done(function () {
                 location.reload();
               });
-              alert('success: ' + JSON.stringify(res));
+              alert("success: " + JSON.stringify(res));
             },
-            fail: function(err) {
-              alert('fail: ' + JSON.stringify(err))
+            fail: function (err) {
+              alert("fail: " + JSON.stringify(err));
             },
-          })
+          });
         }
 
-        {% comment %} function unlinkApp() {
-            //alert( "success" );
-            Kakao.API.request({
-              url: '/v1/user/unlink',
-              success: function(res) {
-                $.ajax({
-            url:"/kakao_unlink/",
-          }).done(function() {
-                alert('success: ' + JSON.stringify(res))
-              },
-              fail: function(err) {
-                alert('fail: ' + JSON.stringify(err))
-              },
-            })
-            location.reload();
-          });
-          
-        } {% endcomment %}
-
-        // unlink 기능은 마이페이지로 옮겨야 함
-        //function unlinkWithKakao() {
-        //console.log(Kakao.Auth.getAccessToken());
-        //  Kakao.API.request({
-        //      url: '/v1/user/unlink',
-        //      success: function (response) {
-        //        console.log(response);
-        //        //$.ajax({
-        //        //  url: "/kakao_unlink/",
-        //        //}).done(function() {
-        //          //alert( "success" );
-        //          //logoutWithKakao();
-        //          //location.reload();
-                //});
-        //      },
-        //      fail: function (error) {
-        //          console.log(error);
-        //      }
-        //  });
-        //}
-        
         function profileWithKakao() {
           Kakao.API.request({
-            url: '/v2/user/me',
+            url: "/v2/user/me",
             success: function (response) {
-                console.log(response);
-                document.getElementById("userid").innerText = response.id;
-                document.getElementById("nickname").innerText = response.kakao_account.profile.nickname;
-                document.getElementById("profile_image").src = response.properties.profile_image;
-                document.getElementById("thumbnail_image").src = response.properties.thumbnail_image;
+              console.log(response);
+              document.getElementById("userid").innerText = response.id;
+              document.getElementById("nickname").innerText =
+                response.kakao_account.profile.nickname;
+              document.getElementById("profile_image").src =
+                response.properties.profile_image;
+              document.getElementById("thumbnail_image").src =
+                response.properties.thumbnail_image;
             },
             fail: function (error) {
-                console.log(error);
-            }
+              console.log(error);
+            },
           });
         }
       </script>
 
-      {% block content %}
-      {% endblock %}
-      
-      <footer>
-        <h1>copyright 사라마라<br/>
-        saramara@kakao.com</h1>
-      </footer>
+      {% block content %} {% endblock %}
 
+      <footer>
+        <h1>
+          copyright 사라마라<br />
+          saramara@kakao.com
+        </h1>
+      </footer>
     </div>
   </body>
 </html>
