@@ -34,14 +34,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
     secrets = json.load(secret_file)
 
-# 안됨 TODO: 해결해야 함
-
 
 @csrf_exempt
 def UploadImage(request):
     print(request.method)
     print("################################")
     print(request.POST)
+    print(len(request.POST))
     # print(request.FILES)
     form = UploadFileForm(request.POST, request.FILES)
     print(form)
@@ -309,6 +308,31 @@ class AskView(View):
     def get(self, request):
         # if request.method == 'GET':
         form = PostForm()
+        return render(request, 'posts/ask.html', {'form': form})
+        # render(request, template_name, context=None, content_type=None, status=None, using=None)
+
+    def post(self, request):
+        # if request.method == 'POST':
+
+        form = PostForm(request.POST)
+        if form.is_valid():
+            user_id = request.session.get('_auth_user_id')
+            user = User.objects.get(pk=user_id)
+            post = Post(**form.cleaned_data)
+            post.author = user
+            post.save()
+            return redirect('/'+str(post.pk))
+        else:
+            return render(request, 'posts/ask.html', {'form': form})
+            # render(request, template_name, context=None, content_type=None, status=None, using=None)
+
+
+class EditView(View):
+    def get(self, request):
+        # if request.method == 'GET':
+        form = PostForm()
+        # TODO: 게시글 수정 화면 내용 채우기
+        # form 안에 context? 로 내용을 채워야 할듯
         return render(request, 'posts/ask.html', {'form': form})
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
 

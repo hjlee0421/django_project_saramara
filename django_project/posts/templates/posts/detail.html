@@ -13,9 +13,8 @@
 <div>
   <h1>
     {{ post.title | upper}} <br />
-    {{ post.author }} | 사라-{{post.sara_cnt}} 마라-{{post.mara_cnt}} 댓글수-{%
-    comment %} post별로 댓글 수 도 확인해야함{% endcomment %}
-    조회수-{{post.view_cnt}} <br />
+    {{ post.author }} | 사라-{{post.sara_cnt}} 마라-{{post.mara_cnt}} 댓글수-
+    post별로 댓글도 확인해야함 조회수-{{post.view_cnt}} <br />
     작성일 {{post.pub_date}}
   </h1>
 </div>
@@ -38,7 +37,7 @@
   <br />
   <p>{{ post.content }}</p>
 
-  <p>{{ post.ckcontent|safe }}</p>
+  <p style="max-width: 400px; height: auto">{{ post.ckcontent|safe }}</p>
 
   <h1>투표공간</h1>
 

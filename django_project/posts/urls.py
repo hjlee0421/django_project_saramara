@@ -12,6 +12,7 @@ urlpatterns = [
     path('<int:pk>/mara/', views.DetailView.as_view(), name="mara_button"),
     path('mypage/', views.MypageView.as_view(), name='mypage'),
     path('ask/', views.AskView.as_view(), name='ask'),
+    path('edit/', views.EditView.as_view(), name='edit'),
     path('kakao_login/', views.kakao_login, name="kakao_login"),
     path('kakao_logout/', views.kakao_logout, name="kakao_logout"),
     path('kakao_unlink/', views.kakao_unlink, name='kakao_unlink'),

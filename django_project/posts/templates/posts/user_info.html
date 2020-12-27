@@ -162,16 +162,31 @@
   function readURL(input) {
     if (input.files && input.files[0]) {
       var reader = new FileReader();
+      form_data = new FormData();
 
       reader.onload = function (e) {
         $(".image-upload-wrap").hide();
-
         $(".file-upload-image").attr("src", e.target.result);
         console.log(e.target.result);
+        form_data.append("image", e.target.result);
+        form_data.append("image1", input.files[0]);
+        form_data.append("image2", input.files);
         // 위에 e.target.result가 새로 바뀐 이미지인거 같은데?
         $(".file-upload-content").show();
-
         $(".image-title").html(input.files[0].name);
+        $.ajax({
+          type: "POST",
+          url: "/UploadImage/",
+          data: form_data,
+          processData: false,
+          success: function (result) {
+            alert("IMAGES UPLOADED");
+          },
+          error: function (data) {
+            console.log("error");
+            console.log(data);
+          },
+        });
       };
 
       reader.readAsDataURL(input.files[0]);
