@@ -17,13 +17,7 @@
   });
 </script>
 
-<input
-  type="submit"
-  class="btn btn-primary"
-  id="search-button"
-  value="검색설정"
-  style="text-align: right; width: 99%"
-/>
+<div id="search-button">검색설정</div>
 
 <div class="items-sort-all" style="display: none">
   <form method="GET" action=".">
@@ -95,10 +89,19 @@
 
 <div class="items-wrap">
   {% if post_objects %}
-  <ul>
+  <ul
+    style="
+      list-style-type: disc;
+      margin-block-start: 0em;
+      margin-block-end: 0em;
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
+      padding-inline-start: 0px;
+    "
+  >
     {% for post in post_objects %}
     <a href="{% url 'posts:detail' post.id %}"
-      ><div class="single-item" style="font-size: 1vw; height: 100px">
+      ><div class="single-item">
         {{post.title|upper}} <br />
         {{post.author}} - {{post.pub_date}}<br />
         댓글 : {{post.get_comment_cnt}} 사라 : {{post.sara_cnt}} 마라 :
@@ -113,29 +116,40 @@
   {% endif %}
 </div>
 
-<div class="pagination" style="height: 100px; width: 100px; font-size: 10px">
-  <div class="step-links">
+<div class="pagination" style="height: 100px; max-width: 360px; font-size: 5px">
+  <div style="display: inline-block" class="step-links">
     {% if page_obj.has_previous %}
-    <a href="?page=1">&laquo; first</a>
-    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+    <a style="width: 50px; text-align: center" href="?page=1">&laquo;first</a>
+    <a
+      style="width: 50px; text-align: center"
+      href="?page={{ page_obj.previous_page_number }}"
+    >
+      previous
+    </a>
+    {% else %}
+    <a style="width: 50px; text-align: center" href="#">first</a>
+    <a style="width: 50px; text-align: center" href="#">previous </a>
     {% endif %}
-    <br />
-    <br />
-    <br />
-    <div class="current">
+    <a style="width: 140px; text-align: center" class="current">
       Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-    </div>
-    <br />
-    <br />
-    <br />
+    </a>
     {% if page_obj.has_next %}
-    <a href="?page={{ page_obj.next_page_number }}">next</a>
-    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+    <a
+      style="width: 50px; text-align: center"
+      href="?page={{ page_obj.next_page_number }}"
+    >
+      next
+    </a>
+    <a
+      style="width: 50px; text-align: center"
+      href="?page={{ page_obj.paginator.num_pages }}"
+    >
+      last&raquo;
+    </a>
+    {% else %}
+    <a style="width: 50px; text-align: center" href="#">next</a>
+    <a style="width: 50px; text-align: center" href="#">last</a>
     {% endif %}
-    <br />
-    <br />
-    <br />
-    <br />
   </div>
 </div>
 {% endblock %}

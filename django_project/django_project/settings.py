@@ -192,6 +192,7 @@ MEDIA_ROOT = 'media/'
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'Custom',
+        'width': 'auto',
         'toolbar_Custom': [
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Font', 'FontSize'],

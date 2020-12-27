@@ -1,14 +1,27 @@
-/* ################################################################################################################## */
-/* ################################################################################################################## */
-/* ################################################################################################################## */
-/* 베이스 페이지 */
+header {
+  outline-style: solid;
+  outline-color: #594231;
+  background-color: #ffffb1;
+  display: inline-flex;
+  /* text-align: left; */
+  /* font-size: 7vw; */
+}
+
+footer {
+  outline-style: solid;
+  outline-color: #594231;
+  text-align: center;
+  font-size: 20px;
+  color: black;
+  z-index: 1;
+}
 
 h1 {
   outline-style: solid;
   outline-color: #594231;
   background-color: #ffffb1;
   display: block;
-  font-size: 5vw;
+  font-size: 5px;
   margin: 0 auto;
 }
 
@@ -18,100 +31,26 @@ p {
   height: auto;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-header {
-  outline-style: solid;
-  outline-color: #594231;
-  /* 나중에 outline 없애야 함 */
-  background-color: #ffffb1;
-  text-align: left;
-  font-size: 7vw;
-  /* color: white; */
-  position: relative;
-}
-
-/* Dropdown Button */
-.dropbtn {
-  background-color: #ffffb1;
-  border: 1px solid;
-  border-color: #594231;
-  color: #594231;
-  height: 40px;
-  width: 40px;
-  border-radius: 100%;
-  position: fixed;
-  z-index: 1000;
-  bottom: 5%;
-  right: 7.5%;
-  cursor: pointer;
-  vertical-align: top;
-  background-position: -276px -116px;
-  outline: 0;
-}
-
-/* Dropdown Content (Hidden by Default) */
-.dropdown-content {
-  display: none;
-  position: fixed;
-  background-color: #ffffb1;
-  outline-style: solid;
-  outline-color: #594231;
-  color: #594231;
-  min-width: 160px;
-  bottom: calc(5% + 50px);
-  /* calc(100% - 18px); */
-  right: calc(10% + 25px);
-  z-index: 100;
-}
-
-/* Links inside the dropdown */
-.dropdown-content a {
-  color: #594231;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {
-  background-color: #dddd;
-}
-
-/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-.show {
-  display: block;
-}
-
-.dropdown-divider {
-  height: 0;
-  overflow: hidden;
-  border-top: 0.1px solid #000000;
-}
-
-footer {
-  outline-style: solid;
-  outline-color: #594231;
-  text-align: center;
-  font-size: 2vw;
-  color: black;
-  position: relative;
-  max-width: 360px;
-  margin: auto;
-  z-index: 1;
-}
-
 /* ################################################################################################################## */
 /* ################################################################################################################## */
 /* ################################################################################################################## */
 /* 리스트 페이지 */
 
-.hot-items {
-  width: 98%;
-  margin: 0 auto;
+.user_info_area {
+  width: 255px;
+  display: inline-flex;
+  text-align: right;
+  font-size: 20px;
+}
+
+#search-button {
+  outline-style: solid;
+  outline-color: #594231;
+  background-color: #ffffb1;
+  text-align: right;
+  font-size: 2vw;
+  max-width: 360px;
+  cursor: pointer;
 }
 
 .items-sort {
@@ -121,56 +60,12 @@ footer {
   margin: 0 auto;
 }
 
-/* Style the buttons that are used to open and close the accordion panel */
-.accordion {
-  background-color: #eee;
-  color: #444;
-  cursor: pointer;
-  padding: 18px;
-  width: 100%;
-  height: auto;
-  text-align: left;
-  border: none;
-  outline: none;
-  transition: 0.4s;
-}
-
-/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-.active,
-.accordion:hover {
-  background-color: #ccc;
-}
-
-/* Style the accordion panel. Note: hidden by default */
-.panel {
-  padding: 0 18px;
-  background-color: white;
-  display: none;
-  overflow: hidden;
-}
-
-.accordion:after {
-  content: "\02795"; /* Unicode character for "plus" sign (+) */
-  font-size: 1vw;
-  color: #777;
-  float: right;
-  margin-left: 5px;
-}
-
-.active:after {
-  content: "\2796"; /* Unicode character for "minus" sign (-) */
-}
-
 .ask-list {
   outline-style: solid;
   outline-color: #594231;
+  background-color: #ffffb1;
   text-align: right;
   font-size: 2vw;
-  width: 99%;
-}
-
-.items-wrap {
-  margin: 0 auto;
 }
 
 .single-item {
@@ -178,28 +73,19 @@ footer {
   outline-color: #594231;
   background-color: #ffffb1;
   height: 100px;
-  width: 98%;
-  display: block;
-  font-size: 2vw;
-  margin: 0 auto;
-}
-
-.setp-link {
-  display: inline-block;
-  max-width: 360px;
-  height: 100px;
+  font-size: 1vw;
 }
 
 .pagination {
-  margin: 0 auto;
-  text-align: center;
+  /* margin: 0 auto;
+  text-align: center; */
   display: inline-block;
 }
 
 .pagination a {
   color: black;
   float: left;
-  padding: 8px 16px;
+  padding: 1px;
   text-decoration: none;
 }
 .pagination a.active {
@@ -209,6 +95,12 @@ footer {
 
 .pagination a:hover:not(.active) {
   background-color: #ddd;
+}
+
+.step-link {
+  display: inline-block;
+  max-width: 360px;
+  height: 100px;
 }
 
 /* ################################################################################################################## */
@@ -411,4 +303,18 @@ a:hover {
 a:active {
   color: #594231;
   text-decoration: none;
+}
+
+a.main_home {
+  color: #594231;
+  text-decoration: none;
+  font-size: 20px;
+  width: 100px;
+}
+
+a.main_home_user {
+  color: #594231;
+  text-decoration: none;
+  font-size: 20px;
+  display: inline-flex;
 }
