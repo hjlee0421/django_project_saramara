@@ -5,47 +5,52 @@
 
 {% if user.is_authenticated %}
 <!--        button onclick 에 2번째 param '도시이름' 부분을 변경할때는 아래쪽 div에 id="도시이름" 부분도 같이 변경해야 js 인식-->
-<div class="tab-wrap">
-  <div class="tab-left-wrap">
-    <div class="tab">
-      <button
-        class="tablinks"
-        onclick="openCity(event, '회원정보')"
-        id="defaultOpen"
-      >
-        회원정보
-      </button>
-      <button class="tablinks" onclick="openCity(event, '활동정보')">
-        활동정보
-      </button>
-      <button class="tablinks" onclick="openCity(event, '포인트정보')">
-        포인트정보
-      </button>
-    </div>
-  </div>
-
-  <div class="tab-right-wrap">
-    <div id="회원정보" class="tabcontent">
-      <h3>회원정보</h3>
-      <img src="{{ user.profile_image.url }}" width="30" height="30" />
-      <h4 style="font-size: 2vw">Nickname : {{ user.username }}</h4>
-      <h4 style="font-size: 2vw">
-        Member Since : {{ user.date_joined|date:"Y년 m월 d일" }}
-      </h4>
-      <div class="tab-right-out">
-        <button class="api-btn" onclick="unlinkApp()">앱 탈퇴하기</button>
-      </div>
-    </div>
-    <div id="활동정보" class="tabcontent">
-      <h3>Paris</h3>
-      <p>Paris is the capital of France.</p>
-    </div>
-    <div id="포인트정보" class="tabcontent">
-      <h3>Tokyo</h3>
-      <p>Tokyo is the capital of Japan.</p>
-    </div>
+<div>
+  <div id="회원정보">
+    <h3>회원정보</h3>
+    <img src="{{ user.profile_image.url }}" width="30" height="30" />
+    <h4 style="font-size: 2px">사용중인 닉네임 : {{ user.username }}</h4>
+    <h4 style="font-size: 2px">
+      사라마라 가입일 : {{ user.date_joined|date:"Y년 m월 d일" }}
+    </h4>
+    <button class="api-btn" onclick="unlinkApp()">앱 탈퇴하기</button>
   </div>
 </div>
+<br />
+<h3>작성한 포스트</h3>
+<div class="items-wrap">
+  {% if user.get_post %}
+  <ul
+    style="
+      list-style-type: disc;
+      margin-block-start: 0em;
+      margin-block-end: 0em;
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
+      padding-inline-start: 0px;
+    "
+  >
+    {% for post in user.get_post %}
+    <a href="{% url 'posts:detail' post.id %}"
+      ><div class="single-item">
+        {{post.title|upper}} <br />
+        {{post.author}} - {{post.pub_date}}<br />
+        댓글 : {{post.comment_cnt}} 사라 : {{post.sara_cnt}} 마라 :
+        {{post.mara_cnt}} 조회수 : {{post.view_cnt}}
+        <br />
+      </div>
+    </a>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>no posts are available</p>
+  {% endif %}
+</div>
+<div>
+  <h3>작성한 댓글</h3>
+  <p>{{user.get_comment}}}</p>
+</div>
+
 <br />
 <br />
 <br />

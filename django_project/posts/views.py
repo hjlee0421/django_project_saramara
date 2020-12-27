@@ -277,7 +277,7 @@ class DetailView(generic.DetailView, View):
             comment = Comment.objects.get(id=comment_id)
             if user == comment.author:
                 comment.delete()
-                post.comment_cnt = post.comment_set.all().count()
+                # post.comment_cnt = post.comment_set.all().count()
                 post.save()
 
         if 'delete_post_button' in request.POST:
@@ -310,7 +310,7 @@ class DetailView(generic.DetailView, View):
         comment = Comment(post=post, author=user_name, text=user_comment)
         comment.save()
 
-        post.comment_cnt = post.comment_set.all().count()
+        # post.comment_cnt = post.comment_set.all().count()
         post.save()
 
 

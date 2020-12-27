@@ -27,6 +27,14 @@ class User(AbstractUser):
         max_length=128, blank=True, null=True, default=str(randint(1950, 2010)))
     # blank = ui에서 빈칸 from valid check, null 은 db에서 빈값을 받는 개념
 
+    @property
+    def get_post(self):
+        return self.post_set.all()
+
+    @property
+    def get_comment(self):
+        return self.comment_set.all()
+
 
 class Post(models.Model):
     author = models.ForeignKey(
