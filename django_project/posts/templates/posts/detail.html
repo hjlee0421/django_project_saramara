@@ -19,6 +19,16 @@
   </h1>
 </div>
 
+{% if user.is_authenticated %} {% if post.author.id == user.id %}
+<form method="POST" action=".">
+  {% csrf_token %}
+  <input type="submit" value="수정" class="btn" />
+  <input type="hidden" value="{{post.id}}" name="delete_post" />
+  <input type="submit" name="delete_post_button" value="삭제" class="btn" />
+  <br />
+</form>
+{% endif %} {% endif %}
+
 <!--        각 item detail 이 가지는 기본 정보, 혹은 보여지는 정보를 따로 표시-->
 <br />
 <!--        작성한 내용을 container 라는 div 안에 담아서 표현-->
@@ -246,12 +256,12 @@
   {% if element.author.id == user.id %}
   <form method="POST" action=".">
     {% csrf_token %}
-    <button>수정</button>
+    <input type="submit" value="댓글수정" class="btn" />
     <input type="hidden" value="{{element.id}}" name="delete_comment" />
     <input
       type="submit"
       name="delete_comment_button"
-      value="삭제"
+      value="댓글삭제"
       class="btn"
     />
     <br />

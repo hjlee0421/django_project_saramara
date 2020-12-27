@@ -3,17 +3,6 @@
 /* ################################################################################################################## */
 /* 베이스 페이지 */
 
-body {
-  /* display: block; */
-  /* margin: 10px; */
-  width: 360px;
-  /* max-width: 100%; */
-  /* overflow: hidde; */
-  /* padding: 10px; */
-
-  background-color: #000000;
-}
-
 h1 {
   outline-style: solid;
   outline-color: #594231;
@@ -43,17 +32,6 @@ header {
   font-size: 7vw;
   /* color: white; */
   position: relative;
-}
-
-.mylayout {
-  outline-style: solid;
-  outline-color: #594231;
-  /* 나중에 outline 없애야 함 */
-  position: relative;
-  /* width: 100%; */
-  width: 360px;
-  max-width: 360px;
-  margin: 0 auto; /* 레이아웃 전체 센터로 위치*/
 }
 
 /* Dropdown Button */
@@ -117,15 +95,11 @@ header {
 footer {
   outline-style: solid;
   outline-color: #594231;
-  /* 나중에 outline 없애야 함 */
-  /* background-color: #ffffb1; */
   text-align: center;
   font-size: 2vw;
   color: black;
   position: relative;
-  width: 360px;
-  /* width: 100%; */
-  max-width: 1000px;
+  max-width: 360px;
   margin: auto;
   z-index: 1;
 }
@@ -205,7 +179,6 @@ footer {
   background-color: #ffffb1;
   height: 100px;
   width: 98%;
-  max-width: 360px;
   display: block;
   font-size: 2vw;
   margin: 0 auto;
@@ -213,7 +186,7 @@ footer {
 
 .setp-link {
   display: inline-block;
-  width: 360px;
+  max-width: 360px;
   height: 100px;
 }
 

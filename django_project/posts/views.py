@@ -2,7 +2,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 import os
 from .models import Post, User, Comment, ViewCount
-from .forms import PostForm, UploadFileForm  # UserForm,
+from .forms import PostForm, EditForm, UploadFileForm  # UserForm,
 from django.views import generic, View
 
 from django.contrib.auth import authenticate, login, logout
@@ -271,7 +271,7 @@ class DetailView(generic.DetailView, View):
 
         user = request.user
         # user = 현재 로그인한 username
-
+        print(request.POST)
         if 'delete_comment_button' in request.POST:
             comment_id = request.POST['delete_comment']
             comment = Comment.objects.get(id=comment_id)
@@ -279,6 +279,16 @@ class DetailView(generic.DetailView, View):
                 comment.delete()
                 post.comment_cnt = post.comment_set.all().count()
                 post.save()
+
+        if 'delete_post_button' in request.POST:
+            post_id = request.POST['delete_post']
+            post = Post.objects.get(id=post_id)
+            if user == post.author:
+                post.delete()
+                return redirect('/')
+                # return render(request, 'posts/detail.html', context=context, content_type=None, status=None, using=None)
+                # post.comment_cnt = post.comment_set.all().count()
+                # post.save()
 
         # delete comment도 ajax로 처리가능할듯
         # if 'sara_button' in request.POST:
@@ -328,12 +338,20 @@ class AskView(View):
 
 
 class EditView(View):
-    def get(self, request):
+    model = Post
+    form_class = PostForm
+
+    def get(self, request, pk, *args, **kwargs):
         # if request.method == 'GET':
         form = PostForm()
+        # post = Post(**form.cleaned_data)
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
         # TODO: 게시글 수정 화면 내용 채우기
         # form 안에 context? 로 내용을 채워야 할듯
-        return render(request, 'posts/ask.html', {'form': form})
+        render(request, 'posts/detail.html', context=context,
+               content_type=None, status=None, using=None)
+        # return render(request, 'posts/ask.html', {'form': form})
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
 
     def post(self, request):

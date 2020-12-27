@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="background-color: black">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,6 +15,7 @@
       href="{% static 'posts/style.css' %}"
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {% comment %}
     <link
       rel="stylesheet"
       href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
@@ -23,18 +24,24 @@
       rel="stylesheet"
       href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"
     />
+    {% endcomment %}
   </head>
 
   <body
     style="
-      background-color: black;
-      width: 1000px;
-      margin: 0 auto;
-      padding: 10px;
+      display: block;
+      background-color: white;
+      outline-color: #594231;
+      outline-style: solid;
+      max-width: 360px;
       font-size: 5vw;
+      padding: 10px;
+      margin: auto;
     "
   >
+    {% comment %}
     <div class="mylayout" style="background-color: white">
+      {% endcomment %}
       <header>
         <a href="{% url 'posts:index' %}">사라마라</a>
         <br />
@@ -165,6 +172,8 @@
           saramara@kakao.com
         </h1>
       </footer>
+      {% comment %}
     </div>
+    {% endcomment %}
   </body>
 </html>

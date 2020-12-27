@@ -28,6 +28,22 @@ class PostForm(forms.ModelForm):
         self.fields['ckcontent'].required = True
 
 
+class EditForm(forms.ModelForm):
+    ckcontent = forms.CharField(
+        widget=CKEditorUploadingWidget())
+
+    class Meta:
+        model = Post
+        fields = ('title', 'category', 'brand', 'price', 'link', 'ckcontent')
+
+    def __init__(self, *args, **kwargs):
+        super(PostForm, self).__init__(*args, **kwargs)
+        self.fields['title'].required = True
+        self.fields['category'].required = True
+        self.fields['brand'].required = True
+        self.fields['price'].required = True
+        self.fields['ckcontent'].required = True
+
 # class CommentForm(forms.ModelForm):
 #     class Meta:
 #         model = Comment
