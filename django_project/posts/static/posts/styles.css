@@ -1,12 +1,10 @@
+/* default tag */
 header {
   outline-style: solid;
   outline-color: #594231;
   background-color: #ffffb1;
   display: inline-flex;
-  /* text-align: left; */
-  /* font-size: 7vw; */
 }
-
 footer {
   outline-style: solid;
   outline-color: #594231;
@@ -15,7 +13,6 @@ footer {
   color: black;
   z-index: 1;
 }
-
 h1 {
   outline-style: solid;
   outline-color: #594231;
@@ -24,23 +21,17 @@ h1 {
   font-size: 5px;
   margin: 0 auto;
 }
-
 p {
   margin: 0 auto;
   width: 100%;
   height: auto;
 }
+/* default tag */
 
-/* ################################################################################################################## */
-/* ################################################################################################################## */
-/* ################################################################################################################## */
-/* 리스트 페이지 */
-
+/* index.html */
 .user_info_area {
-  width: 255px;
+  width: 300px;
   display: inline-flex;
-  text-align: right;
-  font-size: 20px;
 }
 
 #search-button {
@@ -48,15 +39,15 @@ p {
   outline-color: #594231;
   background-color: #ffffb1;
   text-align: right;
-  font-size: 2vw;
-  max-width: 360px;
+  font-size: 20px;
+  max-width: 400px;
   cursor: pointer;
 }
 
 .items-sort {
   outline-style: solid;
   outline-color: #594231;
-  width: 98%;
+  max-width: 400px;
   margin: 0 auto;
 }
 
@@ -65,7 +56,7 @@ p {
   outline-color: #594231;
   background-color: #ffffb1;
   text-align: right;
-  font-size: 2vw;
+  font-size: 20px;
 }
 
 .single-item {
@@ -73,7 +64,7 @@ p {
   outline-color: #594231;
   background-color: #ffffb1;
   height: 100px;
-  font-size: 1vw;
+  font-size: 10px;
 }
 
 .pagination {
@@ -99,144 +90,56 @@ p {
 
 .step-link {
   display: inline-block;
-  max-width: 360px;
+  max-width: 400px;
   height: 100px;
 }
+/* index.html */
 
-/* ################################################################################################################## */
-/* ################################################################################################################## */
-/* ################################################################################################################## */
-/* 질문 페이지 */
-
+/* ask.html */
 .ask-wrap {
-  width: 98%;
-  margin: 0 auto;
-}
-
-.item-ask {
-  height: 200px;
-}
-
-/* The container must be positioned relative: */
-/* 위치만 지정해주는 div 이고, 실제 select 가 변경되려면 아래에 .custom-select select 부분을 변경해야 함 */
-.custom-select {
-  position: relative;
-  font-family: Arial;
-}
-
-.custom-select select {
-  display: block;
-  height: 25px;
-
-  width: 100%;
-  max-width: 1000px;
-  font-size: 3vw;
-}
-
-.select-selected {
-  background-color: DodgerBlue;
-}
-
-/* Style the arrow inside the select element: */
-.select-selected:after {
-  position: absolute;
-  content: "";
-  top: 14px;
-  right: 10px;
-  width: 0;
-  height: 0;
-  border: 6px solid transparent;
-  border-color: #fff transparent transparent transparent;
-}
-
-/* Point the arrow upwards when the select box is open (active): */
-.select-selected.select-arrow-active:after {
-  border-color: transparent transparent #fff transparent;
-  top: 7px;
-}
-
-/* style the items (options), including the selected item: */
-.select-items div,
-.select-selected {
-  color: #ffffff;
-  padding: 8px 16px;
-  border: 1px solid transparent;
-  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
-  cursor: pointer;
-}
-
-/* Style items (options): */
-.select-items {
-  position: absolute;
-  background-color: DodgerBlue;
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 99;
-}
-
-/* Hide the items when the select box is closed: */
-.select-hide {
-  display: none;
-}
-
-.select-items div:hover,
-.same-as-selected {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-.ask-button {
-  display: block;
+  max-width: 400px;
   margin: auto;
-  height: 50px;
-  width: 100px;
-  font-size: 3vw;
 }
+/* ask.html */
 
-/* ################################################################################################################## */
-/* ################################################################################################################## */
-/* ################################################################################################################## */
-/* ahref 용 페이지 */
-
+/* a href */
 a {
   color: #594231;
   text-decoration: none;
 }
-
 /* unvisited link */
 a:link {
   color: #594231;
   text-decoration: none;
 }
-
 /* visited link */
 a:visited {
   color: #594231;
   text-decoration: none;
 }
-
 /* mouse over link */
 a:hover {
   color: #594231;
   text-decoration: none;
 }
-
 /* selected link */
 a:active {
   color: #594231;
   text-decoration: none;
 }
+/* a href */
 
+/* user defined tag */
 a.main_home {
   color: #594231;
   text-decoration: none;
   font-size: 20px;
   width: 100px;
 }
-
 a.main_home_user {
   color: #594231;
   text-decoration: none;
   font-size: 20px;
   display: inline-flex;
 }
+/* user defined tag */

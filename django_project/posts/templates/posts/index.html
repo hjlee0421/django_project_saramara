@@ -116,7 +116,7 @@
   {% endif %}
 </div>
 
-<div class="pagination" style="height: 100px; max-width: 360px; font-size: 5px">
+<div class="pagination" style="height: 100px; max-width: 400px; font-size: 5px">
   <div style="display: inline-block" class="step-links">
     {% if page_obj.has_previous %}
     <a style="width: 50px; text-align: center" href="?page=1">&laquo;first</a>
@@ -130,7 +130,7 @@
     <a style="width: 50px; text-align: center" href="#">first</a>
     <a style="width: 50px; text-align: center" href="#">previous </a>
     {% endif %}
-    <a style="width: 140px; text-align: center" class="current">
+    <a style="width: 200px; text-align: center" class="current">
       Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
     </a>
     {% if page_obj.has_next %}
