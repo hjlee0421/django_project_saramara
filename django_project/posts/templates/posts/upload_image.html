@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<head>
+  {% load static %}
+  <title>Home</title>
+  {% comment %}
+  <script src="{% static 'jQuery.js' %}" type="text/javascript"></script>
+  {% endcomment %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  {% comment %}
+  <script src="{% static 'index.js' %}" type="text/javascript"></script>
+  {% endcomment %}
+  <style>
+    .imageSize {
+      height: 100px;
+      width: 100px;
+    }
+  </style>
+</head>
+<body>
+  <form method="POST" enctype="multipart/form-data" id="imageForm">
+    {% csrf_token %} {{form.as_p}}{{ form.media }} {% comment %}
+    <img
+      class="file-upload-image"
+      src="{{ user.profile_image.url }}"
+      alt="your image"
+      width="240"
+      onclick="$('.file-upload-input').trigger( 'click' )"
+    />
+    {% endcomment %}
+    <input type="button" id="submit" value="submit" />
+  </form>
+  {% comment %} {%for i in up %} {{i}}
+  <img src="{{i.img.url}}" , alt="" />
+  {%endfor%} {% endcomment %} {% comment %}
+  <div class="image-upload-wrap">
+    <input
+      id="image"
+      class="file-upload-input"
+      type="file"
+      onchange="readURL(this);"
+      accept="image/*"
+      style="display: none"
+    />
+  </div>
+  <div class="file-upload-content">
+    {% comment %}
+    <img
+      class="file-upload-image"
+      src="{{ user.profile_image.url }}"
+      alt="your image"
+      width="240"
+      onclick="$('.file-upload-input').trigger( 'click' )"
+    />
+    {% endcomment %} {% comment %}
+  </div>
+  {% endcomment %}
+
+  <button id="showImages">ShowImages</button>
+
+  <div id="imageField"></div>
+</body>
+
+<script>
+  document.getElementById("imageForm").onclick = function () {
+    $.ajax({
+      url: "/add_image/",
+      method: "POST",
+      data: new FormData(imageForm),
+      processData: false,
+      contentType: false,
+    });
+  };
+</script>
+
+<script>
+  document.getElementById("showImages").onclick = function () {
+    $.ajax({
+      url: "/get_images/",
+      method: "GET",
+      success: function (data) {
+        console.log(data["image_urls"]);
+        imageField = document.querySelector("#imageField");
+        imageField.appendChild(CreateImage(data["image_urls"]));
+      },
+    });
+  };
+  function CreateImage(src) {
+    let img = document.createElement("img");
+    console.log(src);
+    img.src = src;
+    img.className = "imageSize";
+    return img;
+  }
+</script>
+
+{% comment %}
+<script>
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      form_data = new FormData();
+
+      reader.onload = function (e) {
+        $(".image-upload-wrap").hide();
+        $(".file-upload-image").attr("src", e.target.result);
+        console.log(e.target.result);
+        form_data.append("image", e.target.result);
+        form_data.append("image1", input.files[0]);
+        form_data.append("image2", input.files);
+        // 위에 e.target.result가 새로 바뀐 이미지인거 같은데?
+        $(".file-upload-content").show();
+        $(".image-title").html(input.files[0].name);
+        // $.ajax({
+        //   type: "POST",
+        //   url: "/UploadImage/",
+        //   data: form_data,
+        //   processData: false,
+        //   success: function (result) {
+        //     alert("IMAGES UPLOADED");
+        //   },
+        //   error: function (data) {
+        //     console.log("error");
+        //     console.log(data);
+        //   },
+        // });
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      removeUpload();
+    }
+  }
+
+  function removeUpload() {
+    $(".file-upload-input").replaceWith($(".file-upload-input").clone());
+    //$(".file-upload-content").hide();
+    //$(".file-upload-content").show();
+    $(".file-upload-image").attr("src", "{{ user.profile_image.url }}");
+    $(".image-upload-wrap").hide();
+    //$(".image-upload-wrap").show();
+  }
+</script>
+{% endcomment %}

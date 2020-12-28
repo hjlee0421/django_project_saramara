@@ -4,6 +4,7 @@ header {
   outline-color: #594231;
   background-color: #ffffb1;
   display: inline-flex;
+  max-width: 100%;
 }
 footer {
   outline-style: solid;

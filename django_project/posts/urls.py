@@ -17,10 +17,14 @@ urlpatterns = [
     path('kakao_logout/', views.kakao_logout, name="kakao_logout"),
     path('kakao_unlink/', views.kakao_unlink, name='kakao_unlink'),
     path('user_info/', views.user_info, name='user_info'),
-    path('UploadImage/', views.UploadImage, name='UploadImage'),
+    # path('UploadImage/', views.UploadImage, name='UploadImage'),
     # path('signup/', views.SignupView.as_view(), name='signup'),
     path('signin/', views.SigninView.as_view(), name='signin'),
     path('signout/', views.SignoutView.as_view(), name='signout'),
     # path('test/', views.TestIndexView.as_view(), name='testindex'),
     # path('testask/', views.TestAskView.as_view(), name='testask'),
+    path('upload_image/', views.upload_image, name="upload_image"),
+    path('add_image/', views.addImage_view, name="add_image"),
+    path('get_images/', views.getImages_view, name="get_images"),
+
 ]

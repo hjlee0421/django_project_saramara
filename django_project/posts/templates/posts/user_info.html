@@ -47,7 +47,26 @@
     <div class="row mt-5">
       <div class="col-12 text-center">
         <div class="file-upload">
+          <form method="POST" enctype="multipart/form-data" id="UserImageForm">
+            {% csrf_token %} {{form.as_p}}
+            <input type="button" id="submit" value="submit" />
+          </form>
+
+          <script>
+            document.getElementById("UserImageForm").onclick = function () {
+              console.log("?????");
+              $.ajax({
+                url: "/add_image/",
+                method: "POST",
+                data: new FormData(UserImageForm),
+                processData: false,
+                contentType: false,
+              });
+            };
+          </script>
+
           <button
+            id="class"
             class="file-upload-btn"
             type="button"
             onclick="$('.file-upload-input').trigger( 'click' )"
@@ -75,6 +94,7 @@
             />
             <div class="image-title-wrap">
               <button
+                id="UserImageForm"
                 type="button"
                 onclick="uploadWithAjax()"
                 class="remove-image"
@@ -174,19 +194,19 @@
         // 위에 e.target.result가 새로 바뀐 이미지인거 같은데?
         $(".file-upload-content").show();
         $(".image-title").html(input.files[0].name);
-        $.ajax({
-          type: "POST",
-          url: "/UploadImage/",
-          data: form_data,
-          processData: false,
-          success: function (result) {
-            alert("IMAGES UPLOADED");
-          },
-          error: function (data) {
-            console.log("error");
-            console.log(data);
-          },
-        });
+        // $.ajax({
+        //   type: "POST",
+        //   url: "/UploadImage/",
+        //   data: form_data,
+        //   processData: false,
+        //   success: function (result) {
+        //     alert("IMAGES UPLOADED");
+        //   },
+        //   error: function (data) {
+        //     console.log("error");
+        //     console.log(data);
+        //   },
+        // });
       };
 
       reader.readAsDataURL(input.files[0]);
@@ -222,7 +242,7 @@
 
     $.ajax({
       type: "POST",
-      url: "/UploadImage/",
+      //url: "/UploadImage/",
       data: form_data, //{ images: file },
       //contentType: false,
       //cache: false,

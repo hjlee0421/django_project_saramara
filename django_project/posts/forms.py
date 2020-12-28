@@ -1,3 +1,4 @@
+# from .models import ImageUpload
 from django import forms
 from .models import User, Post, Comment
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
@@ -66,3 +67,14 @@ class UploadFileForm(forms.Form):
         model = User
         fields = ['profile_image']
         # file = forms.FileField()
+
+
+class UserForm(forms.ModelForm):
+    profile_image = forms.ImageField(
+        widget=forms.FileInput(attrs={"id": "image"}))
+
+    class Meta:
+        model = User  # 여기만 바꿈 원래 ImageUpload
+        fields = [
+            'profile_image',
+        ]

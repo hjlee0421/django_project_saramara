@@ -1,8 +1,9 @@
+from .forms import UserForm
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 import os
 from .models import Post, User, Comment, ViewCount
-from .forms import PostForm, EditForm, UploadFileForm  # UserForm,
+from .forms import UserForm, PostForm, EditForm
 from django.views import generic, View
 
 from django.contrib.auth import authenticate, login, logout
@@ -33,67 +34,6 @@ from django.db.models import Q
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
     secrets = json.load(secret_file)
-
-
-@csrf_exempt
-def UploadImage(request):
-    print(request.method)
-    print("################################")
-    print(request.POST)
-    print(len(request.POST))
-    # print(request.FILES)
-    form = UploadFileForm(request.POST, request.FILES)
-    print(form)
-    if form.is_valid():
-        print("please")
-        print(request.FILES)
-    return JsonResponse(data={'created': False, 'len': '2'})
-    # pic = request.FILES['image']  # I don't know if this is correct
-
-
-def addImage_view(request):
-    form = UserForm(request.POST, request.FILES)
-    if(form.is_valid()):
-        form.save()
-    return HttpResponse("success")
-
-
-def user_info(request):
-    user_id = request.session.get('user_id')
-    username = User.objects.get(pk=user_id)
-
-    if "username_input" in request.GET:
-        new_username = request.GET["username_input"]
-
-        if not User.objects.filter(username=new_username).exists():
-            user = User.objects.get(pk=user_id)
-            user.username = new_username
-            user.save()
-            return JsonResponse({'created': True})
-
-    return render(request, 'posts/user_info.html')
-    # return render(request, 'posts/user_info.html', context)
-
-    '''
-    POST 로 값을 전달받아서,(x)
-    ajax로 값을 전달 받아서 아래 내용을 확인하고
-    if User.objects.filter(username=username).exists():
-        raise forms.ValidationError('아이디가 이미 사용중입니다')
-        username 이 존재함을 return
-    else
-        username 이 사용가능함을 return
-    '''
-
-    '''
-    profile 이미지의 경우 ajax로 처리해야 업로드 후 이미지 바로 표현
-    사진을 업로드 하면 이미지 사이즈를 resize 해서,
-    해당 html 에서 바로 올린 이미지가 보이게끔 처리
-    '''
-
-    '''
-    마지막에 시작하기 버튼을 누르면 위 변경사항들을 모두 적용해서 save 후 redirect
-    user.username = 전달받은 값
-    '''
 
 
 def kakao_unlink(request):
@@ -654,4 +594,109 @@ class TestAskView(APIView):
 
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 ##############################################################################################################################
+
+
+# 해당 html 을 보여주기 위해서
+def upload_image(request):
+    newForm = UserForm()
+    context = {"form": newForm, }
+    return render(request, "posts/upload_image.html", context)
+
+# submit 버튼을 눌렀을때 저장하기 위해서
+
+
+# def addImage_view(request):
+#     form = ImageForm(request.POST, request.FILES)
+#     print("request.files")
+#     print(request.FILES)
+#     print("request.files type")
+#     print(type(request.FILES))
+#     user = User.objects.first()
+#     user.profile_image = request.FILES["profile_image"]
+#     user.save()
+#     if(form.is_valid()):
+#         form.save()
+#         print("form saved")
+#     return HttpResponse("success")
+
+# 저장된 이미지를 보기 위해서
+
+
+def getImages_view(request):
+    # images = User.objects.all()
+    user_id = request.session.get('_auth_user_id')
+    user = User.objects.get(pk=user_id)
+    image_urls = []
+    print(str(user.profile_image))
+    image_urls.append("media/"+str(user.profile_image))
+    response = {"image_urls": "/media/"+str(user.profile_image)}
+    return JsonResponse(response)
+
+
+# @csrf_exempt
+# def UploadImage(request):
+#     form = UploadFileForm(request.POST, request.FILES)
+#     if form.is_valid():
+#         pass
+#     return JsonResponse(data={'created': False, 'len': '2'})
+#     # pic = request.FILES['image']  # I don't know if this is correct
+
+# @csrf_exempt
+def addImage_view(request):
+    form = UserForm(request.POST, request.FILES)
+    print("request.files")
+    print(request.FILES)
+    print("request.files type")
+    print(type(request.FILES))
+    if(form.is_valid()):
+        print('form is valid')
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(pk=user_id)
+        user.profile_image = request.FILES["profile_image"]
+        user.save()
+    return HttpResponse("success")
+    # return render(request, 'home.html', {'form': form, 'up': User.objects.get(pk=user_id), })
+
+
+def user_info(request):
+    user_id = request.session.get('user_id')
+    username = User.objects.get(pk=user_id)
+
+    newForm = UserForm()
+    context = {"form": newForm, }
+    # return render(request, "posts/upload_image.html", context)
+
+    if "username_input" in request.GET:
+        new_username = request.GET["username_input"]
+
+        if not User.objects.filter(username=new_username).exists():
+            user = User.objects.get(pk=user_id)
+            user.username = new_username
+            user.save()
+            return JsonResponse({'created': True})
+
+    return render(request, 'posts/user_info.html', context)
+    # return render(request, 'posts/user_info.html', context)
+
+    '''
+    POST 로 값을 전달받아서,(x)
+    ajax로 값을 전달 받아서 아래 내용을 확인하고
+    if User.objects.filter(username=username).exists():
+        raise forms.ValidationError('아이디가 이미 사용중입니다')
+        username 이 존재함을 return
+    else
+        username 이 사용가능함을 return
+    '''
+
+    '''
+    profile 이미지의 경우 ajax로 처리해야 업로드 후 이미지 바로 표현
+    사진을 업로드 하면 이미지 사이즈를 resize 해서,
+    해당 html 에서 바로 올린 이미지가 보이게끔 처리
+    '''
+
+    '''
+    마지막에 시작하기 버튼을 누르면 위 변경사항들을 모두 적용해서 save 후 redirect
+    user.username = 전달받은 값
+    '''
