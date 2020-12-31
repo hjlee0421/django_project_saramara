@@ -144,3 +144,8 @@ a.main_home_user {
   display: inline-flex;
 }
 /* user defined tag */
+
+textarea {
+  /* will prevent resizing horizontally */
+  resize: vertical;
+}

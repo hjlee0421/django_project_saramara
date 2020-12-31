@@ -114,9 +114,11 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    # or comment 도 부모가 될수있어야 대댓글 여기가 바뀌면 model view html 모두에 변화가있다.
+    #
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    text = models.CharField(max_length=200)
+    text = models.TextField(max_length=1000)
     created_date = models.DateTimeField(default=timezone.now)
 
     class Meta:

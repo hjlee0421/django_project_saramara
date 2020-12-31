@@ -18,7 +18,19 @@
 </head>
 <body>
   <form method="POST" enctype="multipart/form-data" id="imageForm">
-    {% csrf_token %} {{form.as_p}}{{ form.media }} {% comment %}
+    {% csrf_token %}
+    <p>
+      <label for="image">Profile image:</label>
+      <input
+        type="file"
+        name="profile_image"
+        id="image"
+        accept="image/*"
+        required=""
+        onchange="readURL(this);"
+      />
+    </p>
+    {% comment %}
     <img
       class="file-upload-image"
       src="{{ user.profile_image.url }}"
@@ -56,8 +68,23 @@
   {% endcomment %}
 
   <button id="showImages">ShowImages</button>
-
+  <img
+    class="file-upload-image"
+    src="{{ user.profile_image.url }}"
+    alt="your image"
+    width="240"
+  />
   <div id="imageField"></div>
+  <div class="image-upload-wrap">
+    <input
+      id="image"
+      class="file-upload-input"
+      type="file"
+      onchange="readURL(this);"
+      accept="image/*"
+      style="display: block"
+    />
+  </div>
 </body>
 
 <script>
@@ -93,7 +120,6 @@
   }
 </script>
 
-{% comment %}
 <script>
   function readURL(input) {
     if (input.files && input.files[0]) {
@@ -103,26 +129,9 @@
       reader.onload = function (e) {
         $(".image-upload-wrap").hide();
         $(".file-upload-image").attr("src", e.target.result);
-        console.log(e.target.result);
-        form_data.append("image", e.target.result);
-        form_data.append("image1", input.files[0]);
-        form_data.append("image2", input.files);
-        // 위에 e.target.result가 새로 바뀐 이미지인거 같은데?
+
         $(".file-upload-content").show();
         $(".image-title").html(input.files[0].name);
-        // $.ajax({
-        //   type: "POST",
-        //   url: "/UploadImage/",
-        //   data: form_data,
-        //   processData: false,
-        //   success: function (result) {
-        //     alert("IMAGES UPLOADED");
-        //   },
-        //   error: function (data) {
-        //     console.log("error");
-        //     console.log(data);
-        //   },
-        // });
       };
 
       reader.readAsDataURL(input.files[0]);
@@ -139,5 +148,8 @@
     $(".image-upload-wrap").hide();
     //$(".image-upload-wrap").show();
   }
+
+  function editComment(input) {
+    console.log(input);
+  }
 </script>
-{% endcomment %}

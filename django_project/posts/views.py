@@ -69,17 +69,18 @@ def kakao_login(request):  # , pk
     email = ""
     birthday = ""
 
-    if profile_json['kakao_account']['gender_needs_agreement'] == False:
+    if profile_json['kakao_account']['has_gender'] == True:
         gender = profile_json['kakao_account']['gender']
 
-    if profile_json['kakao_account']['email_needs_agreement'] == False:
+    if profile_json['kakao_account']['has_email'] == True:
         email = profile_json['kakao_account']['email']
 
-    if profile_json['kakao_account']['birthday_needs_agreement'] == False:
+    if profile_json['kakao_account']['has_birthday'] == True:
         birthday = profile_json['kakao_account']['birthday']
 
     if not User.objects.filter(kakao_unique_id=str(profile_json['id'])).exists():
         # 기존에 username 이 없다면
+
         user = User(username=username, gender=gender, email=email, password=profile_json['id'],
                     birthday=birthday, kakao_access_token=access_token, kakao_unique_id=profile_json['id'])
         user.is_staff = True
@@ -91,6 +92,7 @@ def kakao_login(request):  # , pk
         # return redirect('/')
     else:
         # 기존에 username 이 있다면?
+
         user = User.objects.get(kakao_unique_id=profile_json['id'])
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         request.session['user_id'] = user.id
@@ -226,9 +228,13 @@ class DetailView(generic.DetailView, View):
             if user == post.author:
                 post.delete()
                 return redirect('/')
-                # return render(request, 'posts/detail.html', context=context, content_type=None, status=None, using=None)
-                # post.comment_cnt = post.comment_set.all().count()
-                # post.save()
+
+        if 'edit_post_button' in request.POST:
+            post_id = request.POST['edit_post']
+            return redirect('/'+post_id+'/edit')
+            # return render(request, 'posts/detail.html', context=context, content_type=None, status=None, using=None)
+            # post.comment_cnt = post.comment_set.all().count()
+            # post.save()
 
         # delete comment도 ajax로 처리가능할듯
         # if 'sara_button' in request.POST:
@@ -246,7 +252,6 @@ class DetailView(generic.DetailView, View):
     def add_comment(self, user_name, user_comment):
 
         post = self.object
-
         comment = Comment(post=post, author=user_name, text=user_comment)
         comment.save()
 
@@ -277,31 +282,44 @@ class AskView(View):
             # render(request, template_name, context=None, content_type=None, status=None, using=None)
 
 
-class EditView(View):
+class EditView(generic.DetailView, View):
     model = Post
     form_class = PostForm
 
     def get(self, request, pk, *args, **kwargs):
         # if request.method == 'GET':
-        form = PostForm()
         # post = Post(**form.cleaned_data)
-        self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
+        post = self.get_object()
+        form = PostForm(instance=post)
+        #context = self.get_context_data(form=form)
+        context = dict(form=form)
+        # TODO: 확인하기
+        # import pdb
+        # pdb.set_trace()
         # TODO: 게시글 수정 화면 내용 채우기
         # form 안에 context? 로 내용을 채워야 할듯
-        render(request, 'posts/detail.html', context=context,
-               content_type=None, status=None, using=None)
+        return render(request, 'posts/edit.html', context=context,
+                      content_type=None, status=None, using=None)
         # return render(request, 'posts/ask.html', {'form': form})
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
 
-    def post(self, request):
+    def post(self, request, pk, *args, **kwargs):
         # if request.method == 'POST':
 
         form = PostForm(request.POST)
         if form.is_valid():
             user_id = request.session.get('_auth_user_id')
             user = User.objects.get(pk=user_id)
-            post = Post(**form.cleaned_data)
+            post = self.get_object()
+
+            # post = Post(**form.cleaned_data)
+            post.title = form.cleaned_data['title']
+            post.category = form.cleaned_data['category']
+            post.brand = form.cleaned_data['brand']
+            post.price = form.cleaned_data['price']
+            post.link = form.cleaned_data['link']
+            post.ckcontent = form.cleaned_data['ckcontent']
+
             post.author = user
             post.save()
             return redirect('/'+str(post.pk))
@@ -643,7 +661,7 @@ def getImages_view(request):
 #     return JsonResponse(data={'created': False, 'len': '2'})
 #     # pic = request.FILES['image']  # I don't know if this is correct
 
-# @csrf_exempt
+@csrf_exempt
 def addImage_view(request):
     form = UserForm(request.POST, request.FILES)
     print("request.files")
@@ -660,6 +678,7 @@ def addImage_view(request):
     # return render(request, 'home.html', {'form': form, 'up': User.objects.get(pk=user_id), })
 
 
+@csrf_exempt
 def user_info(request):
     user_id = request.session.get('user_id')
     username = User.objects.get(pk=user_id)

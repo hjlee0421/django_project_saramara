@@ -22,7 +22,9 @@
 {% if user.is_authenticated %} {% if post.author.id == user.id %}
 <form method="POST" action=".">
   {% csrf_token %}
-  <input type="submit" value="수정" class="btn" />
+
+  <input type="hidden" value="{{post.id}}" name="edit_post" />
+  <input type="submit" name="edit_post_button" value="수정" class="btn" />
   <input type="hidden" value="{{post.id}}" name="delete_post" />
   <input type="submit" name="delete_post_button" value="삭제" class="btn" />
   <br />
@@ -249,23 +251,33 @@
   <!-- {{comment}} -->
 
   {% for element in comment %} author {{element.author.id}} <br />
-  user {{user.id}} <br />
-  <strong>{{element.author}}</strong> <br />
-  {{element.text}} - {{element.created_date}} <br />
+  <div class="comment_{{element.id}}">
+    user {{user.id}} <br />
+    <strong>{{element.author}}</strong> <br />
+    <p class="text">{{element.text|linebreaks}}</p>
+    -
+    <p class="created_date">{{element.created_date}}</p>
+    <br />
 
-  {% if element.author.id == user.id %}
-  <form method="POST" action=".">
-    {% csrf_token %}
-    <input type="submit" value="댓글수정" class="btn" />
-    <input type="hidden" value="{{element.id}}" name="delete_comment" />
+    {% if element.author.id == user.id %}
+    <form method="POST" action=".">
+      {% csrf_token %}
+      <input type="hidden" value="{{element.id}}" name="delete_comment" />
+      <input
+        type="submit"
+        name="delete_comment_button"
+        value="댓글삭제"
+        class="btn"
+      />
+      <br />
+    </form>
     <input
       type="submit"
-      name="delete_comment_button"
-      value="댓글삭제"
+      value="댓글수정"
       class="btn"
+      onclick="editComment('{{element.id}}-{{element.text}}')"
     />
-    <br />
-  </form>
+  </div>
   {% endif %} {% empty %}
   <p>살지 말지 고민을 해결해주세요 :)</p>
 
@@ -280,13 +292,21 @@
   <h1>댓글작성창</h1>
   <!-- <input type="text" name="add_comment" size="100" height="100"><br><br> -->
   <br />
+
   <textarea
     id="comment_input"
     rows="4"
-    cols="51"
     name="add_comment"
     placeholder="당신의 의견을 말해주세요"
   ></textarea>
+
+  {% comment %}
+  <input
+    id="comment_input"
+    name="add_comment"
+    placeholder="당신의 의견을 말해주세요"
+  />
+  {% endcomment %}
   <br />
   <input
     id="add_comment_button"
@@ -301,10 +321,11 @@
   <textarea
     id="comment_input"
     rows="4"
-    cols="130"
+    cols="40"
     name="add_comment"
     placeholder="로그인 후 당신의 의견을 말해주세요"
   ></textarea>
+
   <br />
   <a id="custom-login-btn" href="javascript:loginWithKakao()">
     <img
@@ -328,6 +349,39 @@
     });
   </script>
 
+  <script>
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        form_data = new FormData();
+
+        reader.onload = function (e) {
+          $(".image-upload-wrap").hide();
+          $(".file-upload-image").attr("src", e.target.result);
+
+          $(".file-upload-content").show();
+          $(".image-title").html(input.files[0].name);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+      } else {
+        removeUpload();
+      }
+    }
+
+    function removeUpload() {
+      $(".file-upload-input").replaceWith($(".file-upload-input").clone());
+      //$(".file-upload-content").hide();
+      //$(".file-upload-content").show();
+      $(".file-upload-image").attr("src", "{{ user.profile_image.url }}");
+      $(".image-upload-wrap").hide();
+      //$(".image-upload-wrap").show();
+    }
+
+    function editComment(input) {
+      console.log(input);
+    }
+  </script>
   <br />
   <br />
   <br />
