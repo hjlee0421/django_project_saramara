@@ -167,6 +167,7 @@ class DetailView(generic.DetailView, View):
         post = self.get_object()
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
+        print(post.comment_set.all())
         context['comment'] = post.comment_set.all()
         user = request.user
 
@@ -228,13 +229,15 @@ class DetailView(generic.DetailView, View):
             comment_pk = request.POST["pk"]
             self.edit_comment(comment_pk, new_comment)
 
-        if 'delete_comment_button' in request.POST:
-            comment_id = request.POST['delete_comment']
+        if 'delete_comment_pk' in request.POST:
+            comment_id = request.POST['delete_comment_pk']
             comment = Comment.objects.get(id=comment_id)
             if user == comment.author:
                 comment.delete()
                 # post.comment_cnt = post.comment_set.all().count()
                 post.save()
+                print("삭제완료")
+            # return render(request, 'posts/detail.html', context=context, content_type=None, status=None, using=None)
 
         if 'delete_post_button' in request.POST:
             post_id = request.POST['delete_post']

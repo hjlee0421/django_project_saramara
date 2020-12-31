@@ -244,20 +244,16 @@
 
     {% if element.author.id == user.id %}
     <div class="edit_delete_button">
-      <form method="POST" action=".">
-        {% csrf_token %}
-        <input type="hidden" value="{{element.id}}" name="delete_comment" />
-        <input
-          type="submit"
-          name="delete_comment_button"
-          value="댓글삭제"
-          class="btn"
-        />
-        <br />
-      </form>
       <input
         type="submit"
-        value="댓글수정"
+        value="삭제"
+        class="btn"
+        onclick="deleteComment('{{element.id}}')"
+      />
+
+      <input
+        type="submit"
+        value="수정"
         class="btn"
         onclick="editComment('{{element.id}}')"
       />
@@ -371,6 +367,7 @@
       //$(".image-upload-wrap").show();
     }
   </script>
+
   <script>
     function editComment(input) {
       console.log(input);
@@ -402,6 +399,20 @@
         type: "POST",
         url: current_url,
         data: { new_comment: new_comment, pk: input },
+        //csrfmiddlewaretoken: {{ csrf_token }},
+      }).done(function () {
+        location.reload();
+      });
+    }
+  </script>
+
+  <script>
+    function deleteComment(input) {
+      var current_url = $(location).attr("pathname");
+      $.ajax({
+        type: "POST",
+        url: current_url,
+        data: { delete_comment_pk: input },
         //csrfmiddlewaretoken: {{ csrf_token }},
       }).done(function () {
         location.reload();
