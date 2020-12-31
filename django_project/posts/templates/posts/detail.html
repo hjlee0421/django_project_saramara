@@ -107,7 +107,6 @@
     });
   </script>
 
-  <br />
   <script>
     $("#sarabutton").click(function () {
       var current_url = $(location).attr("pathname") + "sara/";
@@ -120,6 +119,7 @@
       });
     });
   </script>
+
   <script>
     $("#marabutton").click(function () {
       var current_url = $(location).attr("pathname") + "mara/";
@@ -132,10 +132,6 @@
       });
     });
   </script>
-
-  <br />
-  <br />
-  <br />
 
   <script>
     $(document).ready(function () {
@@ -168,22 +164,11 @@
       <br />
     </form>
   </div>
-
-  <br />
-  <br />
-  <br />
   <br />
   <h1>공유하기</h1>
 </div>
 <!--        작성한 내용을 container 라는 div 안에 담아서 표현-->
 <br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-
 <a id="create-kakao-link-btn" href="javascript:;">
   <img
     src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"
@@ -232,13 +217,6 @@
   });
 </script>
 <br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
 <!--        현재의 빈 공간 / 미래의 광고창-->
 <div>
   <h1>빈 공간</h1>
@@ -254,38 +232,49 @@
   <div class="comment_{{element.id}}">
     user {{user.id}} <br />
     <strong>{{element.author}}</strong> <br />
-    <p class="text">{{element.text|linebreaks}}</p>
+    <div class="text">
+      <p>{{element.text|linebreaks}}</p>
+    </div>
     -
     <p class="created_date">{{element.created_date}}</p>
+
     <br />
 
     {% if element.author.id == user.id %}
-    <form method="POST" action=".">
-      {% csrf_token %}
-      <input type="hidden" value="{{element.id}}" name="delete_comment" />
+    <div class="edit_delete_button">
+      <form method="POST" action=".">
+        {% csrf_token %}
+        <input type="hidden" value="{{element.id}}" name="delete_comment" />
+        <input
+          type="submit"
+          name="delete_comment_button"
+          value="댓글삭제"
+          class="btn"
+        />
+        <br />
+      </form>
       <input
         type="submit"
-        name="delete_comment_button"
-        value="댓글삭제"
+        value="댓글수정"
         class="btn"
+        onclick="editComment('{{element.id}}')"
       />
-      <br />
-    </form>
-    <input
-      type="submit"
-      value="댓글수정"
-      class="btn"
-      onclick="editComment('{{element.id}}-{{element.text}}')"
-    />
+    </div>
+    <div class="edit_button_{{element.id}}" style="display: none">
+      <input
+        type="submit"
+        name="edit_comment_button"
+        value="댓글수정"
+        class="btn"
+        id="edit_comment_button"
+        onclick="clickeditComment('{{element.id}}')"
+      />
+    </div>
   </div>
   {% endif %} {% empty %}
   <p>살지 말지 고민을 해결해주세요 :)</p>
 
   {% endfor %}
-  <br />
-  <br />
-  <br />
-  <br />
   <br />
 
   {% if user.is_authenticated %}
@@ -368,7 +357,8 @@
         removeUpload();
       }
     }
-
+  </script>
+  <script>
     function removeUpload() {
       $(".file-upload-input").replaceWith($(".file-upload-input").clone());
       //$(".file-upload-content").hide();
@@ -377,11 +367,45 @@
       $(".image-upload-wrap").hide();
       //$(".image-upload-wrap").show();
     }
-
+  </script>
+  <script>
     function editComment(input) {
       console.log(input);
+      var text = $(".comment_" + input + ">div.text")
+        .html()
+        .replaceAll("<p>", "")
+        .replaceAll("</p>", "")
+        .replaceAll("<br>", "\n")
+        .replaceAll("      ", "")
+        .replaceAll("\n    ", "");
+      console.log(text);
+      $(".comment_" + input + ">div.text").html(
+        "<textarea id='newComment' rows='4' cols='40'>" + text + "</textarea>"
+      );
+      $(".edit_delete_button").hide();
+      $(".edit_button_" + input + "").show();
     }
   </script>
+
+  <script>
+    function clickeditComment(input) {
+      console.log(input);
+      var new_comment = $("#newComment").val();
+      console.log(new_comment);
+
+      var current_url = $(location).attr("pathname");
+      console.log(current_url);
+      $.ajax({
+        type: "POST",
+        url: current_url,
+        data: { new_comment: new_comment, pk: input },
+        //csrfmiddlewaretoken: {{ csrf_token }},
+      }).done(function () {
+        location.reload();
+      });
+    }
+  </script>
+
   <br />
   <br />
   <br />

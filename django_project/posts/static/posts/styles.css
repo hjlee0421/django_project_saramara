@@ -146,6 +146,5 @@ a.main_home_user {
 /* user defined tag */
 
 textarea {
-  /* will prevent resizing horizontally */
-  resize: vertical;
+  width: 98%;
 }

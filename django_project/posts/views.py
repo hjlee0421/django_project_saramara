@@ -1,3 +1,4 @@
+from django.utils.decorators import method_decorator
 from .forms import UserForm
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
@@ -146,6 +147,10 @@ class IndexView(generic.ListView):
 #              <- ListView와 같음  ->
 
 
+# @csrf_exempt
+
+
+@method_decorator(csrf_exempt, name='dispatch')
 class DetailView(generic.DetailView, View):
 
     # NEED model & form_class
@@ -205,6 +210,7 @@ class DetailView(generic.DetailView, View):
 
     def post(self, request, pk, *args, **kwargs):
         # if request.method == 'POST':
+        print("일로오겠지")
 
         post = self.get_object()
         self.object = self.get_object()
@@ -214,6 +220,12 @@ class DetailView(generic.DetailView, View):
         user = request.user
         # user = 현재 로그인한 username
         print(request.POST)
+
+        if 'new_comment' in request.POST:
+            new_comment = request.POST["new_comment"]
+            comment_pk = request.POST["pk"]
+            self.edit_comment(comment_pk, new_comment)
+
         if 'delete_comment_button' in request.POST:
             comment_id = request.POST['delete_comment']
             comment = Comment.objects.get(id=comment_id)
@@ -257,6 +269,12 @@ class DetailView(generic.DetailView, View):
 
         # post.comment_cnt = post.comment_set.all().count()
         post.save()
+
+    def edit_comment(self, pk, user_comment):
+
+        comment = Comment.objects.get(pk=pk)
+        comment.text = user_comment
+        comment.save()
 
 
 class AskView(View):
