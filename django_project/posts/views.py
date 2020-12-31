@@ -37,6 +37,7 @@ with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
     secrets = json.load(secret_file)
 
 
+@csrf_exempt
 def kakao_unlink(request):
     user_id = request.session.get('user_id')
 
@@ -50,6 +51,7 @@ def kakao_unlink(request):
     return redirect('/')
 
 
+@csrf_exempt
 def kakao_logout(request):
     if request.session.get('user_id'):
         del(request.session['user_id'])
@@ -58,9 +60,10 @@ def kakao_logout(request):
     return redirect('/')
 
 
+@csrf_exempt
 def kakao_login(request):  # , pk
-    LOGIN_INFO = json.loads(request.GET['LOGIN_INFO'])
-    USER_INFO = json.loads(request.GET['USER_INFO'])
+    LOGIN_INFO = json.loads(request.POST['LOGIN_INFO'])
+    USER_INFO = json.loads(request.POST['USER_INFO'])
 
     access_token = LOGIN_INFO["access_token"]
     profile_json = USER_INFO
@@ -167,17 +170,6 @@ class DetailView(generic.DetailView, View):
         context['comment'] = post.comment_set.all()
         user = request.user
 
-        if 'comment_input' in request.GET:
-            comment_input = request.GET["comment_input"]
-            self.add_comment(user, comment_input)
-        if 'saramara_input' in request.GET:
-            saramara_input = request.GET["saramara_input"]
-            if saramara_input == "sara":
-                print("sara works till here")
-                post.sara_vote(user)
-            elif saramara_input == "mara":
-                post.mara_vote(user)
-
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
 
         # # 나이 성별은 나중에 view 에서 작업을 해서 html 에서 보여주는 방법으로 해야 함
@@ -210,7 +202,6 @@ class DetailView(generic.DetailView, View):
 
     def post(self, request, pk, *args, **kwargs):
         # if request.method == 'POST':
-        print("일로오겠지")
 
         post = self.get_object()
         self.object = self.get_object()
@@ -220,6 +211,17 @@ class DetailView(generic.DetailView, View):
         user = request.user
         # user = 현재 로그인한 username
         print(request.POST)
+
+        if 'saramara_input' in request.POST:
+            saramara_input = request.POST["saramara_input"]
+            if saramara_input == "sara":
+                post.sara_vote(user)
+            elif saramara_input == "mara":
+                post.mara_vote(user)
+
+        if 'comment_input' in request.POST:
+            comment_input = request.POST["comment_input"]
+            self.add_comment(user, comment_input)
 
         if 'new_comment' in request.POST:
             new_comment = request.POST["new_comment"]

@@ -94,7 +94,7 @@
                     $(location).attr("pathname") + "kakao_login/";
                   console.log(current_url);
                   $.ajax({
-                    //type: "POST",
+                    type: "POST",
                     // url: current_url,
                     url: "/kakao_login/",
                     dataType: "json",
@@ -125,6 +125,7 @@
         Kakao.Auth.logout(function () {
           console.log(Kakao.Auth.getAccessToken()); //after Logout
           $.ajax({
+            type: "POST",
             url: "/kakao_logout/",
           }).done(function () {
             location.reload();
@@ -140,6 +141,7 @@
             Kakao.Auth.setAccessToken(undefined);
             console.log(Kakao.Auth.getAccessToken());
             $.ajax({
+              type: "POST",
               url: "/kakao_unlink/",
             }).done(function () {
               location.reload();

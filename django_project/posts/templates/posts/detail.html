@@ -109,9 +109,10 @@
 
   <script>
     $("#sarabutton").click(function () {
-      var current_url = $(location).attr("pathname") + "sara/";
+      var current_url = $(location).attr("pathname"); // + "sara/";
       var saramara_data = "sara";
       $.ajax({
+        type: "POST",
         url: current_url,
         data: { saramara_input: saramara_data },
       }).done(function () {
@@ -122,9 +123,10 @@
 
   <script>
     $("#marabutton").click(function () {
-      var current_url = $(location).attr("pathname") + "mara/";
+      var current_url = $(location).attr("pathname"); // + "mara/";
       var saramara_data = "mara";
       $.ajax({
+        type: "POST",
         url: current_url,
         data: { saramara_input: saramara_data },
       }).done(function () {
@@ -327,8 +329,9 @@
   <script>
     $("#add_comment_button").click(function () {
       var comment_input = $("#comment_input").val();
-      var current_url = $(location).attr("pathname") + "add_comment/";
+      var current_url = $(location).attr("pathname"); // + "add_comment/";
       $.ajax({
+        type: "POST",
         url: current_url, //"/add_comment/",
         data: { comment_input: comment_input },
       }).done(function () {
