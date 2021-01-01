@@ -18,7 +18,6 @@
 </script>
 
 <div id="search-button">검색설정</div>
-
 <div class="items-sort-all" style="display: none">
   <form method="GET" action=".">
     <div class="items-sort">
@@ -87,8 +86,8 @@
 
 <!--        item list-->
 
-<div class="items-wrap">
-  {% if post_objects %}
+<div class="items-wrap infinite-container">
+  {% if post_objects %} {% comment %}
   <ul
     style="
       list-style-type: disc;
@@ -99,57 +98,55 @@
       padding-inline-start: 0px;
     "
   >
-    {% for post in post_objects %}
-    <a href="{% url 'posts:detail' post.id %}"
+    {% endcomment %} {% for post in post_objects %}
+
+    <a class="infinite-item" href="{% url 'posts:detail' post.id %}"
       ><div class="single-item">
         {{post.title|upper}} <br />
-        {{post.author}} - {{post.pub_date}}<br />
-        댓글 : {{post.comment_cnt}} 사라 : {{post.sara_cnt}} 마라 :
-        {{post.mara_cnt}} 조회수 : {{post.view_cnt}}
-        <br />
+        {{post.author}}<br />
+        {% comment %} {{post.ckcontent|truncatewords:2}} {% endcomment %} 댓글 :
+        {{post.comment_cnt}} 사라 : {{post.sara_cnt}} 마라 : {{post.mara_cnt}}
+        조회수 : {{post.view_cnt}}<br />
+        {{post.get_pub_date}}
       </div>
+      <br />
     </a>
-    {% endfor %}
+
+    {% endfor %} {% if page_obj.has_next %}
+    <a
+      class="infinite-more-link"
+      href="?page={{ page_obj.next_page_number }}"
+    ></a>
+    {% endif %}
+    <div class="d-flex justify-content-center" style="display: div">
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    {% comment %}
   </ul>
-  {% else %}
+  {% endcomment %} {% else %}
   <p>no posts are available</p>
   {% endif %}
 </div>
 
-<div class="pagination" style="height: 100px; max-width: 400px; font-size: 5px">
-  <div style="display: inline-block" class="step-links">
-    {% if page_obj.has_previous %}
-    <a style="width: 50px; text-align: center" href="?page=1">&laquo;first</a>
-    <a
-      style="width: 50px; text-align: center"
-      href="?page={{ page_obj.previous_page_number }}"
-    >
-      previous
-    </a>
-    {% else %}
-    <a style="width: 50px; text-align: center" href="#">first</a>
-    <a style="width: 50px; text-align: center" href="#">previous </a>
-    {% endif %}
-    <a style="width: 200px; text-align: center" class="current">
-      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-    </a>
-    {% if page_obj.has_next %}
-    <a
-      style="width: 50px; text-align: center"
-      href="?page={{ page_obj.next_page_number }}"
-    >
-      next
-    </a>
-    <a
-      style="width: 50px; text-align: center"
-      href="?page={{ page_obj.paginator.num_pages }}"
-    >
-      last&raquo;
-    </a>
-    {% else %}
-    <a style="width: 50px; text-align: center" href="#">next</a>
-    <a style="width: 50px; text-align: center" href="#">last</a>
-    {% endif %}
-  </div>
-</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/static/posts/jquery.waypoints.min.js"></script>
+<script src="/static/posts/infinite.min.js"></script>
+
+<script>
+  var infinite = new Waypoint.Infinite({
+    element: $(".infinite-container")[0],
+    handler: function (direction) {},
+    offset: "bottom-in-view",
+
+    onBeforePageLoad: function () {
+      $(".spinner-border").show();
+    },
+    onAfterPageLoad: function () {
+      $(".spinner-border").hide();
+    },
+  });
+</script>
+
 {% endblock %}

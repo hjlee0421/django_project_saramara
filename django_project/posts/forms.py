@@ -15,6 +15,7 @@ from ckeditor_uploader.widgets import CKEditorUploadingWidget
 class PostForm(forms.ModelForm):
     ckcontent = forms.CharField(
         widget=CKEditorUploadingWidget())
+    pub_date = forms.DateTimeField(input_formats=['%Y.%m.%d. T%H:%M'])
 
     class Meta:
         model = Post
@@ -45,21 +46,22 @@ class EditForm(forms.ModelForm):
         self.fields['price'].required = True
         self.fields['ckcontent'].required = True
 
-# class CommentForm(forms.ModelForm):
-#     class Meta:
-#         model = Comment
-#         fields = ('post', 'author', 'text', 'created_date')
 
-#     def __init__(self, *args, **kwargs):
-#         super(CommentForm, self).__init__(*args, **kwargs)
-#         self.fields['text'].required = True
-# # TODO : CommentForm을 html에서 어떻게 사용하지?
+class CommentForm(forms.ModelForm):
+    created_date = forms.DateTimeField(input_formats=['%Y.%m.%d. T%H:%M'])
+    # class Meta:
+    #     model = Comment
+    #     fields = ('post', 'author', 'text', 'created_date')
 
+    #     def __init__(self, *args, **kwargs):
+    #         super(CommentForm, self).__init__(*args, **kwargs)
+    #         self.fields['text'].required = True
+    # # TODO : CommentForm을 html에서 어떻게 사용하지?
 
-# class LoginForm(forms.ModelForm):
-#     class Meta:
-#         model = User
-#         fields = ['username', 'password']
+    # class LoginForm(forms.ModelForm):
+    #     class Meta:
+    #         model = User
+    #         fields = ['username', 'password']
 
 
 class UploadFileForm(forms.Form):

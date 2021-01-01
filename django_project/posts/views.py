@@ -352,6 +352,8 @@ class EditView(generic.DetailView, View):
 
 
 class MypageView(View):
+    # paginate_by = 2
+
     def get(self, request):
         # if request.method == 'GET':
         return render(request, 'posts/mypage.html')

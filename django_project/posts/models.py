@@ -46,7 +46,7 @@ class Post(models.Model):
         max_length=128, blank=True, null=True)
     ckcontent = RichTextUploadingField(blank=True, null=True)
     pub_date = models.DateTimeField(auto_now_add=True,
-                                    verbose_name='date published')
+                                    verbose_name='date published')  # , input_formats="'%Y.%m.%d. T%H:%M"
     sara_users = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="sara_voter")  # [] 의 형태로 사용자를 담는다
     mara_users = models.ManyToManyField(
@@ -70,8 +70,17 @@ class Post(models.Model):
 
     def was_published_recently(self):
         return self.pub_date <= timezone.now() - datetime.timedelta(days=1)
+        #  if yes time differece,
+        #  if time 1 hour < diff < 1day %% hours ago
+        #  if time 1 min  < diff < 1hour  %% mins ago
+        #  else  now
 
     # 함수를 속성으로 취급하게 하는 데코레이터
+    @property
+    def get_pub_date(self):
+        print(type(self.pub_date))
+        return self.pub_date.strftime("%Y.%m.%d. %H:%M")
+
     @property
     def comment_cnt(self):
         return self.comment_set.all().count()
@@ -119,7 +128,19 @@ class Comment(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text = models.TextField(max_length=1000)
-    created_date = models.DateTimeField(default=timezone.now)
+    created_date = models.DateTimeField(
+        default=timezone.now)  # , input_formats="'%Y.%m.%d. T%H:%M"
+
+    @property
+    def get_created_date(self):
+        return self.created_date.strftime("%Y.%m.%d. %H:%M")
+
+    def was_published_recently(self):
+        return self.created_date <= timezone.now() - datetime.timedelta(days=1)
+        #  if yes time differece,
+        #  if time 1 hour < diff < 1day %% hours ago
+        #  if time 1 min  < diff < 1hour  %% mins ago
+        #  else  now
 
     class Meta:
         ordering = ['created_date']

@@ -63,8 +63,8 @@ p {
 .single-item {
   outline-style: solid;
   outline-color: #594231;
-  background-color: #ffffb1;
-  height: 100px;
+  /* background-color: #ffffb1; */
+  height: 50px;
   font-size: 10px;
 }
 
@@ -147,4 +147,41 @@ a.main_home_user {
 
 textarea {
   width: 98%;
+}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
 }

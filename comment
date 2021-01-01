@@ -55,3 +55,9 @@ In [26]: exit
 <QuerySet [{'id': 25, 'author_id': 3, 'title': '테스트유저1', 'price': '1만원', 'brand': '나이키', 'link': '없음', 'pup_date': datetime.datetime(2020, 11, 1, 6, 28, 22, 682023, tzinfo=<UTC>), 'sara': None, 'mara': None, 'sara_cnt': 0, 'mara_cnt': 0, 'ckcontent': '<p>여기는 ck content</p>', 'category': '상의'}, {'id': 24, 'author_id': 1, 'title': '테스트2', 'price': '스', 'brand': '테', 'link': '트', 'pup_date': datetime.datetime(2020, 10, 21, 11, 45, 25, 310006, tzinfo=<UTC>), 'sara': None, 'mara': None, 'sara_cnt': 0, 'mara_cnt': 0, 'ckcontent': '<p>테스트2</p>', 'category': '상의'}]>
 >>> Post.objects.filter(title__icontains='테스트')
 '''
+
+python manage.py runserver 0.0.0.0:8000
+ALLOWED_HOSTS = ['192.168.1.20']
+
+var aa = $('.comment_185>div.text').html().replaceAll("<p>","").replaceAll("</p>","").replaceAll("<br>","\n").replaceAll("      ","").replaceAll("    ","")
+$('.comment_185>div.text').html("<textarea rows="4" cols="40">"+aa+"</textarea>")

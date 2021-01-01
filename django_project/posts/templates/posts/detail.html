@@ -15,7 +15,7 @@
     {{ post.title | upper}} <br />
     {{ post.author }} | 사라-{{post.sara_cnt}} 마라-{{post.mara_cnt}} 댓글수-
     post별로 댓글도 확인해야함 조회수-{{post.view_cnt}} <br />
-    작성일 {{post.pub_date}}
+    작성일 {{post.get_pub_date}}
   </h1>
 </div>
 
@@ -238,7 +238,7 @@
       <p>{{element.text|linebreaks}}</p>
     </div>
     -
-    <p class="created_date">{{element.created_date}}</p>
+    <p class="created_date">{{element.get_created_date}}</p>
 
     <br />
 
