@@ -43,7 +43,8 @@
   <a href="{% url 'posts:upload_image' %}"
     ><button class="api-btn">프로필 변경하기</button></a
   >
-  <button class="api-btn" onclick="unlinkApp()">앱 탈퇴하기</button>
+  <button onclick="javascript:logoutWithKakao()">로그아웃</button>
+  <button class="api-btn" onclick="unlinkApp()">탈퇴하기</button>
 </div>
 
 <div id="Paris" class="tabcontent">
@@ -125,7 +126,20 @@
 </script>
 <br />
 <br />
-
+<script type="text/javascript">
+  function logoutWithKakao() {
+    console.log(Kakao.Auth.getAccessToken()); //before Logout
+    Kakao.Auth.logout(function () {
+      console.log(Kakao.Auth.getAccessToken()); //after Logout
+      $.ajax({
+        type: "POST",
+        url: "/kakao_logout/",
+      }).done(function () {
+        location.reload();
+      });
+    });
+  }
+</script>
 <br />
 <br />
 <br />

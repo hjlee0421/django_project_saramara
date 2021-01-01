@@ -1,21 +1,14 @@
 {% extends 'posts/base.html' %} {% block content %}
 
-<div class="ask-list" style="font-size: 2vw">
+<div class="ask-list" style="font-size: 20px">
   {% if user.is_authenticated %}
   <a href="{% url 'posts:ask' %}">질문하기</a>
-  {% comment %} forward to ask page {% endcomment %} {% else %}
-  <a href="{% url 'posts:signin' %}">질문하기</a>
+  {% comment %} forward to ask page {% endcomment %} {% else %} {% comment %}
+  <a href="{% url 'posts:signin' %}">질문하기</a> {% endcomment %}
+  <div id="after_login">질문하기</div>
   {% comment %} run kakao_login_javascript OR alert "You should log in to ask"
   {% endcomment %} {% endif %}
 </div>
-
-<script>
-  $(document).ready(function () {
-    $("#search-button").click(function () {
-      $("div.items-sort-all").slideToggle(1000);
-    });
-  });
-</script>
 
 <div id="search-button">검색설정</div>
 <div class="items-sort-all" style="display: none">
@@ -148,5 +141,18 @@
     },
   });
 </script>
-
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#search-button").click(function () {
+      $("div.items-sort-all").slideToggle(1000);
+    });
+  });
+</script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#after_login").click(function () {
+      alert("카카오톡으로 로그인 후 이용해주세요");
+    });
+  });
+</script>
 {% endblock %}
