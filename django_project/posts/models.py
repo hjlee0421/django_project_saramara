@@ -29,11 +29,11 @@ class User(AbstractUser):
 
     @property
     def get_post(self):
-        return self.post_set.all()
+        return reversed(self.post_set.all())
 
     @property
     def get_comment(self):
-        return self.comment_set.all()
+        return reversed(self.comment_set.all())
 
 
 class Post(models.Model):
@@ -78,7 +78,6 @@ class Post(models.Model):
     # 함수를 속성으로 취급하게 하는 데코레이터
     @property
     def get_pub_date(self):
-        print(type(self.pub_date))
         return self.pub_date.strftime("%Y.%m.%d. %H:%M")
 
     @property

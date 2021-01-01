@@ -5,6 +5,7 @@
 
 {% if user.is_authenticated %}
 <!--        button onclick 에 2번째 param '도시이름' 부분을 변경할때는 아래쪽 div에 id="도시이름" 부분도 같이 변경해야 js 인식-->
+{% comment %}
 <div>
   <div id="회원정보">
     <h3>회원정보</h3>
@@ -16,6 +17,7 @@
     <button class="api-btn" onclick="unlinkApp()">앱 탈퇴하기</button>
   </div>
 </div>
+{% endcomment %}
 
 <br />
 <br />
@@ -30,11 +32,17 @@
 
 <div id="London" class="tabcontent">
   <h3>회원정보</h3>
-  <img src="{{ user.profile_image.url }}" width="30" height="30" />
-  <h4 style="font-size: 2px">사용중인 닉네임 : {{ user.username }}</h4>
-  <h4 style="font-size: 2px">
+  <img
+    src="{{ user.profile_image.url }}"
+    style="max-width: 150px; max-height: 150px; height: auto; width: auto"
+  />
+  <h4 style="font-size: 10px">사용중인 닉네임 : {{ user.username }}</h4>
+  <h4 style="font-size: 10px">
     사라마라 가입일 : {{ user.date_joined|date:"Y년 m월 d일" }}
   </h4>
+  <a href="{% url 'posts:upload_image' %}"
+    ><button class="api-btn">프로필 변경하기</button></a
+  >
   <button class="api-btn" onclick="unlinkApp()">앱 탈퇴하기</button>
 </div>
 
@@ -57,23 +65,44 @@
       <a href="{% url 'posts:detail' post.id %}"
         ><div class="single-item">
           {{post.title|upper}} <br />
-          {{post.author}} - {{post.get_pub_date}}<br />
+          {{post.author}}{{post.get_pub_date}}<br />
           댓글 : {{post.comment_cnt}} 사라 : {{post.sara_cnt}} 마라 :
-          {{post.mara_cnt}} 조회수 : {{post.view_cnt}}
-          <br />
+          {{post.mara_cnt}} 조회수 : {{post.view_cnt}}<br />
+          {{post.get_pub_date}}<br />
         </div>
       </a>
       {% endfor %}
     </ul>
     {% else %}
-    <p>no posts are available</p>
+    <p>아직 작성글이 없습니다.</p>
     {% endif %}
   </div>
 </div>
 
 <div id="Tokyo" class="tabcontent">
   <h3>작성한 댓글</h3>
-  <p>{{user.get_comment}}</p>
+  {% if user.get_comment %} {% for comment in user.get_comment %}
+  <br />
+  <a href="{% url 'posts:detail' comment.post.id %}"
+    ><div class="single-item">
+      {{comment.text|truncatewords:2}} <br />
+      {{comment.get_created_date}}<br />
+      {{comment.post.title}}<br />
+    </div>
+  </a>
+  {% endfor %} {% else %}
+  <p>아직 댓글이 없습니다.</p>
+  {% endif %}
+</div>
+
+<div id="Seoul" class="tabcontent">
+  <h3>회원정보</h3>
+  <img src="{{ user.profile_image.url }}" width="30" height="30" />
+  <h4 style="font-size: 10px">사용중인 닉네임 : {{ user.username }}</h4>
+  <h4 style="font-size: 10px">
+    사라마라 가입일 : {{ user.date_joined|date:"Y년 m월 d일" }}
+  </h4>
+  <button class="api-btn" onclick="unlinkApp()">앱 탈퇴하기</button>
 </div>
 
 <script>
