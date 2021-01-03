@@ -1,15 +1,18 @@
 {% extends 'posts/base.html' %} {% block content %} {% load static %}
+
 <script>
-  $("#add_comment_button").click(function () {
-    var comment_input = $("#comment_input").val();
-    var current_url = $(location).attr("pathname"); // + "add_comment/";
-    $.ajax({
-      type: "POST",
-      url: current_url, //"/add_comment/",
-      data: { comment_input: comment_input },
-    }).done(function () {
-      location.reload();
-      $("#comment_input").val("");
+  $(document).ready(function () {
+    $("#add_comment_button").click(function () {
+      var comment_input = $("#comment_input").val();
+      var current_url = $(location).attr("pathname"); // + "add_comment/";
+      $.ajax({
+        type: "POST",
+        url: current_url, //"/add_comment/",
+        data: { comment_input: comment_input },
+      }).done(function () {
+        location.reload();
+        $("#comment_input").val("");
+      });
     });
   });
 </script>
@@ -84,16 +87,44 @@
 </script>
 
 <script>
+  function deletePost(input) {
+    if (confirm("정말 삭제하시겠습니까?") == true) {
+      //확인
+      var current_url = $(location).attr("pathname");
+      console.log("%%%%%%%%%%");
+      console.log(current_url);
+      $.ajax({
+        type: "POST",
+        url: current_url,
+        data: { delete_post: input },
+        //csrfmiddlewaretoken: {{ csrf_token }},
+      }).done(function () {
+        window.location.replace("http://192.168.219.104:8000");
+      });
+    } else {
+      //취소
+      return;
+    }
+  }
+</script>
+
+<script>
   function deleteComment(input) {
-    var current_url = $(location).attr("pathname");
-    $.ajax({
-      type: "POST",
-      url: current_url,
-      data: { delete_comment_pk: input },
-      //csrfmiddlewaretoken: {{ csrf_token }},
-    }).done(function () {
-      location.reload();
-    });
+    if (confirm("정말 삭제하시겠습니까?") == true) {
+      //확인
+      var current_url = $(location).attr("pathname");
+      $.ajax({
+        type: "POST",
+        url: current_url,
+        data: { delete_comment_pk: input },
+        //csrfmiddlewaretoken: {{ csrf_token }},
+      }).done(function () {
+        location.reload();
+      });
+    } else {
+      //취소
+      return;
+    }
   }
 </script>
 
@@ -107,12 +138,7 @@
 <br />
 <script>
   $("#plz_login_mara").click(function () {
-    //var current_url = $(location).attr("pathname") + "add_comment/";
-    console.log("뭐지?");
     alert("이건 절대아니다!! 투표하려면 로그인을 해주세요");
-    //$.ajax({
-    //  alert("사라 마라 하려면 로그인을 해주세요");
-    //});
   });
 </script>
 
@@ -144,15 +170,6 @@
   });
 </script>
 
-<script>
-  $(document).ready(function () {
-    $("#vote-result").click(function () {
-      $("div.vote-result-area").slideToggle(1000);
-    });
-  });
-</script>
-<br />
-<br />
 <script type="text/javascript">
   var current_url = $(location).attr("href");
   console.log(current_url);
@@ -248,15 +265,15 @@
 </div>
 
 {% if user.is_authenticated %} {% if post.author.id == user.id %}
-<form method="POST" action=".">
-  {% csrf_token %}
+<input
+  type="submit"
+  name="delete_post_button"
+  value="삭제"
+  class="btn"
+  onclick="deletePost('{{post.id}}')"
+/>
+<br />
 
-  <input type="hidden" value="{{post.id}}" name="edit_post" />
-  <input type="submit" name="edit_post_button" value="수정" class="btn" />
-  <input type="hidden" value="{{post.id}}" name="delete_post" />
-  <input type="submit" name="delete_post_button" value="삭제" class="btn" />
-  <br />
-</form>
 {% endif %} {% endif %}
 
 <!--        각 item detail 이 가지는 기본 정보, 혹은 보여지는 정보를 따로 표시-->

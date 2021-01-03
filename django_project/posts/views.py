@@ -72,7 +72,7 @@ def kakao_login(request):  # , pk
     gender = ""
     email = ""
     birthday = ""
-
+    print(profile_json['kakao_account'])
     if profile_json['kakao_account']['has_gender'] == True:
         gender = profile_json['kakao_account']['gender']
 
@@ -167,7 +167,7 @@ class DetailView(generic.DetailView, View):
         post = self.get_object()
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
-        print(post.comment_set.all())
+        # print(post.comment_set.all())
         context['comment'] = post.comment_set.all()
         user = request.user
 
@@ -211,6 +211,7 @@ class DetailView(generic.DetailView, View):
 
         user = request.user
         # user = 현재 로그인한 username
+        print("################")
         print(request.POST)
 
         if 'saramara_input' in request.POST:
@@ -239,12 +240,15 @@ class DetailView(generic.DetailView, View):
                 print("삭제완료")
             # return render(request, 'posts/detail.html', context=context, content_type=None, status=None, using=None)
 
-        if 'delete_post_button' in request.POST:
+        if 'delete_post' in request.POST:
             post_id = request.POST['delete_post']
             post = Post.objects.get(id=post_id)
+
             if user == post.author:
                 post.delete()
+                print("post deleted")
                 return redirect('/')
+                # return render(request, 'posts/index.html')
 
         if 'edit_post_button' in request.POST:
             post_id = request.POST['edit_post']
@@ -267,7 +271,7 @@ class DetailView(generic.DetailView, View):
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
 
     def add_comment(self, user_name, user_comment):
-
+        print("add_comment called")
         post = self.object
         comment = Comment(post=post, author=user_name, text=user_comment)
         comment.save()

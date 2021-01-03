@@ -61,3 +61,4 @@ ALLOWED_HOSTS = ['192.168.1.20']
 
 var aa = $('.comment_185>div.text').html().replaceAll("<p>","").replaceAll("</p>","").replaceAll("<br>","\n").replaceAll("      ","").replaceAll("    ","")
 $('.comment_185>div.text').html("<textarea rows="4" cols="40">"+aa+"</textarea>")
+

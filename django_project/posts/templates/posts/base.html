@@ -15,6 +15,12 @@
       type="text/css"
       href="{% static 'posts/styles.css' %}"
     />
+    <style>
+      .imageSize {
+        height: 100px;
+        width: 100px;
+      }
+    </style>
   </head>
 
   <body
@@ -111,7 +117,7 @@
                     alert(Object.keys(res).length);
                     if (Object.keys(res).length == 1) {
                       window.location.replace(
-                        "http://192.168.1.20:8000/upload_image/"
+                        "http://192.168.219.104/upload_image/"
                       );
                     } else {
                       location.reload();
@@ -180,5 +186,110 @@
         });
       }
     </script>
+    <script>
+      $("#plz_login_sara").click(function () {
+        alert("이건 사야한다!! 투표하려면 로그인을 해주세요");
+      });
+    </script>
+    <script>
+      $("#plz_login_mara").click(function () {
+        //var current_url = $(location).attr("pathname") + "add_comment/";
+        console.log("뭐지?");
+        alert("이건 절대아니다!! 투표하려면 로그인을 해주세요");
+        //$.ajax({
+        //  alert("사라 마라 하려면 로그인을 해주세요");
+        //});
+      });
+    </script>
+
+    <script>
+      $("#sarabutton").click(function () {
+        var current_url = $(location).attr("pathname"); // + "sara/";
+        var saramara_data = "sara";
+        $.ajax({
+          type: "POST",
+          url: current_url,
+          data: { saramara_input: saramara_data },
+        }).done(function () {
+          location.reload();
+        });
+      });
+    </script>
+
+    <script>
+      $("#marabutton").click(function () {
+        var current_url = $(location).attr("pathname"); // + "mara/";
+        var saramara_data = "mara";
+        $.ajax({
+          type: "POST",
+          url: current_url,
+          data: { saramara_input: saramara_data },
+        }).done(function () {
+          location.reload();
+        });
+      });
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        $("#vote-result").click(function () {
+          $("div.vote-result-area").slideToggle(1000);
+        });
+      });
+    </script>
+    <br />
+    <br />
+    <script type="text/javascript">
+      var current_url = $(location).attr("href");
+      console.log(current_url);
+      Kakao.Link.createDefaultButton({
+        container: "#create-kakao-link-btn",
+        objectType: "feed",
+        content: {
+          title: "포스트 제목을 여기에 가져와야 함",
+          description:
+            "여기에는 포스트 ckcontent 가져와야 함 #사라 #마라 #사이트 #테스트 #해쉬태그를 해야하나",
+          imageUrl:
+            "https://cdn.pixabay.com/photo/2018/06/04/00/29/women-3452067_1280.jpg",
+          link: {
+            // mobileWebUrl: "https://developers.kakao.com",
+            // webUrl: "https://developers.kakao.com",
+            mobileWebUrl: current_url,
+            webUrl: current_url,
+          },
+        },
+        social: {
+          likeCount: 286, // 이걸 사라, 마라, 댓글, 조회수, 공유수 로 바꿀수가 있나?
+          commentCount: 45,
+          sharedCount: 845,
+        },
+        /*buttons: [
+      {
+        title: "웹으로 보기",
+        link: {
+          mobileWebUrl: "https://developers.kakao.com",
+          webUrl: "https://developers.kakao.com",
+        },
+      },
+      {
+        title: "앱으로 보기",
+        link: {
+          mobileWebUrl: "https://developers.kakao.com",
+          webUrl: "https://developers.kakao.com",
+        },
+      },
+    ],*/
+      });
+    </script>
+    <br />
+    <br />
+    <script
+      type="text/javascript"
+      src="{% static 'ckeditor/ckeditor-init.js' %}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"
+    ></script>
   </body>
 </html>

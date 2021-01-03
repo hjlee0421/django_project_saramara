@@ -15,7 +15,7 @@ from ckeditor_uploader.widgets import CKEditorUploadingWidget
 class PostForm(forms.ModelForm):
     ckcontent = forms.CharField(
         widget=CKEditorUploadingWidget())
-    pub_date = forms.DateTimeField(input_formats=['%Y.%m.%d. T%H:%M'])
+    # pub_date = forms.DateTimeField(input_formats=['%Y.%m.%d. T%H:%M'])
 
     class Meta:
         model = Post
