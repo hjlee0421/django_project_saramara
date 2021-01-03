@@ -647,9 +647,43 @@ class TestAskView(APIView):
 
 # 해당 html 을 보여주기 위해서
 def upload_image(request):
+    user_id = request.session.get('user_id')
+    username = User.objects.get(pk=user_id)
     newForm = UserForm()
     context = {"form": newForm, }
+
+    if "username_input" in request.GET:
+        new_username = request.GET["username_input"]
+
+        if not User.objects.filter(username=new_username).exists():
+            user = User.objects.get(pk=user_id)
+            user.username = new_username
+            user.save()
+            return JsonResponse({'created': True})
     return render(request, "posts/upload_image.html", context)
+
+
+# @csrf_exempt
+# def user_info(request):
+#     user_id = request.session.get('user_id')
+#     username = User.objects.get(pk=user_id)
+
+#     newForm = UserForm()
+#     context = {"form": newForm, }
+#     # return render(request, "posts/upload_image.html", context)
+
+#     if "username_input" in request.GET:
+#         new_username = request.GET["username_input"]
+
+#         if not User.objects.filter(username=new_username).exists():
+#             user = User.objects.get(pk=user_id)
+#             user.username = new_username
+#             user.save()
+#             return JsonResponse({'created': True})
+
+#     return render(request, 'posts/user_info.html', context)
+#     # return render(request, 'posts/user_info.html', context)
+
 
 # submit 버튼을 눌렀을때 저장하기 위해서
 
@@ -707,44 +741,44 @@ def addImage_view(request):
     # return render(request, 'home.html', {'form': form, 'up': User.objects.get(pk=user_id), })
 
 
-@csrf_exempt
-def user_info(request):
-    user_id = request.session.get('user_id')
-    username = User.objects.get(pk=user_id)
+# @csrf_exempt
+# def user_info(request):
+#     user_id = request.session.get('user_id')
+#     username = User.objects.get(pk=user_id)
 
-    newForm = UserForm()
-    context = {"form": newForm, }
-    # return render(request, "posts/upload_image.html", context)
+#     newForm = UserForm()
+#     context = {"form": newForm, }
+#     # return render(request, "posts/upload_image.html", context)
 
-    if "username_input" in request.GET:
-        new_username = request.GET["username_input"]
+#     if "username_input" in request.GET:
+#         new_username = request.GET["username_input"]
 
-        if not User.objects.filter(username=new_username).exists():
-            user = User.objects.get(pk=user_id)
-            user.username = new_username
-            user.save()
-            return JsonResponse({'created': True})
+#         if not User.objects.filter(username=new_username).exists():
+#             user = User.objects.get(pk=user_id)
+#             user.username = new_username
+#             user.save()
+#             return JsonResponse({'created': True})
 
-    return render(request, 'posts/user_info.html', context)
-    # return render(request, 'posts/user_info.html', context)
+#     return render(request, 'posts/user_info.html', context)
+#     # return render(request, 'posts/user_info.html', context)
 
-    '''
-    POST 로 값을 전달받아서,(x)
-    ajax로 값을 전달 받아서 아래 내용을 확인하고
-    if User.objects.filter(username=username).exists():
-        raise forms.ValidationError('아이디가 이미 사용중입니다')
-        username 이 존재함을 return
-    else
-        username 이 사용가능함을 return
-    '''
+#     '''
+#     POST 로 값을 전달받아서,(x)
+#     ajax로 값을 전달 받아서 아래 내용을 확인하고
+#     if User.objects.filter(username=username).exists():
+#         raise forms.ValidationError('아이디가 이미 사용중입니다')
+#         username 이 존재함을 return
+#     else
+#         username 이 사용가능함을 return
+#     '''
 
-    '''
-    profile 이미지의 경우 ajax로 처리해야 업로드 후 이미지 바로 표현
-    사진을 업로드 하면 이미지 사이즈를 resize 해서,
-    해당 html 에서 바로 올린 이미지가 보이게끔 처리
-    '''
+#     '''
+#     profile 이미지의 경우 ajax로 처리해야 업로드 후 이미지 바로 표현
+#     사진을 업로드 하면 이미지 사이즈를 resize 해서,
+#     해당 html 에서 바로 올린 이미지가 보이게끔 처리
+#     '''
 
-    '''
-    마지막에 시작하기 버튼을 누르면 위 변경사항들을 모두 적용해서 save 후 redirect
-    user.username = 전달받은 값
-    '''
+#     '''
+#     마지막에 시작하기 버튼을 누르면 위 변경사항들을 모두 적용해서 save 후 redirect
+#     user.username = 전달받은 값
+#     '''
