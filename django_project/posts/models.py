@@ -4,7 +4,6 @@ from datetime import datetime
 from django.conf import settings  # Foreign Key
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser  # user defined "User" Model
-
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 
@@ -16,7 +15,8 @@ class User(AbstractUser):
     kakao_access_token = models.CharField(
         max_length=128, blank=True, null=True, default="")
     profile_image = models.ImageField(
-        blank=True, null=True, upload_to='profile_image', default="C:\django_project\django_project\media\profile_image\saramara_defaults.jpg")
+        blank=True, null=True, upload_to='profile_image',
+        default="C:\\django_project\\django_project\\media\\profile_image\\saramara_defaults.jpg")
     gender = models.CharField(
         max_length=128, blank=True, null=True, default="")
     email = models.EmailField(
@@ -35,6 +35,10 @@ class User(AbstractUser):
     def get_comment(self):
         return reversed(self.comment_set.all())
 
+    @property
+    def get_vote(self):
+        return reversed((self.sara_voter.all() | self.mara_voter.all().order_by('pub_date')))
+
 
 class Post(models.Model):
     author = models.ForeignKey(
@@ -50,7 +54,7 @@ class Post(models.Model):
     sara_users = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="sara_voter")  # [] 의 형태로 사용자를 담는다
     mara_users = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="mara_Voter")  # [] 의 형태로 사용자를 담는다
+        settings.AUTH_USER_MODEL, related_name="mara_voter")  # [] 의 형태로 사용자를 담는다
 
     view_cnt = models.IntegerField(default=0)
 
@@ -76,21 +80,29 @@ class Post(models.Model):
         #  else  now
 
     # 함수를 속성으로 취급하게 하는 데코레이터
-    @property
+    @ property
     def get_pub_date(self):
         return self.pub_date.strftime("%Y.%m.%d. %H:%M")
 
-    @property
+    @ property
     def comment_cnt(self):
         return self.comment_set.all().count()
 
-    @property
+    @ property
     def sara_cnt(self):
         return self.sara_users.all().count()
 
-    @property
+    @ property
     def mara_cnt(self):
         return self.mara_users.all().count()
+
+    @ property
+    def get_sara_users(self):
+        return self.sara_users.all()
+
+    @ property
+    def get_mara_users(self):
+        return self.mara_users.all()
 
     def sara_vote(self, user):
 
@@ -130,7 +142,7 @@ class Comment(models.Model):
     created_date = models.DateTimeField(
         default=timezone.now)  # , input_formats="'%Y.%m.%d. T%H:%M"
 
-    @property
+    @ property
     def get_created_date(self):
         return self.created_date.strftime("%Y.%m.%d. %H:%M")
 

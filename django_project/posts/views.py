@@ -73,13 +73,13 @@ def kakao_login(request):  # , pk
     email = ""
     birthday = ""
     print(profile_json['kakao_account'])
-    if profile_json['kakao_account']['has_gender'] == True:
+    if profile_json['kakao_account']['has_gender'] is True:
         gender = profile_json['kakao_account']['gender']
 
-    if profile_json['kakao_account']['has_email'] == True:
+    if profile_json['kakao_account']['has_email'] is True:
         email = profile_json['kakao_account']['email']
 
-    if profile_json['kakao_account']['has_birthday'] == True:
+    if profile_json['kakao_account']['has_birthday'] is True:
         birthday = profile_json['kakao_account']['birthday']
 
     if not User.objects.filter(kakao_unique_id=str(profile_json['id'])).exists():
@@ -318,7 +318,7 @@ class EditView(generic.DetailView, View):
         # post = Post(**form.cleaned_data)
         post = self.get_object()
         form = PostForm(instance=post)
-        #context = self.get_context_data(form=form)
+        # context = self.get_context_data(form=form)
         context = dict(form=form)
         # TODO: 확인하기
         # import pdb
@@ -642,7 +642,7 @@ class TestAskView(APIView):
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-##############################################################################################################################
+#############################################################################################
 
 
 # 해당 html 을 보여주기 위해서
