@@ -73,7 +73,7 @@ class UploadFileForm(forms.Form):
 
 class UserForm(forms.ModelForm):
     profile_image = forms.ImageField(
-        widget=forms.FileInput(attrs={"id": "image"}))
+        widget=forms.FileInput(attrs={"id": "image", 'multiple': True}))
 
     class Meta:
         model = User  # 여기만 바꿈 원래 ImageUpload

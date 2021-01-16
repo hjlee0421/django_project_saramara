@@ -648,17 +648,18 @@ class TestAskView(APIView):
 # 해당 html 을 보여주기 위해서
 def upload_image(request):
     user_id = request.session.get('user_id')
-    username = User.objects.get(pk=user_id)
+    user = User.objects.get(pk=user_id)
     newForm = UserForm()
     context = {"form": newForm, }
 
     if "username_input" in request.GET:
         new_username = request.GET["username_input"]
 
-        if not User.objects.filter(username=new_username).exists():
-            user = User.objects.get(pk=user_id)
-            user.username = new_username
-            user.save()
+        if not User.objects.filter(username=new_username).exists() or (user.username == new_username):
+            # user = User.objects.get(pk=user_id)
+            # user.username = new_username
+            # user.save()
+            # if user.username is new_username:
             return JsonResponse({'created': True})
     return render(request, "posts/upload_image.html", context)
 
@@ -727,19 +728,41 @@ def getImages_view(request):
 @csrf_exempt
 def addImage_view(request):
     form = UserForm(request.POST, request.FILES)
-    print("request.files")
-    print(request.FILES)
-    print("request.files type")
-    print(type(request.FILES))
-    if(form.is_valid()):
-        print('form is valid')
-        user_id = request.session.get('_auth_user_id')
-        user = User.objects.get(pk=user_id)
+
+    user_id = request.session.get('_auth_user_id')
+    user = User.objects.get(pk=user_id)
+
+    if "profile_image" in request.FILES:
         user.profile_image = request.FILES["profile_image"]
-        user.save()
-    return HttpResponse("success")
+
+    new_username = request.POST["username"]
+    print("?????????")
+    print(new_username)
+    if not User.objects.filter(username=new_username).exists():
+        # user = User.objects.get(pk=user_id)
+        user.username = new_username
+        print(user.username)
+    user.save()
+    # return HttpResponse("success")
+    # return redirect("http://192.168.219.159:8000")
+    return render(request, 'posts/index.html')
     # return render(request, 'home.html', {'form': form, 'up': User.objects.get(pk=user_id), })
 
+
+# user_id = request.session.get('user_id')
+# username = User.objects.get(pk=user_id)
+#  newForm = UserForm()
+#   context = {"form": newForm, }
+
+#    if "username_input" in request.GET:
+#         new_username = request.GET["username_input"]
+
+#         if not User.objects.filter(username=new_username).exists():
+#             # user = User.objects.get(pk=user_id)
+#             # user.username = new_username
+#             # user.save()
+#             return JsonResponse({'created': True})
+#     return render(request, "posts/upload_image.html", context)
 
 # @csrf_exempt
 # def user_info(request):

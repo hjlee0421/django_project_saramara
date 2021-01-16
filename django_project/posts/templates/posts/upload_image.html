@@ -7,6 +7,7 @@
       <input
         type="file"
         name="profile_image"
+        multiple
         id="image"
         accept="image/*"
         required=""
@@ -22,18 +23,14 @@
       onclick="$('.file-upload-input').trigger( 'click' )"
     />
     {% endcomment %}
-    <input
+    {% comment %} <input
       type="button"
       id="submit"
       value="submit"
       onclick="confirmNewImage()"
     />
-  </form>
-  <script>
-    function confirmNewImage() {
-      alert("프로필 사진이 변경되었습니다.");
-    }
-  </script>
+  </form> {% endcomment %}
+  
   {% comment %} {%for i in up %} {{i}}
   <img src="{{i.img.url}}" , alt="" />
   {%endfor%} {% endcomment %}
@@ -94,7 +91,7 @@
     minlength="4"
     maxlength="16"
     id="username_input"
-    placeholder="{{ user.username }}"
+    {% comment %} placeholder="{{ user.username }}" {% endcomment %}
     name="username"
     value="{{ user.username }}"
     style="width: 240px; margin: 0 auto"
@@ -102,68 +99,56 @@
   <p id="check_duplicated">사용가능한 닉네임인지 확인해주세요</p>
   <br />
 
-  <input
+  {% comment %} <input
     id="change_username"
     type="submit"
     name="change_username"
     value="사용하기"
     class="btn btn-primary"
-  />
-
-  <script type="text/javascript">
-    $("#change_username").click(function () {
-      var username_input = $("#username_input").val();
-      if (username_input.length < 4 || username_input.length > 16) {
-        $("#check_duplicated").text("4~16자리로 변경 가능합니다.");
-      } else {
-        $.ajax({
-          url: "/user_info/",
-          data: { username_input: username_input },
-        }).done(function (res) {
-          //if else 로 username 아래쪽에 가능하면 사용가능한 닉네임입니다.
-          // 불가능하면, 이미 사용중인 닉네임입니다. 를 띄우기
-          //location.reload();
-          if (Object.keys(res).length == 1) {
-            // 이미 사용중인 아이디
-            $("#check_duplicated").text("원하시는 아이디로 등록해드렸어요 :)");
-          } else {
-            // 사용 가능한 아이디
-            $("#check_duplicated").text("이미 사용중에요 :(");
-          }
-        });
-      }
-    });
-  </script>
+  /> {% endcomment %}
+  <button type="button"
+      id="check_duplicated"
+      value="중복확인" class="btn btn-primary" onclick="confirmNewNickname()"> 
+    중복확인
+  </button>
+ {% comment %} onclick="movehome()" {% endcomment %}
   <br />
   <br />
   <br />
   <br />
 
-  {% comment %}
-  <form action="http://192.168.219.104:8000/">
-    {% endcomment %}
-    <button type="submit" class="btn btn-primary" onclick="movehome()">
-      사라마라 시작하러 가기 {% comment %} form POST 로 바꿔서 보내서 여기에서
-      저장해야함 {% endcomment %}
-    </button>
-    {% comment %}
+  <button type="button"
+      id="submit_profile"
+      value="submit" class="btn btn-primary" > 
+      {% comment %} onclick="movehome()" {% endcomment %}
+    사라마라 시작하기
+  </button>
+  {% comment %} <input
+      type="button"
+      id="submit"
+      value="submit"
+      onclick="confirmNewImage()"
+    /> {% endcomment %}
   </form>
-  {% endcomment %}
 </body>
+
 <script>
   function movehome() {
-    window.location.replace("http://192.168.219.104:8000");
+    window.location.replace("http://192.168.219.159:8000/");
   }
 </script>
 <script>
-  document.getElementById("imageForm").onclick = function () {
+  //document.getElementById("imageForm").onclick = function () {
+  document.getElementById("submit_profile").onclick = function () {
     $.ajax({
       url: "/add_image/",
       method: "POST",
       data: new FormData(imageForm),
       processData: false,
       contentType: false,
-    });
+    }).done(function () {
+        window.location.replace("http://192.168.219.159:8000");
+      });
   };
 </script>
 
@@ -207,7 +192,9 @@
       removeUpload();
     }
   }
+</script>
 
+<script>
   function removeUpload() {
     $(".file-upload-input").replaceWith($(".file-upload-input").clone());
     //$(".file-upload-content").hide();
@@ -217,5 +204,57 @@
     //$(".image-upload-wrap").show();
   }
 </script>
-
+<script type="text/javascript">
+  $("#change_username").click(function () {
+    var username_input = $("#username_input").val();
+    if (username_input.length < 4 || username_input.length > 16) {
+      $("#check_duplicated").text("4~16자리로 변경 가능합니다.");
+    } else {
+      $.ajax({
+        url: "/user_info/",
+        data: { username_input: username_input },
+      }).done(function (res) {
+        //if else 로 username 아래쪽에 가능하면 사용가능한 닉네임입니다.
+        // 불가능하면, 이미 사용중인 닉네임입니다. 를 띄우기
+        //location.reload();
+        if (Object.keys(res).length == 1) {
+          // 이미 사용중인 아이디
+          $("#check_duplicated").text("원하시는 아이디로 등록해드렸어요 :)");
+        } else {
+          // 사용 가능한 아이디
+          $("#check_duplicated").text("이미 사용중에요 :(");
+        }
+      });
+    }
+  });
+</script>
+<script>
+    function confirmNewImage() {
+      alert("프로필 사진이 변경되었습니다.");
+    }
+  </script>
+<script>
+    function confirmNewNickname() {
+      var username_input = $("#username_input").val();
+      if (username_input.length < 4 || username_input.length > 16) {
+      $("#check_duplicated").text("4~16자리로 변경 가능합니다.");
+      } else {
+        $.ajax({
+          url: "/upload_image/",
+          data: { username_input: username_input },
+        }).done(function (res) {
+          //if else 로 username 아래쪽에 가능하면 사용가능한 닉네임입니다.
+          // 불가능하면, 이미 사용중인 닉네임입니다. 를 띄우기
+          //location.reload();
+          if (Object.keys(res).length == 1) {
+            // 이미 사용중인 아이디
+            $("#check_duplicated").text("사용가능한 닉네임이에요 :)");
+          } else {
+            // 사용 가능한 아이디
+            $("#check_duplicated").text("이미 사용중인 닉네임이에요 :(");
+          }
+        });
+      }
+    }
+  </script>
 {% endblock %}
