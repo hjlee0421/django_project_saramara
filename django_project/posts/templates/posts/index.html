@@ -6,6 +6,7 @@
   {% comment %} forward to ask page {% endcomment %} {% else %} {% comment %}
   <a href="{% url 'posts:signin' %}">질문하기</a> {% endcomment %}
   <button id="after_login">질문하기</button>
+
   {% comment %} run kakao_login_javascript OR alert "You should log in to ask"
   {% endcomment %} {% endif %}
 </div>
