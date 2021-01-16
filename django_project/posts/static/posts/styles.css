@@ -1,4 +1,9 @@
 /* default tag */
+p > img {
+  width: 100% !important;
+  height: auto !important;
+}
+
 header {
   outline-style: solid;
   outline-color: #594231;

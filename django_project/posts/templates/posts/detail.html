@@ -279,7 +279,7 @@
 <!--        각 item detail 이 가지는 기본 정보, 혹은 보여지는 정보를 따로 표시-->
 <br />
 <!--        작성한 내용을 container 라는 div 안에 담아서 표현-->
-<div>
+<div class="ckbody">
   <p>카테고리 : {{ post.category }}</p>
   <br />
   <p>가격 : {{ post.price }}</p>
@@ -290,7 +290,10 @@
   <br />
   <p>{{ post.content }}</p>
 
+  {% comment %}
   <p style="max-width: 400px; height: auto">{{ post.ckcontent|safe }}</p>
+  {% endcomment %}
+  <p>{{ post.ckcontent|safe }}</p>
 
   <h1>투표공간</h1>
 
