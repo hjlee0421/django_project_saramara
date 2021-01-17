@@ -295,13 +295,19 @@ class AskView(View):
 
     def post(self, request):
         # if request.method == 'POST':
+        # post = self.get_object()
+        # print(post)
+        # self.object = self.get_object()
 
         form = PostForm(request.POST)
+
         if form.is_valid():
             user_id = request.session.get('_auth_user_id')
             user = User.objects.get(pk=user_id)
             post = Post(**form.cleaned_data)
             post.author = user
+            # if 'item_image' in request.POST:
+            #     post.item_image = request.POST['item_image']
             post.save()
             return redirect('/'+str(post.pk))
         else:

@@ -15,11 +15,13 @@ from ckeditor_uploader.widgets import CKEditorUploadingWidget
 class PostForm(forms.ModelForm):
     ckcontent = forms.CharField(
         widget=CKEditorUploadingWidget())
+
     # pub_date = forms.DateTimeField(input_formats=['%Y.%m.%d. T%H:%M'])
 
     class Meta:
         model = Post
-        fields = ('title', 'category', 'brand', 'price', 'link', 'ckcontent')
+        fields = ('title', 'category', 'brand', 'price',
+                  'link', 'item_image', 'ckcontent')
 
     def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
