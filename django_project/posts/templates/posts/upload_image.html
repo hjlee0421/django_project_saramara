@@ -1,134 +1,138 @@
 {% extends 'posts/base.html' %} {% block content %}{% load static %}
 <body>
+  <br />
   <form method="POST" enctype="multipart/form-data" id="imageForm">
     {% csrf_token %}
-    <p>
-      <label for="image">Profile image:</label>
+
+    <label for="image"></label>
+
+    <br />
+    <br />
+    <br />
+
+    <input
+      type="file"
+      name="profile_image"
+      id="image"
+      accept="image/*"
+      required=""
+      onchange="readURL(this);"
+    />
+
+    <br />
+    <br />
+    <br />
+
+    <div class="image-upload-wrap">
       <input
-        type="file"
-        name="profile_image"
-        multiple
         id="image"
-        accept="image/*"
-        required=""
+        class="file-upload-input"
+        type="file"
         onchange="readURL(this);"
+        accept="image/*"
+        style="display: none"
       />
-    </p>
-    {% comment %}
+    </div>
+
+    <br />
+    <br />
+    <br />
+
+    <div class="file-upload-content">
+      <img
+        style="display: none"
+        class="file-upload-image"
+        src="{{ user.profile_image.url }}"
+        alt="your image"
+        width="240"
+        onclick="$('.file-upload-input').trigger( 'click' )"
+      />
+    </div>
+
+    <button id="showImages" style="display: none"></button>
+
     <img
       class="file-upload-image"
       src="{{ user.profile_image.url }}"
-      alt="your image"
-      width="240"
-      onclick="$('.file-upload-input').trigger( 'click' )"
+      alt="yourimage"
+      style="max-width: 80%; max-height: 80%; height: auto; width: auto"
+    />
+
+    <br />
+    <br />
+    <br />
+
+    <div id="imageField"></div>
+
+    <div class="image-upload-wrap" style="display: none">
+      <input
+        id="image"
+        class="file-upload-input"
+        type="file"
+        onchange="readURL(this);"
+        accept="image/*"
+        style="display: block"
+      />
+    </div>
+
+    {% comment %} 이 아래로는 닉네임 중복확인 {% endcomment %}
+
+    <br />
+    <br />
+    <input
+      type="text"
+      class="form-control"
+      minlength="4"
+      maxlength="16"
+      id="username_input"
+      placeholder="닉네임을 입력해주세요"
+      name="username"
+      value="{{ user.username }}"
+      style="width: 240px; margin: 0 auto"
+    />
+    <p id="check_duplicated">사용가능한 닉네임인지 확인해주세요</p>
+    <br />
+
+    {% comment %}
+    <input
+      id="change_username"
+      type="submit"
+      name="change_username"
+      value="사용하기"
+      class="btn btn-primary"
     />
     {% endcomment %}
-    {% comment %} <input
+    <button
       type="button"
-      id="submit"
-      value="submit"
-      onclick="confirmNewImage()"
-    />
-  </form> {% endcomment %}
-  
-  {% comment %} {%for i in up %} {{i}}
-  <img src="{{i.img.url}}" , alt="" />
-  {%endfor%} {% endcomment %}
-  <div class="image-upload-wrap">
-    <input
-      id="image"
-      class="file-upload-input"
-      type="file"
-      onchange="readURL(this);"
-      accept="image/*"
-      style="display: none"
-    />
-  </div>
-  <div class="file-upload-content">
-    <img
-      style="display: none"
-      class="file-upload-image"
-      src="{{ user.profile_image.url }}"
-      alt="your image"
-      width="240"
-      onclick="$('.file-upload-input').trigger( 'click' )"
-    />
-  </div>
-
-  <button id="showImages" style="display: none"></button>
-  <img
-    class="file-upload-image"
-    src="{{ user.profile_image.url }}"
-    alt="your
-  image"
-    style="max-width: 80%; max-height: 80%; height: auto; width: auto"
-  />
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
-  <div id="imageField"></div>
-
-  <div class="image-upload-wrap" style="display: none">
-    <input
-      id="image"
-      class="file-upload-input"
-      type="file"
-      onchange="readURL(this);"
-      accept="image/*"
-      style="display: block"
-    />
-  </div>
-
-  <br />
-  <br />
-  <input
-    type="text"
-    class="form-control"
-    minlength="4"
-    maxlength="16"
-    id="username_input"
-    {% comment %} placeholder="{{ user.username }}" {% endcomment %}
-    name="username"
-    value="{{ user.username }}"
-    style="width: 240px; margin: 0 auto"
-  />
-  <p id="check_duplicated">사용가능한 닉네임인지 확인해주세요</p>
-  <br />
-
-  {% comment %} <input
-    id="change_username"
-    type="submit"
-    name="change_username"
-    value="사용하기"
-    class="btn btn-primary"
-  /> {% endcomment %}
-  <button type="button"
       id="check_duplicated"
-      value="중복확인" class="btn btn-primary" onclick="confirmNewNickname()"> 
-    중복확인
-  </button>
- {% comment %} onclick="movehome()" {% endcomment %}
-  <br />
-  <br />
-  <br />
-  <br />
+      value="중복확인"
+      class="btn btn-primary"
+      onclick="confirmNewNickname()"
+    >
+      중복확인
+    </button>
+    {% comment %} onclick="movehome()" {% endcomment %}
+    <br />
+    <br />
+    <br />
+    <br />
 
-  <button type="button"
+    <button
+      type="button"
       id="submit_profile"
-      value="submit" class="btn btn-primary" > 
-      {% comment %} onclick="movehome()" {% endcomment %}
-    사라마라 시작하기
-  </button>
-  {% comment %} <input
+      value="submit"
+      class="btn btn-primary"
+    >
+      {% comment %} onclick="movehome()" {% endcomment %} 사라마라 시작하기
+    </button>
+    {% comment %}
+    <input
       type="button"
       id="submit"
       value="submit"
       onclick="confirmNewImage()"
-    /> {% endcomment %}
+    />
+    {% endcomment %}
   </form>
 </body>
 
@@ -138,7 +142,6 @@
   }
 </script>
 <script>
-  //document.getElementById("imageForm").onclick = function () {
   document.getElementById("submit_profile").onclick = function () {
     $.ajax({
       url: "/add_image/",
@@ -147,8 +150,8 @@
       processData: false,
       contentType: false,
     }).done(function () {
-        window.location.replace("http://192.168.219.159:8000");
-      });
+      window.location.replace("http://192.168.219.159:8000");
+    });
   };
 </script>
 
@@ -186,7 +189,6 @@
         $(".file-upload-content").show();
         $(".image-title").html(input.files[0].name);
       };
-
       reader.readAsDataURL(input.files[0]);
     } else {
       removeUpload();
@@ -204,6 +206,7 @@
     //$(".image-upload-wrap").show();
   }
 </script>
+
 <script type="text/javascript">
   $("#change_username").click(function () {
     var username_input = $("#username_input").val();
@@ -228,33 +231,35 @@
     }
   });
 </script>
+
 <script>
-    function confirmNewImage() {
-      alert("프로필 사진이 변경되었습니다.");
-    }
-  </script>
+  function confirmNewImage() {
+    alert("프로필 사진이 변경되었습니다.");
+  }
+</script>
+
 <script>
-    function confirmNewNickname() {
-      var username_input = $("#username_input").val();
-      if (username_input.length < 4 || username_input.length > 16) {
+  function confirmNewNickname() {
+    var username_input = $("#username_input").val();
+    if (username_input.length < 4 || username_input.length > 16) {
       $("#check_duplicated").text("4~16자리로 변경 가능합니다.");
-      } else {
-        $.ajax({
-          url: "/upload_image/",
-          data: { username_input: username_input },
-        }).done(function (res) {
-          //if else 로 username 아래쪽에 가능하면 사용가능한 닉네임입니다.
-          // 불가능하면, 이미 사용중인 닉네임입니다. 를 띄우기
-          //location.reload();
-          if (Object.keys(res).length == 1) {
-            // 이미 사용중인 아이디
-            $("#check_duplicated").text("사용가능한 닉네임이에요 :)");
-          } else {
-            // 사용 가능한 아이디
-            $("#check_duplicated").text("이미 사용중인 닉네임이에요 :(");
-          }
-        });
-      }
+    } else {
+      $.ajax({
+        url: "/upload_image/",
+        data: { username_input: username_input },
+      }).done(function (res) {
+        //if else 로 username 아래쪽에 가능하면 사용가능한 닉네임입니다.
+        // 불가능하면, 이미 사용중인 닉네임입니다. 를 띄우기
+        //location.reload();
+        if (Object.keys(res).length == 1) {
+          // 이미 사용중인 아이디
+          $("#check_duplicated").text("사용가능한 닉네임이에요 :)");
+        } else {
+          // 사용 가능한 아이디
+          $("#check_duplicated").text("이미 사용중인 닉네임이에요 :(");
+        }
+      });
     }
-  </script>
+  }
+</script>
 {% endblock %}
