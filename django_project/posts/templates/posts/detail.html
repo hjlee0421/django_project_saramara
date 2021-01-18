@@ -290,7 +290,16 @@
   <br />
   <p>{{ post.content }}</p>
   <br />
-  <p>{{ post.item_image }}</p>
+  <p>{{ post.item_image.url }}</p>
+  <img
+    src="{{ post.item_image.url }}"
+    style="
+      width: 29px;
+      height: 29px;
+      border: 1px solid #000;
+      border-radius: 30px;
+    "
+  />
 
   {% comment %}
   <p style="max-width: 400px; height: auto">{{ post.ckcontent|safe }}</p>

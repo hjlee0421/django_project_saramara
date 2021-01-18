@@ -82,11 +82,9 @@
 <br />
 <div class="ask-wrap">
   <h1>질문하기</h1>
-  <form method="POST" action="." id="askForm">
+  <form enctype="multipart/form-data" method="POST" action="." id="askForm">
+  
     {% csrf_token %}
-    <br />
-    <br />
-    <br />
     <br />
 
     {% comment %} <label for="image"></label>
@@ -103,24 +101,18 @@
     {% endcomment %}
 
     <br />
-    <br />
-
-    <br />
-    <br />
-    <label for="id_item_image">Item image:</label>
+    {% comment %} <label for="id_item_image">Item image:</label>
     <input
       type="file"
       name="item_image"
       multiple
       accept="image/*"
       id="gallery-photo-add"
-    />
+    /> {% endcomment %}
     <div class="gallery" id="id_item_image"></div>
 
     <br />
-    <br />
-    <br />
-    <br />
+    
 
     <div class="image-upload-wrap">
       <input
@@ -133,9 +125,6 @@
       />
     </div>
 
-    <br />
-    <br />
-    <br />
     <br />
 
     <div class="file-upload-content">
@@ -150,17 +139,11 @@
     </div>
 
     <br />
-    <br />
-    <br />
-    <br />
-
+    
     <button id="showImages" style="display: none"></button>
 
     <br />
-    <br />
-    <br />
-    <br />
-
+    
     {% comment %} 원래 이 아래에 src 들어가면 기본으로 이미지를 보여주는것
     src="{{ user.profile_image.url }}" {% endcomment %}
 
@@ -183,15 +166,9 @@
     />
 
     <br />
-    <br />
-    <br />
-    <br />
 
     <div id="imageField"></div>
 
-    <br />
-    <br />
-    <br />
     <br />
 
     <div class="image-upload-wrap" style="display: none">
@@ -206,13 +183,10 @@
     </div>
 
     <br />
-    <br />
-    <br />
-    <br />
 
     {{ form.media }}<br />
 
-    <p>
+    {% comment %} <p>
       <label for="id_item_image">Item image:</label>
       <input
         type="file"
@@ -221,13 +195,31 @@
         accept="image/*"
         id="id_item_image"
       />
-    </p>
+    </p> {% endcomment %}
 
     <p></p>
     <br />
-    {{ form.as_p }}
+    {% comment %} {{ form.as_p }} {% endcomment %}
+    <p><label for="id_title">Title:</label> <input type="text" name="title" maxlength="128" required id="id_title"></p>
+    <p>
+    <label for="id_category">Category:</label>
+    <select name="category" id="id_category">
+      <option value="상의" selected>상의</option>
+      <option value="하의">하의</option>
+      <option value="신발">신발</option>
+      <option value="기타">기타</option>
+    </select></p>
+    <p><label for="id_brand">Brand:</label> <input type="text" name="brand" maxlength="128" required id="id_brand"></p>
+    <p><label for="id_price">Price:</label> <input type="text" name="price" maxlength="128" required id="id_price"></p>
+    <p><label for="id_link">Link:</label> <input type="text" name="link" maxlength="128" id="id_link"></p>
+    <p><label for="id_item_image">Item image:</label> <input type="file" name="item_image" multiple accept="image/*" id="gallery-photo-add"></p>
+    <p>
+    <label for="id_ckcontent">Ckcontent:</label>
+    <div class="django-ckeditor-widget" data-field-id="id_ckcontent" style="display: inline-block;">
+        <textarea cols="40" id="id_ckcontent" name="ckcontent" rows="10" required data-processed="0" data-config="{&quot;skin&quot;: &quot;moono-lisa&quot;, &quot;toolbar_Basic&quot;: [[&quot;Source&quot;, &quot;-&quot;, &quot;Bold&quot;, &quot;Italic&quot;]], &quot;toolbar_Full&quot;: [[&quot;Styles&quot;, &quot;Format&quot;, &quot;Bold&quot;, &quot;Italic&quot;, &quot;Underline&quot;, &quot;Strike&quot;, &quot;SpellChecker&quot;, &quot;Undo&quot;, &quot;Redo&quot;], [&quot;Link&quot;, &quot;Unlink&quot;, &quot;Anchor&quot;], [&quot;Image&quot;, &quot;Flash&quot;, &quot;Table&quot;, &quot;HorizontalRule&quot;], [&quot;TextColor&quot;, &quot;BGColor&quot;], [&quot;Smiley&quot;, &quot;SpecialChar&quot;], [&quot;Source&quot;]], &quot;toolbar&quot;: &quot;Custom&quot;, &quot;height&quot;: 291, &quot;width&quot;: &quot;auto&quot;, &quot;filebrowserWindowWidth&quot;: 940, &quot;filebrowserWindowHeight&quot;: 725, &quot;toolbar_Custom&quot;: [[&quot;FontSize&quot;], [&quot;Bold&quot;, &quot;Italic&quot;, &quot;Underline&quot;, &quot;Strike&quot;], [&quot;TextColor&quot;], [&quot;Image&quot;]], &quot;filebrowserUploadUrl&quot;: &quot;/ckeditor/upload/&quot;, &quot;filebrowserBrowseUrl&quot;: &quot;/ckeditor/browse/&quot;, &quot;language&quot;: &quot;en-us&quot;}" data-external-plugin-resources="[]" data-id="id_ckcontent" data-type="ckeditortype"></textarea>
+    </div>
+    </p>
     <br />
-
     <button type="submit" id="submit_ask" class="btn btn-primary">
       사라마라 질문하기
     </button>

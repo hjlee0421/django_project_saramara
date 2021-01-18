@@ -15,6 +15,8 @@ from ckeditor_uploader.widgets import CKEditorUploadingWidget
 class PostForm(forms.ModelForm):
     ckcontent = forms.CharField(
         widget=CKEditorUploadingWidget())
+    # item_image = forms.FileField(
+    #     widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
     # pub_date = forms.DateTimeField(input_formats=['%Y.%m.%d. T%H:%M'])
 

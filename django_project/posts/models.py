@@ -50,7 +50,7 @@ class Post(models.Model):
         max_length=128, blank=True, null=True)
     item_image = models.ImageField(
         blank=True, null=True, upload_to='uploads/',
-        default="C:\\django_project\\django_project\\media\\profile_image\\saramara_defaults.jpg")
+        default="C:\\django_project\\django_project\\media\\uploads\\saramara_defaults.jpg")
     ckcontent = RichTextUploadingField(blank=True, null=True)
     pub_date = models.DateTimeField(auto_now_add=True,
                                     verbose_name='date published')  # , input_formats="'%Y.%m.%d. T%H:%M"

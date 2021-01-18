@@ -1,5 +1,6 @@
+
 from django.utils.decorators import method_decorator
-from .forms import UserForm
+
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 import os
@@ -294,17 +295,34 @@ class AskView(View):
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
 
     def post(self, request):
+        print(request.FILES)
+        files = request.FILES.getlist('item_image')
+        for f in files:
+            print(f)
         # if request.method == 'POST':
         # post = self.get_object()
         # print(post)
         # self.object = self.get_object()
-
+        print(request.POST)
         form = PostForm(request.POST)
 
+        # print(form)
+        # print(**form.cleaned_data)
+        # print(form.cleaned_data)
+        print(form.is_valid())
         if form.is_valid():
             user_id = request.session.get('_auth_user_id')
             user = User.objects.get(pk=user_id)
             post = Post(**form.cleaned_data)
+            post.author = user
+            images = request.FILES.getlist('item_image')
+            # for f in request.FILES.getlist('file'):
+            # do something with the file f...
+            print(images)
+            for image in images:
+                print(image)
+                post.item_image = image
+                post.save()
             post.author = user
             # if 'item_image' in request.POST:
             #     post.item_image = request.POST['item_image']
@@ -737,6 +755,8 @@ def addImage_view(request):
 
     user_id = request.session.get('_auth_user_id')
     user = User.objects.get(pk=user_id)
+    print(request.FILES["profile_image"])
+    print(request.FILES)
 
     if "profile_image" in request.FILES:
         user.profile_image = request.FILES["profile_image"]
