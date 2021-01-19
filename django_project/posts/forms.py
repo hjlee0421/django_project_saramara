@@ -17,7 +17,8 @@ class PostForm(forms.ModelForm):
         widget=CKEditorUploadingWidget())
     # item_image = forms.FileField(
     #     widget=forms.ClearableFileInput(attrs={'multiple': True}))
-
+    images = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={'multiple': True}))
     # pub_date = forms.DateTimeField(input_formats=['%Y.%m.%d. T%H:%M'])
 
     class Meta:
@@ -84,3 +85,12 @@ class UserForm(forms.ModelForm):
         fields = [
             'profile_image',
         ]
+
+
+class ImageUploadForm(forms.Form):
+    images = forms.ImageField()
+
+
+class FileFieldForm(forms.Form):
+    file_field = forms.FileField(
+        widget=forms.ClearableFileInput(attrs={'multiple': True}))

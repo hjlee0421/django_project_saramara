@@ -160,6 +160,14 @@ class Comment(models.Model):
         ordering = ['created_date']
 
 
+class Images(models.Model):
+    post = models.ForeignKey(
+        Post, default=None, null=True, on_delete=models.CASCADE)
+    item_image = models.ImageField(
+        blank=True, null=True, upload_to='uploads/',
+        default="C:\\django_project\\django_project\\media\\uploads\\saramara_defaults.jpg")
+
+
 class ViewCount(models.Model):
     loggedin_user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

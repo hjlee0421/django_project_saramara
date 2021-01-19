@@ -1,11 +1,14 @@
 
+from django.views.generic.edit import FormView
 from django.utils.decorators import method_decorator
 
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 import os
-from .models import Post, User, Comment, ViewCount
-from .forms import UserForm, PostForm, EditForm
+from .models import Post, User, Comment, ViewCount, Images
+from .forms import UserForm, PostForm, EditForm, UploadFileForm, ImageUploadForm
+from .forms import FileFieldForm  # ModelFormWithFileField
+
 from django.views import generic, View
 
 from django.contrib.auth import authenticate, login, logout
@@ -287,7 +290,24 @@ class DetailView(generic.DetailView, View):
         comment.save()
 
 
-class AskView(View):
+# class AskView(View):
+class AskView(FormView):
+
+    form_class = FileFieldForm
+    template_name = 'ask.html'  # Replace with your template.
+    success_url = "/"  # Replace with your URL or reverse().
+
+    # def post(self, request, *args, **kwargs):
+    #     form_class = self.get_form_class()
+    #     form = self.get_form(form_class)
+    #     files = request.FILES.getlist('file_field')
+    #     if form.is_valid():
+    #         for f in files:
+    #             ...  # Do something with each file.
+    #         return self.form_valid(form)
+    #     else:
+    #         return self.form_invalid(form)
+
     def get(self, request):
         # if request.method == 'GET':
         form = PostForm()
@@ -303,34 +323,39 @@ class AskView(View):
         # post = self.get_object()
         # print(post)
         # self.object = self.get_object()
-        print(request.POST)
-        form = PostForm(request.POST)
-
+        # print(request.POST)
+        # # form = PostForm(request.POST)
+        # form = ImageUploadForm(request.POST, request.FILES)
+        # form_class = FileFieldForm
+        # # form = self.get_form(form_class)
+        # form = FileFieldForm(request.POST, request.FILES)
+        # files = request.FILES.getlist('file_field')
         # print(form)
         # print(**form.cleaned_data)
         # print(form.cleaned_data)
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        files = request.FILES.getlist('item_images')
         print(form.is_valid())
         if form.is_valid():
             user_id = request.session.get('_auth_user_id')
             user = User.objects.get(pk=user_id)
             post = Post(**form.cleaned_data)
             post.author = user
-            images = request.FILES.getlist('item_image')
-            # for f in request.FILES.getlist('file'):
-            # do something with the file f...
-            print(images)
-            for image in images:
-                print(image)
-                post.item_image = image
-                post.save()
-            post.author = user
-            # if 'item_image' in request.POST:
-            #     post.item_image = request.POST['item_image']
             post.save()
+
+            # images = request.FILES.getlist('item_image')
+
+            for image in request.FILES.getlist('item_image'):
+                image_obj = Images()
+                image_obj.post_id = post.id
+                image_obj.image = image
+                image_obj.save()
+
             return redirect('/'+str(post.pk))
         else:
             return render(request, 'posts/ask.html', {'form': form})
-            # render(request, template_name, context=None, content_type=None, status=None, using=None)
+        # render(request, template_name, context=None, content_type=None, status=None, using=None)
 
 
 class EditView(generic.DetailView, View):
