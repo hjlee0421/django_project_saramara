@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractUser  # user defined "User" Model
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
+from model_utils.models import TimeStampedModel
 
 
 class User(AbstractUser):
@@ -48,9 +49,9 @@ class Post(models.Model):
     brand = models.CharField(max_length=128, blank=True, null=True)
     link = models.CharField(
         max_length=128, blank=True, null=True)
-    item_image = models.ImageField(
-        blank=True, null=True, upload_to='uploads/',
-        default="C:\\django_project\\django_project\\media\\uploads\\saramara_defaults.jpg")
+    # item_image = models.ImageField(
+    # blank=True, null=True, upload_to='uploads/',
+    # default="C:\\django_project\\django_project\\media\\uploads\\saramara_defaults.jpg")
     ckcontent = RichTextUploadingField(blank=True, null=True)
     pub_date = models.DateTimeField(auto_now_add=True,
                                     verbose_name='date published')  # , input_formats="'%Y.%m.%d. T%H:%M"
@@ -160,7 +161,7 @@ class Comment(models.Model):
         ordering = ['created_date']
 
 
-class Images(models.Model):
+class Image(TimeStampedModel):
     post = models.ForeignKey(
         Post, default=None, null=True, on_delete=models.CASCADE)
     item_image = models.ImageField(

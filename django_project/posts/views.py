@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 import os
-from .models import Post, User, Comment, ViewCount, Images
+from .models import Post, User, Comment, ViewCount, Image
 from .forms import UserForm, PostForm, EditForm, UploadFileForm, ImageUploadForm
 from .forms import FileFieldForm  # ModelFormWithFileField
 
@@ -173,6 +173,7 @@ class DetailView(generic.DetailView, View):
         context = self.get_context_data(object=self.object)
         # print(post.comment_set.all())
         context['comment'] = post.comment_set.all()
+        context['images'] = post.image_set.all()
         user = request.user
 
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
@@ -293,7 +294,8 @@ class DetailView(generic.DetailView, View):
 # class AskView(View):
 class AskView(FormView):
 
-    form_class = FileFieldForm
+    # form_class = FileFieldForm
+    form_class = PostForm
     template_name = 'ask.html'  # Replace with your template.
     success_url = "/"  # Replace with your URL or reverse().
 
@@ -336,6 +338,8 @@ class AskView(FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         files = request.FILES.getlist('item_images')
+        import ipdb
+        ipdb.set_trace()
         print(form.is_valid())
         if form.is_valid():
             user_id = request.session.get('_auth_user_id')
@@ -347,9 +351,9 @@ class AskView(FormView):
             # images = request.FILES.getlist('item_image')
 
             for image in request.FILES.getlist('item_image'):
-                image_obj = Images()
+                image_obj = Image()
                 image_obj.post_id = post.id
-                image_obj.image = image
+                image_obj.item_image = image
                 image_obj.save()
 
             return redirect('/'+str(post.pk))

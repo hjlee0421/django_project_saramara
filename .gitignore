@@ -3,5 +3,7 @@
 /django_project/frontend/node_modules
 /polls
 /susers
-/media
+/django_project/media
+/django_project/db.sqlite3
 /django_project/secrets.json
+*pyc

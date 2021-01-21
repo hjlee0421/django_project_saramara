@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Post, Comment, ViewCount
+from .models import User, Post, Comment, ViewCount, Image
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -23,7 +23,13 @@ class ViewCountAdmin(admin.ModelAdmin):
     list_filter = ('post',)
 
 
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ('post', 'item_image', 'created', 'modified')
+    list_filter = ('post',)
+
+
 admin.site.register(Post, PostAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(ViewCount, ViewCountAdmin)
+admin.site.register(Image, ImageAdmin)
