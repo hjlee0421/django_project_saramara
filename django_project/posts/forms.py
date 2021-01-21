@@ -19,14 +19,14 @@ class PostForm(forms.ModelForm):
     #     widget=forms.ClearableFileInput(attrs={'multiple': True}))
     # images = forms.ImageField(
     # widget = forms.ClearableFileInput(attrs={'multiple': True}))
-    item_image = forms.FileField(
-        widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    # item_image = forms.FileField(
+    #     widget=forms.ClearableFileInput(attrs={'multiple': True}))
     # pub_date = forms.DateTimeField(input_formats=['%Y.%m.%d. T%H:%M'])
 
     class Meta:
         model = Post
         fields = ('title', 'category', 'brand', 'price',
-                  'link', 'item_image', 'ckcontent')
+                  'link', 'ckcontent')
 
     def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)

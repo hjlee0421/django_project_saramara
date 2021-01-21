@@ -338,8 +338,8 @@ class AskView(FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         files = request.FILES.getlist('item_images')
-        import ipdb
-        ipdb.set_trace()
+        # import ipdb
+        # ipdb.set_trace()
         print(form.is_valid())
         if form.is_valid():
             user_id = request.session.get('_auth_user_id')

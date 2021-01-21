@@ -290,17 +290,14 @@
   <br />
   <p>{{ post.content }}</p>
   <br />
-  {% comment %}
-  <p>{{ post.item_image.url }}</p>
-  {% endcomment %} {% for image in images %}
-
+  {% for image in images %}
   <img
     src="{{ image.item_image.url }}"
     style="
       width: 100px;
       height: 100px;
-      {% comment %} border: 1px solid #000; {% endcomment %}
-      {% comment %} border-radius: 30px; {% endcomment %}
+      border: 1px solid #000;
+      border-radius: 30px;
     "
   />
   {% endfor %} {% comment %}
