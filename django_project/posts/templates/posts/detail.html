@@ -69,15 +69,7 @@
   <p>{{ post.content }}</p>
   <br />
   {% for image in images %}
-  <img
-    src="{{ image.item_image.url }}"
-    style="
-      width: 100px;
-      height: 100px;
-      border: 1px solid #000;
-      border-radius: 30px;
-    "
-  />
+  <img src="{{ image.item_image.url }}" style="width: 100%; height: auto" />
   {% endfor %} {% comment %}
   <p style="max-width: 400px; height: auto">{{ post.ckcontent|safe }}</p>
   {% endcomment %}
