@@ -385,77 +385,93 @@ class MypageView(View):
         return render(request, 'posts/mypage.html')
 
 
-# 맨처음 변경들어갈때는 get 이고 닉네임 중복확인 이랑 변경하기 버튼 누를때는 POST
-@csrf_exempt
-def upload_image(request):
-    if request.method == 'GET':
-        print("################################")
-        print("upload_image using GET")
-        print("################################")
-        user_id = request.session.get('user_id')
-        user = User.objects.get(pk=user_id)
-        newForm = UserForm()
-        context = {"form": newForm, }
+@method_decorator(csrf_exempt, name='dispatch')
+class UserProfileView(View):
+    def get(self, request):
+        # if request.method == 'GET':
 
         if "username_input" in request.GET:
             new_username = request.GET["username_input"]
 
-            if not User.objects.filter(username=new_username).exists() or (user.username == new_username):
-                # user = User.objects.get(pk=user_id)
-                # user.username = new_username
-                # user.save()
-                # if user.username is new_username:
-                return JsonResponse({'created': True})
-        return render(request, "posts/upload_image.html", context)
-    if request.method == 'POST':
-        print("################################")
-        print("upload_image using POST")
-        print("################################")
-        user_id = request.session.get('user_id')
-        user = User.objects.get(pk=user_id)
-        newForm = UserForm()
-        context = {"form": newForm, }
+            if not User.objects.filter(username=new_username).exists():
+                return JsonResponse(data={'created': True})
+            elif User.objects.filter(username=new_username).exists():
+                return JsonResponse(data={'created': False, 'len': '2'})
 
-        if "username_input" in request.POST:
-            new_username = request.POST["username_input"]
+        return render(request, "posts/user_profile.html")
 
-            if not User.objects.filter(username=new_username).exists() or (user.username == new_username):
-                # user = User.objects.get(pk=user_id)
-                # user.username = new_username
-                # user.save()
-                # if user.username is new_username:
-                return JsonResponse({'created': True})
-        return render(request, "posts/upload_image.html", context)
-
-
-@csrf_exempt
-def addImage_view(request):
-    if request.method == 'POST':
-        print("################################")
-        print("addimage view using POST")
-        print("################################")
-        form = UserForm(request.POST, request.FILES)
+    def post(self, request):
+        # if request.method == 'POST':
 
         user_id = request.session.get('_auth_user_id')
         user = User.objects.get(pk=user_id)
-        # print(request.FILES["profile_image"])
-        print(request.FILES)
 
+        print(request.FILES)
         if "profile_image" in request.FILES:
             user.profile_image = request.FILES["profile_image"]
 
-        new_username = request.POST["username"]
-        print("?????????")
-        print(new_username)
-        if not User.objects.filter(username=new_username).exists():
-            # user = User.objects.get(pk=user_id)
-            user.username = new_username
-            print(user.username)
+        print(request.POST)
+        if "username" in request.POST:
+            new_username = request.POST["username"]
+
+            if not User.objects.filter(username=new_username).exists():
+                user.username = new_username
+
         user.save()
-        # return HttpResponse("success")
-        # return redirect("http://192.168.219.159:8000")
-        return render(request, 'posts/index.html')
-        # return render(request, 'home.html', {'form': form, 'up': User.objects.get(pk=user_id), })
+
+        return redirect('/')
+
+
+# # 맨처음 변경들어갈때는 get 이고 닉네임 중복확인 이랑 변경하기 버튼 누를때는 POST
+# @csrf_exempt
+# def upload_image(request):
+#     if request.method == 'GET':
+#         return render(request, "posts/upload_image.html")
+
+#     if request.method == 'POST':
+
+#         user_id = request.session.get('_auth_user_id')
+#         user = User.objects.get(pk=user_id)
+
+#         if "profile_image" in request.FILES:
+#             user.profile_image = request.FILES["profile_image"]
+
+#         new_username = request.POST["username"]
+
+#         if not User.objects.filter(username=new_username).exists():
+#             user.username = new_username
+
+#         user.save()
+
+#         return redirect('/')
+
+
+# @csrf_exempt
+# def addImage_view(request):
+#     if request.method == 'POST':
+
+#         form = UserForm(request.POST, request.FILES)
+
+#         user_id = request.session.get('_auth_user_id')
+#         user = User.objects.get(pk=user_id)
+#         # print(request.FILES["profile_image"])
+#         print(request.FILES)
+
+#         if "profile_image" in request.FILES:
+#             user.profile_image = request.FILES["profile_image"]
+
+#         new_username = request.POST["username"]
+#         print("?????????")
+#         print(new_username)
+#         if not User.objects.filter(username=new_username).exists():
+#             # user = User.objects.get(pk=user_id)
+#             user.username = new_username
+#             print(user.username)
+#         user.save()
+#         # return HttpResponse("success")
+#         # return redirect("http://192.168.219.159:8000")
+#         return render(request, 'posts/index.html')
+#         # return render(request, 'home.html', {'form': form, 'up': User.objects.get(pk=user_id), })
 
 
 # @csrf_exempt

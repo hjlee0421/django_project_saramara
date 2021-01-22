@@ -40,7 +40,7 @@
   <h4 style="font-size: 10px">
     사라마라 가입일 : {{ user.date_joined|date:"Y년 m월 d일" }}
   </h4>
-  <a href="{% url 'posts:upload_image' %}"
+  <a href="{% url 'posts:user_profile' %}"
     ><button class="api-btn">프로필 변경하기</button></a
   >
   <button onclick="javascript:logoutWithKakao()">로그아웃</button>
