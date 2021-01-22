@@ -6,8 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 import os
 from .models import Post, User, Comment, ViewCount, Image
-from .forms import UserForm, PostForm, EditForm, UploadFileForm, ImageUploadForm
-from .forms import FileFieldForm  # ModelFormWithFileField
+from .forms import PostForm, EditForm
 
 from django.views import generic, View
 
@@ -295,7 +294,6 @@ class DetailView(generic.DetailView, View):
 # class AskView(View):
 class AskView(FormView):
 
-    # form_class = FileFieldForm
     form_class = PostForm
     template_name = 'ask.html'  # Replace with your template.
     success_url = "/"  # Replace with your URL or reverse().
