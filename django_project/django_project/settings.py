@@ -39,14 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # main app
     'posts',
 
-    # ckeditor
     'ckeditor',
     'ckeditor_uploader',
 
-    # DRF
     'rest_framework',
     'django_extensions',
 
@@ -61,6 +58,7 @@ INSTALLED_APPS = [
 
 # django-allauth
 SITE_ID = 1
+
 
 with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
     secrets = json.load(secret_file)
@@ -199,11 +197,11 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'Custom',
         'width': 'auto',
         'toolbar_Custom': [
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['FontSize'],  # 'Font',
             ['Bold', 'Italic', 'Underline', 'Strike'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['TextColor'],  # 'BGColor'
-            # ['Image'], 'Smiley'
+            ['FontSize'],  # 'Font',
+            # ['Image'],  # 'Smiley'
             # ['Bold', 'Italic', 'Underline'],
             # ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             # ['Link', 'Unlink'],
