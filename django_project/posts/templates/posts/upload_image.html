@@ -136,11 +136,13 @@
   </form>
 </body>
 
+{% comment %}
 <script>
   function movehome() {
     window.location.replace("http://192.168.219.159:8000/");
   }
 </script>
+{% endcomment %}
 <script>
   document.getElementById("submit_profile").onclick = function () {
     $.ajax({
@@ -150,7 +152,7 @@
       processData: false,
       contentType: false,
     }).done(function () {
-      window.location.replace("http://192.168.219.159:8000");
+      window.location.replace("http://127.0.0.1:8000/");
     });
   };
 </script>
