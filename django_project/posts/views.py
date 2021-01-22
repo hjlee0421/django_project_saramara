@@ -36,10 +36,6 @@ from django.http import JsonResponse
 # Item.objects.filter(Q(creator=owner) | Q(moderated=False))
 from django.db.models import Q
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
-    secrets = json.load(secret_file)
-
 
 @csrf_exempt
 def kakao_unlink(request):
@@ -299,17 +295,6 @@ class AskView(FormView):
     template_name = 'ask.html'  # Replace with your template.
     success_url = "/"  # Replace with your URL or reverse().
 
-    # def post(self, request, *args, **kwargs):
-    #     form_class = self.get_form_class()
-    #     form = self.get_form(form_class)
-    #     files = request.FILES.getlist('file_field')
-    #     if form.is_valid():
-    #         for f in files:
-    #             ...  # Do something with each file.
-    #         return self.form_valid(form)
-    #     else:
-    #         return self.form_invalid(form)
-
     def get(self, request):
         # if request.method == 'GET':
         form = PostForm()
@@ -317,38 +302,19 @@ class AskView(FormView):
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
 
     def post(self, request):
-        print(request.FILES)
+
         files = request.FILES.getlist('item_image')
-        for f in files:
-            print(f)
-        # if request.method == 'POST':
-        # post = self.get_object()
-        # print(post)
-        # self.object = self.get_object()
-        # print(request.POST)
-        # # form = PostForm(request.POST)
-        # form = ImageUploadForm(request.POST, request.FILES)
-        # form_class = FileFieldForm
-        # # form = self.get_form(form_class)
-        # form = FileFieldForm(request.POST, request.FILES)
-        # files = request.FILES.getlist('file_field')
-        # print(form)
-        # print(**form.cleaned_data)
-        # print(form.cleaned_data)
+
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         files = request.FILES.getlist('item_images')
-        # import ipdb
-        # ipdb.set_trace()
-        print(form.is_valid())
+
         if form.is_valid():
             user_id = request.session.get('_auth_user_id')
             user = User.objects.get(pk=user_id)
             post = Post(**form.cleaned_data)
             post.author = user
             post.save()
-
-            # images = request.FILES.getlist('item_image')
 
             for image in request.FILES.getlist('item_image'):
                 image_obj = Image()
@@ -416,252 +382,63 @@ class MypageView(View):
         return render(request, 'posts/mypage.html')
 
 
-# class SigninView(View):
-#     def get(self, request):
-#         # if request.method == 'GET':
-#         return render(request, 'posts/signin.html')
+# 해당 html 을 보여주기 위해서
+def upload_image(request):
+    user_id = request.session.get('user_id')
+    user = User.objects.get(pk=user_id)
+    newForm = UserForm()
+    context = {"form": newForm, }
 
-#     def post(self, request):
-#         # if request.method == 'POST':
+    if "username_input" in request.GET:
+        new_username = request.GET["username_input"]
 
-#         username = request.POST.get('username', None)
-#         password = request.POST.get('password', None)
-
-#         res_data = {}
-
-#         if not(username and password):
-#             res_data['error'] = "모든값을 입려해주세요."
-#         elif not(authenticate(username=username, password=password)):
-#             res_data['error'] = "모든값을 입려해주세요."
-#         else:
-#             # 여기가 결국 로그인 포인트
-#             user = authenticate(username=username, password=password)
-#             login(request, user)
-#             user = User.objects.get(username=username)
-#             if check_password(password, user.password):
-#                 request.session['user_id'] = user.id
-#                 return redirect('/')
-#             else:
-#                 res_data['error'] = "비밀번호가 틀렸습니다."
-#         return render(request, 'posts/signin.html', res_data)
+        if not User.objects.filter(username=new_username).exists() or (user.username == new_username):
+            # user = User.objects.get(pk=user_id)
+            # user.username = new_username
+            # user.save()
+            # if user.username is new_username:
+            return JsonResponse({'created': True})
+    return render(request, "posts/upload_image.html", context)
 
 
-# class SignoutView(View):
-#     def get(self, request):
-#         # if request.method == 'GET':
-#         if request.session.get('user_id'):
-#             access_token = User.objects.get(pk=request.session.get(
-#                 'user_id')).kakao_access_token
-#             profile_request = requests.post(
-#                 "https://kapi.kakao.com/v1/user/logout",
-#                 headers={"Authorization": f"Bearer {access_token}"},
-#             )
-#             del(request.session['user_id'])
-
-#         logout(request)
-#         # logout(request, backend='django.contrib.auth.backends.ModelBackend')
-#         return redirect('/')
-
-# def listing(request):
-#     # post_objects = Post.objects.all()
-#     post_objects = Post.objects.filter(title__icontains='테스트')
-#     print(post_objects)
-#     paginator = Paginator(post_objects, 10)  # Show 10 contacts per page.
-
-#     page_number = request.GET.get('page')
-#     page_obj = paginator.get_page(page_number)
-#     return render(request, 'posts/index.html.html', {'page_obj': page_obj})
+def getImages_view(request):
+    # images = User.objects.all()
+    user_id = request.session.get('_auth_user_id')
+    user = User.objects.get(pk=user_id)
+    image_urls = []
+    print(str(user.profile_image))
+    image_urls.append("media/"+str(user.profile_image))
+    response = {"image_urls": "/media/"+str(user.profile_image)}
+    return JsonResponse(response)
 
 
-# class SignupView(View):
-#     def get(self, request):
-#         # if request.method == 'GET':
-#         return render(request, 'posts/signup.html')
-#         # render(request, template_name, context=None, content_type=None, status=None, using=None)
+@csrf_exempt
+def addImage_view(request):
+    form = UserForm(request.POST, request.FILES)
 
-#     def post(self, request):
-#         # if request.method == 'POST':
+    user_id = request.session.get('_auth_user_id')
+    user = User.objects.get(pk=user_id)
+    # print(request.FILES["profile_image"])
+    print(request.FILES)
 
-#         username = request.POST.get('username', None)
-#         password = request.POST.get('password', None)
-#         re_password = request.POST.get('re-password', None)
+    if "profile_image" in request.FILES:
+        user.profile_image = request.FILES["profile_image"]
 
-#         res_data = {}
-
-#         if not(username and password and re_password):
-#             res_data['error'] = "모든값을 입려해주세요."
-#         elif password != re_password:
-#             res_data['error'] = "비밀번호가 다릅니다."
-#         else:
-#             # 여기가 결국 회원가입 포인트
-#             user = User.objects.create_user(
-#                 username, email=None, password=password)
-#             login(request, user)
-#             user = User.objects.get(username=username)
-#             request.session['user_id'] = user.id
-#             return redirect('/')
-
-#         return render(request, 'posts/signup.html', res_data)
+    new_username = request.POST["username"]
+    print("?????????")
+    print(new_username)
+    if not User.objects.filter(username=new_username).exists():
+        # user = User.objects.get(pk=user_id)
+        user.username = new_username
+        print(user.username)
+    user.save()
+    # return HttpResponse("success")
+    # return redirect("http://192.168.219.159:8000")
+    return render(request, 'posts/index.html')
+    # return render(request, 'home.html', {'form': form, 'up': User.objects.get(pk=user_id), })
 
 
-# def Unread(request):
-#     print(request.POST)
-#     count = request.POST.get(['count'])
-
-#     print("hello")
-
-#     print("count status ", count)
-
-
-# def my_def_in_view(request):
-#     result = request.GET.get('result')
-#     print(type(result))
-#     result = request.POST.get('result')
-#     print(type(result))
-
-#     # Any process that you want
-#     data = {
-#         "apple": "please",
-#     }
-#     return JsonResponse(data)
-
-
-# def YourViewsHere(request):
-#     # if request.method == 'GET':
-#     #     pass
-#     #     # do_something()
-#     if request.method == 'POST':
-#         # access you data by playing around with the request.POST object
-#         request.POST.get('data')
-#         print(request.POST.get('data'))
-
-
-# 회원탈퇴 해당 아이디에 대해서 access token 을 계속 추적가능해야 함
-
-
-# def kakao_unlink(request):
-
-#     access_token = User.objects.get(
-#         pk=request.session.get('user_id')).kakao_access_token
-#     profile_request = requests.post(
-#         "https://kapi.kakao.com/v1/user/unlink", headers={"Authorization": f"Bearer {access_token}"},)
-#     # profile_json = profile_request.json()
-#     # return HttpResponse(f'{profile_json}')
-#     return redirect('/')
-# # 로그아웃 해당 아이디에 대해서 access token 을 계속 추적가능해야 함
-
-
-# def kakao_logout(request):
-#     #     if request.method == 'GET':
-#     #         if request.session.get('user_id'):
-#     #             print(request.session.get('user_id'))
-#     #             # access_token = User.object.filter()
-#     #             profile_request = requests.post(
-#     # "https://kapi.kakao.com/v1/user/logout",
-#     #         headers={"Authorization": f"Bearer {access_token}"},
-#     #     )
-#     #             del(request.session['user_id'])
-
-#     #         logout(request, backend='django.contrib.auth.backends.ModelBackend')
-
-#     #         return redirect('/')
-
-#     access_token = 'YqY4ghTnrJglEySNp44at2oXv9wSQZ5NITh_yAopb1QAAAF2E1hnFQ'
-#     profile_request = requests.post(
-#         "https://kapi.kakao.com/v1/user/logout",
-#         headers={"Authorization": f"Bearer {access_token}"},
-#     )
-#     profile_json = profile_request.json()
-#     return HttpResponse(f'{profile_json}')
-
-
-# class SignoutView(View):
-#     def get(self, request):
-#         # if request.method == 'GET':
-#         if request.session.get('user_id'):
-#             del(request.session['user_id'])
-#         logout(request)
-
-#         # return redirect('/')
-
-
-# # # 처음이라면 회원가입, 아니라면 로그인
-# def kakao_login(request):
-#     # app_rest_api_key = os.getenv("APP_REST_API_KEY") TsecretsODO : os.getenv 방법도 정리해 둘것
-#     javascript_key = ["kakao"]["javascript_key"]
-#     redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
-#     return redirect(
-#         f"https://kauth.kakao.com/oauth/authorize?client_id={javascript_key}&redirect_uri={redirect_uri}&response_type=code"
-#     )
-
-
-# def kakao_callback(request):
-
-#     user_token = request.GET.get("code")
-
-#     # app_rest_api_key = os.getenv("APP_REST_API_KEY")
-#     javascript_key = secrets["kakao"]["javascript_key"]
-#     url = 'https://kauth.kakao.com/oauth/token'
-#     redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
-
-#     token_request = requests.post(
-#         f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={javascript_key}&redirect_uri={redirect_uri}&code={user_token}"
-#     )
-
-#     token_response_json = token_request.json()
-#     error = token_response_json.get("error", None)
-
-#     # if there is an error from token_request
-#     if error is not None:
-#         raise KakaoException()
-#     access_token = token_response_json.get("access_token")
-#     print(access_token)
-#     # post request
-#     profile_request = requests.post(
-#         "https://kapi.kakao.com/v2/user/me",
-#         headers={"Authorization": f"Bearer {access_token}"},
-#     )
-#     profile_json = profile_request.json()
-#     print(profile_json)
-#     username = str(profile_json['id'])+'@kakao'
-
-#     gender = ""
-#     email = ""
-#     birthday = ""
-
-#     if profile_json['kakao_account']['gender_needs_agreement'] == False:
-#         gender = profile_json['kakao_account']['gender']
-
-#     if profile_json['kakao_account']['email_needs_agreement'] == False:
-#         email = profile_json['kakao_account']['email']
-
-#     if profile_json['kakao_account']['birthday_needs_agreement'] == False:
-#         birthday = profile_json['kakao_account']['birthday']
-
-#     if not User.objects.filter(username=username).exists():
-#         # 기존에 username 이 없다면
-#         user = User(username=username, gender=gender, email=email,
-#                     birthday=birthday, kakao_access_token=access_token)
-#         user.save()
-#         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-#         request.session['user_id'] = user.id
-#         return redirect('/')
-#     else:
-#         # 기존에 username 이 있다면?
-#         print("#######################")
-#         user = User.objects.get(username=username)
-#         # user = authenticate(username=username)
-#         print(user)
-#         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-#         request.session['user_id'] = user.id
-#         return redirect('/')
-
-#     # return HttpResponse(f'{profile_json}')
-#     return redirect('/')
-
-# ##############################################################################################################################
-# # add new
-
+#############################################################################################
 
 class TestIndexView(generics.ListAPIView):  # CreateAPIView
     queryset = Post.objects.all()
@@ -696,167 +473,3 @@ class TestAskView(APIView):
 
 
 #############################################################################################
-
-
-# 해당 html 을 보여주기 위해서
-def upload_image(request):
-    user_id = request.session.get('user_id')
-    user = User.objects.get(pk=user_id)
-    newForm = UserForm()
-    context = {"form": newForm, }
-
-    if "username_input" in request.GET:
-        new_username = request.GET["username_input"]
-
-        if not User.objects.filter(username=new_username).exists() or (user.username == new_username):
-            # user = User.objects.get(pk=user_id)
-            # user.username = new_username
-            # user.save()
-            # if user.username is new_username:
-            return JsonResponse({'created': True})
-    return render(request, "posts/upload_image.html", context)
-
-
-# @csrf_exempt
-# def user_info(request):
-#     user_id = request.session.get('user_id')
-#     username = User.objects.get(pk=user_id)
-
-#     newForm = UserForm()
-#     context = {"form": newForm, }
-#     # return render(request, "posts/upload_image.html", context)
-
-#     if "username_input" in request.GET:
-#         new_username = request.GET["username_input"]
-
-#         if not User.objects.filter(username=new_username).exists():
-#             user = User.objects.get(pk=user_id)
-#             user.username = new_username
-#             user.save()
-#             return JsonResponse({'created': True})
-
-#     return render(request, 'posts/user_info.html', context)
-#     # return render(request, 'posts/user_info.html', context)
-
-
-# submit 버튼을 눌렀을때 저장하기 위해서
-
-
-# def addImage_view(request):
-#     form = ImageForm(request.POST, request.FILES)
-#     print("request.files")
-#     print(request.FILES)
-#     print("request.files type")
-#     print(type(request.FILES))
-#     user = User.objects.first()
-#     user.profile_image = request.FILES["profile_image"]
-#     user.save()
-#     if(form.is_valid()):
-#         form.save()
-#         print("form saved")
-#     return HttpResponse("success")
-
-# 저장된 이미지를 보기 위해서
-
-
-def getImages_view(request):
-    # images = User.objects.all()
-    user_id = request.session.get('_auth_user_id')
-    user = User.objects.get(pk=user_id)
-    image_urls = []
-    print(str(user.profile_image))
-    image_urls.append("media/"+str(user.profile_image))
-    response = {"image_urls": "/media/"+str(user.profile_image)}
-    return JsonResponse(response)
-
-
-# @csrf_exempt
-# def UploadImage(request):
-#     form = UploadFileForm(request.POST, request.FILES)
-#     if form.is_valid():
-#         pass
-#     return JsonResponse(data={'created': False, 'len': '2'})
-#     # pic = request.FILES['image']  # I don't know if this is correct
-
-@csrf_exempt
-def addImage_view(request):
-    form = UserForm(request.POST, request.FILES)
-
-    user_id = request.session.get('_auth_user_id')
-    user = User.objects.get(pk=user_id)
-    # print(request.FILES["profile_image"])
-    print(request.FILES)
-
-    if "profile_image" in request.FILES:
-        user.profile_image = request.FILES["profile_image"]
-
-    new_username = request.POST["username"]
-    print("?????????")
-    print(new_username)
-    if not User.objects.filter(username=new_username).exists():
-        # user = User.objects.get(pk=user_id)
-        user.username = new_username
-        print(user.username)
-    user.save()
-    # return HttpResponse("success")
-    # return redirect("http://192.168.219.159:8000")
-    return render(request, 'posts/index.html')
-    # return render(request, 'home.html', {'form': form, 'up': User.objects.get(pk=user_id), })
-
-
-# user_id = request.session.get('user_id')
-# username = User.objects.get(pk=user_id)
-#  newForm = UserForm()
-#   context = {"form": newForm, }
-
-#    if "username_input" in request.GET:
-#         new_username = request.GET["username_input"]
-
-#         if not User.objects.filter(username=new_username).exists():
-#             # user = User.objects.get(pk=user_id)
-#             # user.username = new_username
-#             # user.save()
-#             return JsonResponse({'created': True})
-#     return render(request, "posts/upload_image.html", context)
-
-# @csrf_exempt
-# def user_info(request):
-#     user_id = request.session.get('user_id')
-#     username = User.objects.get(pk=user_id)
-
-#     newForm = UserForm()
-#     context = {"form": newForm, }
-#     # return render(request, "posts/upload_image.html", context)
-
-#     if "username_input" in request.GET:
-#         new_username = request.GET["username_input"]
-
-#         if not User.objects.filter(username=new_username).exists():
-#             user = User.objects.get(pk=user_id)
-#             user.username = new_username
-#             user.save()
-#             return JsonResponse({'created': True})
-
-#     return render(request, 'posts/user_info.html', context)
-#     # return render(request, 'posts/user_info.html', context)
-
-#     '''
-#     POST 로 값을 전달받아서,(x)
-#     ajax로 값을 전달 받아서 아래 내용을 확인하고
-#     if User.objects.filter(username=username).exists():
-#         raise forms.ValidationError('아이디가 이미 사용중입니다')
-#         username 이 존재함을 return
-#     else
-#         username 이 사용가능함을 return
-#     '''
-
-#     '''
-#     profile 이미지의 경우 ajax로 처리해야 업로드 후 이미지 바로 표현
-#     사진을 업로드 하면 이미지 사이즈를 resize 해서,
-#     해당 html 에서 바로 올린 이미지가 보이게끔 처리
-#     '''
-
-#     '''
-#     마지막에 시작하기 버튼을 누르면 위 변경사항들을 모두 적용해서 save 후 redirect
-#     user.username = 전달받은 값
-#     '''
