@@ -1,12 +1,4 @@
 {% extends 'posts/base.html' %} {% block content %} {% load static %}
-<script
-  type="text/javascript"
-  src="{% static 'ckeditor/ckeditor-init.js' %}"
-></script>
-<script
-  type="text/javascript"
-  src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"
-></script>
 
 <br />
 <div class="ask-wrap">
@@ -18,5 +10,14 @@
   <br />
   <br />
 </div>
+
+<script
+  type="text/javascript"
+  src="{% static 'ckeditor/ckeditor-init.js' %}"
+></script>
+<script
+  type="text/javascript"
+  src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"
+></script>
 
 {% endblock %}

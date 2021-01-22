@@ -1,227 +1,5 @@
 {% extends 'posts/base.html' %} {% block content %} {% load static %}
 
-<script>
-  $(document).ready(function () {
-    $("#add_comment_button").click(function () {
-      var comment_input = $("#comment_input").val();
-      var current_url = $(location).attr("pathname"); // + "add_comment/";
-      $.ajax({
-        type: "POST",
-        url: current_url, //"/add_comment/",
-        data: { comment_input: comment_input },
-      }).done(function () {
-        location.reload();
-        $("#comment_input").val("");
-      });
-    });
-  });
-</script>
-
-<script>
-  function readURL(input) {
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-      form_data = new FormData();
-
-      reader.onload = function (e) {
-        $(".image-upload-wrap").hide();
-        $(".file-upload-image").attr("src", e.target.result);
-
-        $(".file-upload-content").show();
-        $(".image-title").html(input.files[0].name);
-      };
-
-      reader.readAsDataURL(input.files[0]);
-    } else {
-      removeUpload();
-    }
-  }
-</script>
-<script>
-  function removeUpload() {
-    $(".file-upload-input").replaceWith($(".file-upload-input").clone());
-    //$(".file-upload-content").hide();
-    //$(".file-upload-content").show();
-    $(".file-upload-image").attr("src", "{{ user.profile_image.url }}");
-    $(".image-upload-wrap").hide();
-    //$(".image-upload-wrap").show();
-  }
-</script>
-
-<script>
-  function editComment(input) {
-    console.log(input);
-    var text = $(".comment_" + input + ">div.text")
-      .html()
-      .replaceAll("<p>", "")
-      .replaceAll("</p>", "")
-      .replaceAll("<br>", "\n")
-      .replaceAll("      ", "")
-      .replaceAll("\n    ", "");
-    console.log(text);
-    $(".comment_" + input + ">div.text").html(
-      "<textarea id='newComment' rows='4' cols='40'>" + text + "</textarea>"
-    );
-    $(".edit_delete_button").hide();
-    $(".edit_button_" + input + "").show();
-  }
-</script>
-
-<script>
-  function clickeditComment(input) {
-    console.log(input);
-    var new_comment = $("#newComment").val();
-    console.log(new_comment);
-
-    var current_url = $(location).attr("pathname");
-    console.log(current_url);
-    $.ajax({
-      type: "POST",
-      url: current_url,
-      data: { new_comment: new_comment, pk: input },
-      //csrfmiddlewaretoken: {{ csrf_token }},
-    }).done(function () {
-      location.reload();
-    });
-  }
-</script>
-
-<script>
-  function deletePost(input) {
-    if (confirm("정말 삭제하시겠습니까?") == true) {
-      //확인
-      var current_url = $(location).attr("pathname");
-      console.log("%%%%%%%%%%");
-      console.log(current_url);
-      $.ajax({
-        type: "POST",
-        url: current_url,
-        data: { delete_post: input },
-        //csrfmiddlewaretoken: {{ csrf_token }},
-      }).done(function () {
-        window.location.replace("http://192.168.219.104:8000");
-      });
-    } else {
-      //취소
-      return;
-    }
-  }
-</script>
-
-<script>
-  function deleteComment(input) {
-    if (confirm("정말 삭제하시겠습니까?") == true) {
-      //확인
-      var current_url = $(location).attr("pathname");
-      $.ajax({
-        type: "POST",
-        url: current_url,
-        data: { delete_comment_pk: input },
-        //csrfmiddlewaretoken: {{ csrf_token }},
-      }).done(function () {
-        location.reload();
-      });
-    } else {
-      //취소
-      return;
-    }
-  }
-</script>
-
-<br />
-<script>
-  $("#plz_login_sara").click(function () {
-    alert("이건 사야한다!! 투표하려면 로그인을 해주세요");
-  });
-</script>
-<br />
-<br />
-<script>
-  $("#plz_login_mara").click(function () {
-    alert("이건 절대아니다!! 투표하려면 로그인을 해주세요");
-  });
-</script>
-
-<script>
-  $("#sarabutton").click(function () {
-    var current_url = $(location).attr("pathname"); // + "sara/";
-    var saramara_data = "sara";
-    $.ajax({
-      type: "POST",
-      url: current_url,
-      data: { saramara_input: saramara_data },
-    }).done(function () {
-      location.reload();
-    });
-  });
-</script>
-
-<script>
-  $("#marabutton").click(function () {
-    var current_url = $(location).attr("pathname"); // + "mara/";
-    var saramara_data = "mara";
-    $.ajax({
-      type: "POST",
-      url: current_url,
-      data: { saramara_input: saramara_data },
-    }).done(function () {
-      location.reload();
-    });
-  });
-</script>
-
-<script type="text/javascript">
-  var current_url = $(location).attr("href");
-  console.log(current_url);
-  Kakao.Link.createDefaultButton({
-    container: "#create-kakao-link-btn",
-    objectType: "feed",
-    content: {
-      title: "포스트 제목을 여기에 가져와야 함",
-      description:
-        "여기에는 포스트 ckcontent 가져와야 함 #사라 #마라 #사이트 #테스트 #해쉬태그를 해야하나",
-      imageUrl:
-        "https://cdn.pixabay.com/photo/2018/06/04/00/29/women-3452067_1280.jpg",
-      link: {
-        // mobileWebUrl: "https://developers.kakao.com",
-        // webUrl: "https://developers.kakao.com",
-        mobileWebUrl: current_url,
-        webUrl: current_url,
-      },
-    },
-    social: {
-      likeCount: 286, // 이걸 사라, 마라, 댓글, 조회수, 공유수 로 바꿀수가 있나?
-      commentCount: 45,
-      sharedCount: 845,
-    },
-    /*buttons: [
-      {
-        title: "웹으로 보기",
-        link: {
-          mobileWebUrl: "https://developers.kakao.com",
-          webUrl: "https://developers.kakao.com",
-        },
-      },
-      {
-        title: "앱으로 보기",
-        link: {
-          mobileWebUrl: "https://developers.kakao.com",
-          webUrl: "https://developers.kakao.com",
-        },
-      },
-    ],*/
-  });
-</script>
-<br />
-<br />
-<script
-  type="text/javascript"
-  src="{% static 'ckeditor/ckeditor-init.js' %}"
-></script>
-<script
-  type="text/javascript"
-  src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"
-></script>
 <!--        item filter-->
 
 <br /><br /><br /><br /><br /><br />
@@ -500,5 +278,228 @@
   <br />
   <br />
 </div>
+
+<script>
+  $(document).ready(function () {
+    $("#add_comment_button").click(function () {
+      var comment_input = $("#comment_input").val();
+      var current_url = $(location).attr("pathname"); // + "add_comment/";
+      $.ajax({
+        type: "POST",
+        url: current_url, //"/add_comment/",
+        data: { comment_input: comment_input },
+      }).done(function () {
+        location.reload();
+        $("#comment_input").val("");
+      });
+    });
+  });
+</script>
+
+<script>
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      form_data = new FormData();
+
+      reader.onload = function (e) {
+        $(".image-upload-wrap").hide();
+        $(".file-upload-image").attr("src", e.target.result);
+
+        $(".file-upload-content").show();
+        $(".image-title").html(input.files[0].name);
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      removeUpload();
+    }
+  }
+</script>
+<script>
+  function removeUpload() {
+    $(".file-upload-input").replaceWith($(".file-upload-input").clone());
+    //$(".file-upload-content").hide();
+    //$(".file-upload-content").show();
+    $(".file-upload-image").attr("src", "{{ user.profile_image.url }}");
+    $(".image-upload-wrap").hide();
+    //$(".image-upload-wrap").show();
+  }
+</script>
+
+<script>
+  function editComment(input) {
+    console.log(input);
+    var text = $(".comment_" + input + ">div.text")
+      .html()
+      .replaceAll("<p>", "")
+      .replaceAll("</p>", "")
+      .replaceAll("<br>", "\n")
+      .replaceAll("      ", "")
+      .replaceAll("\n    ", "");
+    console.log(text);
+    $(".comment_" + input + ">div.text").html(
+      "<textarea id='newComment' rows='4' cols='40'>" + text + "</textarea>"
+    );
+    $(".edit_delete_button").hide();
+    $(".edit_button_" + input + "").show();
+  }
+</script>
+
+<script>
+  function clickeditComment(input) {
+    console.log(input);
+    var new_comment = $("#newComment").val();
+    console.log(new_comment);
+
+    var current_url = $(location).attr("pathname");
+    console.log(current_url);
+    $.ajax({
+      type: "POST",
+      url: current_url,
+      data: { new_comment: new_comment, pk: input },
+      //csrfmiddlewaretoken: {{ csrf_token }},
+    }).done(function () {
+      location.reload();
+    });
+  }
+</script>
+
+<script>
+  function deletePost(input) {
+    if (confirm("정말 삭제하시겠습니까?") == true) {
+      //확인
+      var current_url = $(location).attr("pathname");
+      console.log("%%%%%%%%%%");
+      console.log(current_url);
+      $.ajax({
+        type: "POST",
+        url: current_url,
+        data: { delete_post: input },
+        //csrfmiddlewaretoken: {{ csrf_token }},
+      }).done(function () {
+        window.location.replace("http://192.168.219.104:8000");
+      });
+    } else {
+      //취소
+      return;
+    }
+  }
+</script>
+
+<script>
+  function deleteComment(input) {
+    if (confirm("정말 삭제하시겠습니까?") == true) {
+      //확인
+      var current_url = $(location).attr("pathname");
+      $.ajax({
+        type: "POST",
+        url: current_url,
+        data: { delete_comment_pk: input },
+        //csrfmiddlewaretoken: {{ csrf_token }},
+      }).done(function () {
+        location.reload();
+      });
+    } else {
+      //취소
+      return;
+    }
+  }
+</script>
+
+<br />
+<script>
+  $("#plz_login_sara").click(function () {
+    alert("이건 사야한다!! 투표하려면 로그인을 해주세요");
+  });
+</script>
+<br />
+<br />
+<script>
+  $("#plz_login_mara").click(function () {
+    alert("이건 절대아니다!! 투표하려면 로그인을 해주세요");
+  });
+</script>
+
+<script>
+  $("#sarabutton").click(function () {
+    var current_url = $(location).attr("pathname"); // + "sara/";
+    var saramara_data = "sara";
+    $.ajax({
+      type: "POST",
+      url: current_url,
+      data: { saramara_input: saramara_data },
+    }).done(function () {
+      location.reload();
+    });
+  });
+</script>
+
+<script>
+  $("#marabutton").click(function () {
+    var current_url = $(location).attr("pathname"); // + "mara/";
+    var saramara_data = "mara";
+    $.ajax({
+      type: "POST",
+      url: current_url,
+      data: { saramara_input: saramara_data },
+    }).done(function () {
+      location.reload();
+    });
+  });
+</script>
+
+<script>
+  var current_url = $(location).attr("href");
+  console.log(current_url);
+  Kakao.Link.createDefaultButton({
+    container: "#create-kakao-link-btn",
+    objectType: "feed",
+    content: {
+      title: "포스트 제목을 여기에 가져와야 함",
+      description:
+        "여기에는 포스트 ckcontent 가져와야 함 #사라 #마라 #사이트 #테스트 #해쉬태그를 해야하나",
+      imageUrl:
+        "https://cdn.pixabay.com/photo/2018/06/04/00/29/women-3452067_1280.jpg",
+      link: {
+        // mobileWebUrl: "https://developers.kakao.com",
+        // webUrl: "https://developers.kakao.com",
+        mobileWebUrl: current_url,
+        webUrl: current_url,
+      },
+    },
+    social: {
+      likeCount: 286, // 이걸 사라, 마라, 댓글, 조회수, 공유수 로 바꿀수가 있나?
+      commentCount: 45,
+      sharedCount: 845,
+    },
+    /*buttons: [
+      {
+        title: "웹으로 보기",
+        link: {
+          mobileWebUrl: "https://developers.kakao.com",
+          webUrl: "https://developers.kakao.com",
+        },
+      },
+      {
+        title: "앱으로 보기",
+        link: {
+          mobileWebUrl: "https://developers.kakao.com",
+          webUrl: "https://developers.kakao.com",
+        },
+      },
+    ],*/
+  });
+</script>
+<br />
+<br />
+<script
+  type="text/javascript"
+  src="{% static 'ckeditor/ckeditor-init.js' %}"
+></script>
+<script
+  type="text/javascript"
+  src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"
+></script>
 
 {% endblock %}

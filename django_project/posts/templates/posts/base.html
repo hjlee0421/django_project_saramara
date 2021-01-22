@@ -87,8 +87,9 @@
         saramara@kakao.com
       </h3>
     </footer>
+
     {% csrf_token %}
-    <script type="text/javascript">
+    <script>
       function loginWithKakao() {
         console.log(Kakao.isInitialized());
         console.log(Kakao.Auth.getAccessToken());
@@ -240,7 +241,7 @@
     </script>
     <br />
     <br />
-    <script type="text/javascript">
+    <script>
       var current_url = $(location).attr("href");
       console.log(current_url);
       Kakao.Link.createDefaultButton({
