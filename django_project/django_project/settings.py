@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'rest_framework',
     'django_extensions',
-    'frontend',
 
     # django-allauth
     'django.contrib.sites',
