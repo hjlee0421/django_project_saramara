@@ -1,10 +1,9 @@
-/pro1_venv
-/django_project/static
-/django_project/frontend/node_modules
-/polls
-/susers
 /frontend
+/polls
+/pro1_venv
+/susers
 /django_project/media
+/django_project/static
 /django_project/db.sqlite3
 /django_project/secrets.json
 *pyc
