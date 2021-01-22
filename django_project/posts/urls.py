@@ -16,7 +16,7 @@ urlpatterns = [
     # 프로필 변경할때 사진부분 서버로 넘기는 작업처리
     path('add_image/', views.addImage_view, name="add_image"),
     # 프로필 변경할때 사진부분 클라이언트로 가져오는 작업처리
-    path('get_images/', views.getImages_view, name="get_images"),
+    # path('get_images/', views.getImages_view, name="get_images"),
     path('kakao_login/', views.KakaoLoginView.as_view(),
          name="kakao_login"),  # 카카오 로그인
     path('kakao_logout/', views.KakaoLogoutView.as_view(),

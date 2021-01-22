@@ -385,60 +385,104 @@ class MypageView(View):
         return render(request, 'posts/mypage.html')
 
 
-# 해당 html 을 보여주기 위해서
+# 맨처음 변경들어갈때는 get 이고 닉네임 중복확인 이랑 변경하기 버튼 누를때는 POST
+@csrf_exempt
 def upload_image(request):
-    user_id = request.session.get('user_id')
-    user = User.objects.get(pk=user_id)
-    newForm = UserForm()
-    context = {"form": newForm, }
+    if request.method == 'GET':
+        print("################################")
+        print("upload_image using GET")
+        print("################################")
+        user_id = request.session.get('user_id')
+        user = User.objects.get(pk=user_id)
+        newForm = UserForm()
+        context = {"form": newForm, }
 
-    if "username_input" in request.GET:
-        new_username = request.GET["username_input"]
+        if "username_input" in request.GET:
+            new_username = request.GET["username_input"]
 
-        if not User.objects.filter(username=new_username).exists() or (user.username == new_username):
-            # user = User.objects.get(pk=user_id)
-            # user.username = new_username
-            # user.save()
-            # if user.username is new_username:
-            return JsonResponse({'created': True})
-    return render(request, "posts/upload_image.html", context)
+            if not User.objects.filter(username=new_username).exists() or (user.username == new_username):
+                # user = User.objects.get(pk=user_id)
+                # user.username = new_username
+                # user.save()
+                # if user.username is new_username:
+                return JsonResponse({'created': True})
+        return render(request, "posts/upload_image.html", context)
+    if request.method == 'POST':
+        print("################################")
+        print("upload_image using POST")
+        print("################################")
+        user_id = request.session.get('user_id')
+        user = User.objects.get(pk=user_id)
+        newForm = UserForm()
+        context = {"form": newForm, }
 
+        if "username_input" in request.POST:
+            new_username = request.POST["username_input"]
 
-def getImages_view(request):
-    # images = User.objects.all()
-    user_id = request.session.get('_auth_user_id')
-    user = User.objects.get(pk=user_id)
-    image_urls = []
-    print(str(user.profile_image))
-    image_urls.append("media/"+str(user.profile_image))
-    response = {"image_urls": "/media/"+str(user.profile_image)}
-    return JsonResponse(response)
+            if not User.objects.filter(username=new_username).exists() or (user.username == new_username):
+                # user = User.objects.get(pk=user_id)
+                # user.username = new_username
+                # user.save()
+                # if user.username is new_username:
+                return JsonResponse({'created': True})
+        return render(request, "posts/upload_image.html", context)
 
 
 @csrf_exempt
 def addImage_view(request):
-    form = UserForm(request.POST, request.FILES)
+    if request.method == 'POST':
+        print("################################")
+        print("addimage view using POST")
+        print("################################")
+        form = UserForm(request.POST, request.FILES)
 
-    user_id = request.session.get('_auth_user_id')
-    user = User.objects.get(pk=user_id)
-    # print(request.FILES["profile_image"])
-    print(request.FILES)
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(pk=user_id)
+        # print(request.FILES["profile_image"])
+        print(request.FILES)
 
-    if "profile_image" in request.FILES:
-        user.profile_image = request.FILES["profile_image"]
+        if "profile_image" in request.FILES:
+            user.profile_image = request.FILES["profile_image"]
 
-    new_username = request.POST["username"]
-    print("?????????")
-    print(new_username)
-    if not User.objects.filter(username=new_username).exists():
-        # user = User.objects.get(pk=user_id)
-        user.username = new_username
-        print(user.username)
-    user.save()
-    # return HttpResponse("success")
-    # return redirect("http://192.168.219.159:8000")
-    return render(request, 'posts/index.html')
-    # return render(request, 'home.html', {'form': form, 'up': User.objects.get(pk=user_id), })
+        new_username = request.POST["username"]
+        print("?????????")
+        print(new_username)
+        if not User.objects.filter(username=new_username).exists():
+            # user = User.objects.get(pk=user_id)
+            user.username = new_username
+            print(user.username)
+        user.save()
+        # return HttpResponse("success")
+        # return redirect("http://192.168.219.159:8000")
+        return render(request, 'posts/index.html')
+        # return render(request, 'home.html', {'form': form, 'up': User.objects.get(pk=user_id), })
+
+
+# @csrf_exempt
+# def getImages_view(request):
+#     # images = User.objects.all()
+#     if request.method == 'GET':
+#         print("################################")
+#         print("getimages view using GET")
+#         print("################################")
+#         user_id = request.session.get('_auth_user_id')
+#         user = User.objects.get(pk=user_id)
+#         image_urls = []
+#         print(str(user.profile_image))
+#         image_urls.append("media/"+str(user.profile_image))
+#         response = {"image_urls": "/media/"+str(user.profile_image)}
+#         return JsonResponse(response)
+#     if request.method == 'POST':
+#         print("################################")
+#         print("getimages view using POST")
+#         print("################################")
+#         user_id = request.session.get('_auth_user_id')
+#         user = User.objects.get(pk=user_id)
+#         image_urls = []
+#         print(str(user.profile_image))
+#         image_urls.append("media/"+str(user.profile_image))
+#         response = {"image_urls": "/media/"+str(user.profile_image)}
+#         return JsonResponse(response)
 
 
 #############################################################################################

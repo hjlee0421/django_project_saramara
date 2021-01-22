@@ -249,6 +249,7 @@
       $("#check_duplicated").text("4~16자리로 변경 가능합니다.");
     } else {
       $.ajax({
+        type: "POST",
         url: "/upload_image/",
         data: { username_input: username_input },
       }).done(function (res) {
