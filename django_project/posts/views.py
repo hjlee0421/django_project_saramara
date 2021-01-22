@@ -38,65 +38,6 @@ from django.db.models import Q
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class KakaoUnlinkView(View):
-    def post(self, request):
-        user_id = request.session.get('user_id')
-
-        if request.session.get('user_id'):
-            del(request.session['user_id'])
-
-        logout(request)
-        user = User.objects.get(pk=user_id)
-        user.delete()
-        # logout(request, backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('/')
-
-
-# @csrf_exempt
-# def kakao_unlink(request):
-#     if request.method == 'POST':
-#         print("using POST")
-#         user_id = request.session.get('user_id')
-
-#         if request.session.get('user_id'):
-#             del(request.session['user_id'])
-
-#         logout(request)
-#         user = User.objects.get(pk=user_id)
-#         user.delete()
-#         # logout(request, backend='django.contrib.auth.backends.ModelBackend')
-#         return redirect('/')
-
-
-@method_decorator(csrf_exempt, name='dispatch')
-class KakaoLogoutView(View):
-    def post(self, request):
-        if request.session.get('user_id'):
-            del(request.session['user_id'])
-        logout(request)
-        # logout(request, backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('/')
-
-
-# @csrf_exempt
-# def kakao_logout(request):
-#     if request.method == 'GET':
-#         print("using get")
-#         if request.session.get('user_id'):
-#             del(request.session['user_id'])
-#         logout(request)
-#         # logout(request, backend='django.contrib.auth.backends.ModelBackend')
-#         return redirect('/')
-#     if request.method == 'POST':
-#         print("using post")
-#         if request.session.get('user_id'):
-#             del(request.session['user_id'])
-#         logout(request)
-#         # logout(request, backend='django.contrib.auth.backends.ModelBackend')
-#         return redirect('/')
-
-
-@method_decorator(csrf_exempt, name='dispatch')
 class KakaoLoginView(View):
     def post(self, request):
         LOGIN_INFO = json.loads(request.POST['LOGIN_INFO'])
@@ -142,48 +83,29 @@ class KakaoLoginView(View):
         return render(request, 'posts/ask.html')
 
 
-# def kakao_login(request):  # , pk
-#     LOGIN_INFO = json.loads(request.POST['LOGIN_INFO'])
-#     USER_INFO = json.loads(request.POST['USER_INFO'])
+@method_decorator(csrf_exempt, name='dispatch')
+class KakaoLogoutView(View):
+    def post(self, request):
+        if request.session.get('user_id'):
+            del(request.session['user_id'])
+        logout(request)
+        # logout(request, backend='django.contrib.auth.backends.ModelBackend')
+        return redirect('/')
 
-#     access_token = LOGIN_INFO["access_token"]
-#     profile_json = USER_INFO
-#     username = str(profile_json['id'])+'@kakao'
 
-#     gender = ""
-#     email = ""
-#     birthday = ""
-#     print(profile_json['kakao_account'])
-#     if profile_json['kakao_account']['has_gender'] is True:
-#         gender = profile_json['kakao_account']['gender']
+@method_decorator(csrf_exempt, name='dispatch')
+class KakaoUnlinkView(View):
+    def post(self, request):
+        user_id = request.session.get('user_id')
 
-#     if profile_json['kakao_account']['has_email'] is True:
-#         email = profile_json['kakao_account']['email']
+        if request.session.get('user_id'):
+            del(request.session['user_id'])
 
-#     if profile_json['kakao_account']['has_birthday'] is True:
-#         birthday = profile_json['kakao_account']['birthday']
-
-#     if not User.objects.filter(kakao_unique_id=str(profile_json['id'])).exists():
-#         # 기존에 username 이 없다면
-
-#         user = User(username=username, gender=gender, email=email, password=profile_json['id'],
-#                     birthday=birthday, kakao_access_token=access_token, kakao_unique_id=profile_json['id'])
-#         user.is_staff = True
-#         user.save()
-#         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-#         request.session['user_id'] = user.id
-#         return JsonResponse({'created': True})
-#         # return render(request, 'posts/ask.html')
-#         # return redirect('/')
-#     else:
-#         # 기존에 username 이 있다면?
-
-#         user = User.objects.get(kakao_unique_id=profile_json['id'])
-#         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-#         request.session['user_id'] = user.id
-#         return JsonResponse(data={'created': False, 'len': '2'})
-
-#     return render(request, 'posts/ask.html')
+        logout(request)
+        user = User.objects.get(pk=user_id)
+        user.delete()
+        # logout(request, backend='django.contrib.auth.backends.ModelBackend')
+        return redirect('/')
 
 
 class IndexView(generic.ListView):
