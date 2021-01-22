@@ -199,11 +199,11 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'Custom',
         'width': 'auto',
         'toolbar_Custom': [
-            # ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['FontSize'],  # 'Font',
             ['Bold', 'Italic', 'Underline', 'Strike'],
             ['TextColor'],  # 'BGColor'
-            ['Image'],  # 'Smiley'
+            # ['Image'], 'Smiley'
             # ['Bold', 'Italic', 'Underline'],
             # ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             # ['Link', 'Unlink'],
