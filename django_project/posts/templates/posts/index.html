@@ -1,5 +1,39 @@
 {% extends 'posts/base.html' %} {% block content %}
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/static/posts/jquery.waypoints.min.js"></script>
+<script src="/static/posts/infinite.min.js"></script>
+<script src="/static/posts/myScript1.js"></script>
+
+<script>
+  var infinite = new Waypoint.Infinite({
+    element: $(".infinite-container")[0],
+    handler: function (direction) {},
+    offset: "bottom-in-view",
+
+    onBeforePageLoad: function () {
+      $(".spinner-border").show();
+    },
+    onAfterPageLoad: function () {
+      $(".spinner-border").hide();
+    },
+  });
+</script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#search-button").click(function () {
+      $("div.items-sort-all").slideToggle(1000);
+    });
+  });
+</script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#after_login").click(function () {
+      alert("카카오톡으로 로그인 후 이용해주세요");
+    });
+  });
+</script>
+
 <div class="ask-list" style="font-size: 20px">
   {% if user.is_authenticated %}
   <a href="{% url 'posts:ask' %}">질문하기</a>
@@ -124,36 +158,4 @@
   {% endif %}
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="/static/posts/jquery.waypoints.min.js"></script>
-<script src="/static/posts/infinite.min.js"></script>
-
-<script>
-  var infinite = new Waypoint.Infinite({
-    element: $(".infinite-container")[0],
-    handler: function (direction) {},
-    offset: "bottom-in-view",
-
-    onBeforePageLoad: function () {
-      $(".spinner-border").show();
-    },
-    onAfterPageLoad: function () {
-      $(".spinner-border").hide();
-    },
-  });
-</script>
-<script type="text/javascript">
-  $(document).ready(function () {
-    $("#search-button").click(function () {
-      $("div.items-sort-all").slideToggle(1000);
-    });
-  });
-</script>
-<script type="text/javascript">
-  $(document).ready(function () {
-    $("#after_login").click(function () {
-      alert("카카오톡으로 로그인 후 이용해주세요");
-    });
-  });
-</script>
 {% endblock %}
