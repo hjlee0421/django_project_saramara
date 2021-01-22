@@ -784,7 +784,7 @@ def addImage_view(request):
 
     user_id = request.session.get('_auth_user_id')
     user = User.objects.get(pk=user_id)
-    print(request.FILES["profile_image"])
+    # print(request.FILES["profile_image"])
     print(request.FILES)
 
     if "profile_image" in request.FILES:
