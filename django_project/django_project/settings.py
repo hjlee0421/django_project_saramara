@@ -38,9 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # main app
     'posts',
+
+    # ckeditor
     'ckeditor',
     'ckeditor_uploader',
+
+    # DRF
     'rest_framework',
     'django_extensions',
 
@@ -55,7 +61,6 @@ INSTALLED_APPS = [
 
 # django-allauth
 SITE_ID = 1
-
 
 with open(os.path.join(BASE_DIR, 'secrets.json'), 'rb') as secret_file:
     secrets = json.load(secret_file)

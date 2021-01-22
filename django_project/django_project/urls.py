@@ -23,9 +23,5 @@ from posts import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('posts.urls', namespace='posts')),
-    path('api-auth/', include('rest_framework.urls')),
-    path('ckeditor/', include(
-        'ckeditor_uploader.urls')),
-    path('accounts/', include('allauth.urls')),
 ] + static(settings.MEDIA_URL,
            document_root=settings.MEDIA_ROOT)
