@@ -1,5 +1,5 @@
 // #####################################################################
-// 카카오계정 관련 함수들
+// 카카오 관련 함수들
 // #####################################################################
 
 function loginWithKakao() {
@@ -99,9 +99,49 @@ $(document).ready(function () {
   });
 });
 
+Kakao.Link.createDefaultButton({
+  container: "#create-kakao-link-btn",
+  objectType: "feed",
+  content: {
+    title: "포스트 제목을 여기에 가져와야 함",
+    description:
+      "여기에는 포스트 ckcontent 가져와야 함 #사라 #마라 #사이트 #테스트 #해쉬태그를 해야하나",
+    imageUrl:
+      "https://cdn.pixabay.com/photo/2018/06/04/00/29/women-3452067_1280.jpg",
+    link: {
+      // mobileWebUrl: "https://developers.kakao.com",
+      // webUrl: "https://developers.kakao.com",
+      mobileWebUrl: $(location).attr("href"),
+      webUrl: $(location).attr("href"),
+    },
+  },
+  social: {
+    likeCount: 286, // 이걸 사라, 마라, 댓글, 조회수, 공유수 로 바꿀수가 있나?
+    commentCount: 45,
+    sharedCount: 845,
+  },
+  /*buttons: [
+    {
+      title: "웹으로 보기",
+      link: {
+        mobileWebUrl: "https://developers.kakao.com",
+        webUrl: "https://developers.kakao.com",
+      },
+    },
+    {
+      title: "앱으로 보기",
+      link: {
+        mobileWebUrl: "https://developers.kakao.com",
+        webUrl: "https://developers.kakao.com",
+      },
+    },
+  ],*/
+});
+
 // #####################################################################
-// 카카오계정 관련 함수들
+// 카카오 관련 함수들
 // #####################################################################
+
 
 
 // #####################################################################
@@ -117,6 +157,7 @@ $(document).ready(function () {
 // #####################################################################
 // 메인페이지 관련 함수들
 // #####################################################################
+
 
 
 // #####################################################################
@@ -155,11 +196,10 @@ $(function () {
   });
 });
 
-
-
 // #####################################################################
 // 포스트 이미지 관련 함수들
 // #####################################################################
+
 
 
 // #####################################################################
@@ -245,10 +285,10 @@ function DeletePost(input) {
   }
 }
 
-
 // #####################################################################
 // 포스트 수정 관련 함수들
 // #####################################################################
+
 
 
 // #####################################################################
@@ -297,57 +337,6 @@ $(document).ready(function () {
 // 포스트 투표 관련 함수들
 // #####################################################################
 
-// var slideIndex = 1;
-// showSlides(slideIndex);
-
-// // Next/previous controls
-// function plusSlides(n) {
-//   showSlides((slideIndex += n));
-// }
-
-// // Thumbnail image controls
-// function currentSlide(n) {
-//   showSlides((slideIndex = n));
-// }
-
-// function showSlides(n) {
-//   var i;
-//   var slides = document.getElementsByClassName("mySlides");
-//   var dots = document.getElementsByClassName("dot");
-//   if (n > slides.length) {
-//     slideIndex = 1;
-//   }
-//   if (n < 1) {
-//     slideIndex = slides.length;
-//   }
-//   for (i = 0; i < slides.length; i++) {
-//     slides[i].style.display = "none";
-//   }
-//   for (i = 0; i < dots.length; i++) {
-//     dots[i].className = dots[i].className.replace(" active", "");
-//   }
-//   slides[slideIndex - 1].style.display = "block";
-//   dots[slideIndex - 1].className += " active";
-// }
-
-// #####################################################################
-// 마이페이지에 사용되는 함수들
-// #####################################################################
-
-function logoutWithKakao() {
-  Kakao.Auth.logout(function () {
-    $.ajax({
-      type: "POST",
-      url: "/kakao_logout/",
-    }).done(function () {
-      location.reload();
-    });
-  });
-}
-
-// #####################################################################
-// 마이페이지에 사용되는 함수들
-// #####################################################################
 
 
 // #####################################################################
@@ -413,6 +402,18 @@ function removeUpload() {
   $(".image-upload-wrap").hide();
   //$(".image-upload-wrap").show();
 }
+
+document.getElementById("submit_profile").onclick = function () {
+  $.ajax({
+    url: "/user_profile/",
+    method: "POST",
+    data: new FormData(imageForm),
+    processData: false,
+    contentType: false,
+  }).done(function () {
+    window.location.replace("http://127.0.0.1:8000/");
+  });
+};
 
 // #####################################################################
 // 마이페이지에서 유저정보 수정할때 사용되는 함수들

@@ -66,20 +66,4 @@
     </button>
   </form>
 </body>
-
-{% comment %} document로 잡으면 js 파일로 못하는듯 {% endcomment %}
-<script>
-  document.getElementById("submit_profile").onclick = function () {
-    $.ajax({
-      url: "/user_profile/",
-      method: "POST",
-      data: new FormData(imageForm),
-      processData: false,
-      contentType: false,
-    }).done(function () {
-      window.location.replace("http://127.0.0.1:8000/");
-    });
-  };
-</script>
-
 {% endblock %}
