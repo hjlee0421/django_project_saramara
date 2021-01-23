@@ -6,7 +6,10 @@
   <form method="POST" action="." enctype="multipart/form-data">
     {% csrf_token %} {{ form.media }}
 
-    <label for="id_item_image">Item image:</label>
+    <br /><br /><br /><br />
+
+    <label for="id_item_image">사진을 선택해주세요</label>
+
     <input
       type="file"
       name="item_image"
@@ -15,48 +18,27 @@
       id="gallery-photo-add"
     />
 
-    <br />
-    <div id="current_post_image">
+    <br /><br />
+
+    <div class="current_post_image">
       {% for image in images %}
       <img src="{{ image.item_image.url }}" style="width: 100%; height: auto" />
       {% endfor %}
     </div>
-    <br />
-    <div class="gallery" id="id_item_image"></div>
+
     <br /><br />
+
+    <div class="gallery" id="id_item_image"></div>
+
+    <br /><br />
+
     {{ form.as_p }}
+
+    <br /><br />
+
     <button type="submit" class="btn btn-primary">질문 수정하기</button>
   </form>
+
   <br />
 </div>
-
-<script>
-  $(function () {
-    // Multiple images preview in browser
-    var imagesPreview = function (input, placeToInsertImagePreview) {
-      if (input.files) {
-        var filesAmount = input.files.length;
-
-        for (i = 0; i < filesAmount; i++) {
-          var reader = new FileReader();
-
-          reader.onload = function (event) {
-            $($.parseHTML("<img style='width: 100%; height: auto;'>"))
-              .attr("src", event.target.result)
-              .appendTo(placeToInsertImagePreview);
-          };
-
-          reader.readAsDataURL(input.files[i]);
-        }
-      }
-    };
-
-    $("#gallery-photo-add").on("change", function () {
-      imagesPreview(this, "div.gallery");
-      imagesPreview(this, "div.mySlides");
-      document.getElementById("current_post_image").style.display = "none";
-    });
-  });
-</script>
-
 {% endblock %}

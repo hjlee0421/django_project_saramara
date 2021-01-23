@@ -1,26 +1,15 @@
 {% extends 'posts/base.html' %} {% block content %} {% load static %}
 
+<br />
 <div class="ask-wrap">
-  <h1>질문하기</h1>
-  <form enctype="multipart/form-data" method="POST" action="." id="askForm">
-    {% csrf_token %}
-    <br />
+  <br />
+  <form method="POST" action="." enctype="multipart/form-data">
+    {% csrf_token %} {{ form.media }}
 
-    {% comment %} <label for="image"></label>
+    <br /><br /><br /><br />
 
-    <input
-      type="file"
-      name="profile_image"
-      multiple="multiple"
-      id="image"
-      accept="image/*"
-      required=""
-      onchange="readURL(this);"
-    />
-    {% endcomment %}
+    <label for="id_item_image">사진을 선택해주세요</label>
 
-    <br />
-    {% comment %} <label for="id_item_image">Item image:</label>
     <input
       type="file"
       name="item_image"
@@ -28,181 +17,22 @@
       accept="image/*"
       id="gallery-photo-add"
     />
-    {% endcomment %} {% comment %}
-    <div class="gallery" id="id_item_image"></div>
-    {% endcomment %}
 
-    <br />
-
-    <div class="image-upload-wrap">
-      <input
-        id="image"
-        class="file-upload-input"
-        type="file"
-        onchange="readURL(this);"
-        accept="image/*"
-        style="display: none"
-      />
-    </div>
-
-    <br />
-
-    <div class="file-upload-content">
-      <img
-        style="display: none"
-        class="file-upload-image"
-        src="{{ user.profile_image.url }}"
-        alt="your image"
-        width="240"
-        onclick="$('.file-upload-input').trigger( 'click' )"
-      />
-    </div>
-
-    <br />
-
-    <button id="showImages" style="display: none"></button>
-
-    <br />
-
-    {% comment %} 원래 이 아래에 src 들어가면 기본으로 이미지를 보여주는것
-    src="{{ user.profile_image.url }}" {% endcomment %}
-
-    <div class="test_div"></div>
-
-    <img
-      class="file-upload-image1"
-      id="previewImg"
-      style="max-width: 80%; max-height: 80%; height: auto; width: auto"
-    />
-    <img
-      class="file-upload-image2"
-      id="previewImg"
-      style="max-width: 80%; max-height: 80%; height: auto; width: auto"
-    />
-    <img
-      class="file-upload-image3"
-      id="previewImg"
-      style="max-width: 80%; max-height: 80%; height: auto; width: auto"
-    />
-
-    <div id="imageField"></div>
-
-    <div class="image-upload-wrap" style="display: none">
-      <input
-        id="image"
-        class="file-upload-input"
-        type="file"
-        onchange="readURL(this);"
-        accept="image/*"
-        style="display: block"
-      />
-    </div>
-
-    {{ form.media }}<br />
-
-    {% comment %}
-    <p>
-      <label for="id_item_image">Item image:</label>
-      <input
-        type="file"
-        name="item_image"
-        multiple
-        accept="image/*"
-        id="id_item_image"
-      />
-    </p>
-    {% endcomment %}
-
-    <p>
-      <label for="id_item_image">Item image:</label>
-      <input
-        type="file"
-        name="item_image"
-        multiple
-        accept="image/*"
-        id="gallery-photo-add"
-      />
-    </p>
     <br /><br />
+
     <div class="gallery" id="id_item_image"></div>
+
     <br /><br />
+
     {{ form.as_p }}
 
-    <br />
+    <br /><br />
+
     <button type="submit" id="submit_ask" class="btn btn-primary">
       사라마라 질문하기
     </button>
   </form>
-  <br />
+
   <br />
 </div>
-
-{% comment %} 음 이건일단 나중에해도 될듯 form 전체를 django 쪽으로 넘기는 함수
-{% endcomment %} {% comment %}
-<script>
-  document.getElementById("submit_ask").onclick = function () {
-    $.ajax({
-      url: "/ask/",
-      method: "POST",
-      data: new FormData(askForm),
-      processData: false,
-      contentType: false,
-    }).done(function () {
-      window.location.replace("http://192.168.219.159:8000");
-    });
-  };
-</script>
-{% endcomment %} {% comment %}
-<script>
-  document.getElementById("showImages").onclick = function () {
-    $.ajax({
-      url: "/get_images/",
-      method: "GET",
-      success: function (data) {
-        console.log(data["image_urls"]);
-        imageField = document.querySelector("#imageField");
-        imageField.appendChild(CreateImage(data["image_urls"]));
-      },
-    });
-  };
-</script>
-{% endcomment %} {% comment %}
-<script>
-  function CreateImage(src) {
-    let img = document.createElement("img");
-    console.log(src);
-    img.src = src;
-    img.className = "imageSize";
-    return img;
-  }
-</script>
-{% endcomment %}
-
-<script>
-  $(function () {
-    // Multiple images preview in browser
-    var imagesPreview = function (input, placeToInsertImagePreview) {
-      if (input.files) {
-        var filesAmount = input.files.length;
-
-        for (i = 0; i < filesAmount; i++) {
-          var reader = new FileReader();
-
-          reader.onload = function (event) {
-            $($.parseHTML("<img style='width: 100%; height: auto;'>"))
-              .attr("src", event.target.result)
-              .appendTo(placeToInsertImagePreview);
-          };
-
-          reader.readAsDataURL(input.files[i]);
-        }
-      }
-    };
-
-    $("#gallery-photo-add").on("change", function () {
-      imagesPreview(this, "div.gallery");
-      imagesPreview(this, "div.mySlides");
-    });
-  });
-</script>
 {% endblock %}

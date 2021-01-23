@@ -140,6 +140,48 @@ function profileWithKakao() {
 // #####################################################################
 
 
+// #####################################################################
+// 포스트 수정 관련 함수들
+// #####################################################################
+
+$(function () {
+  // Multiple images preview in browser
+  var imagesPreview = function (input, placeToInsertImagePreview) {
+    if (input.files) {
+      var filesAmount = input.files.length;
+
+      for (i = 0; i < filesAmount; i++) {
+        var reader = new FileReader();
+
+        reader.onload = function (event) {
+          $(
+            $.parseHTML(
+              "<img class='new_images' style='width: 100%; height: auto;'>"
+            )
+          )
+            .attr("src", event.target.result)
+            .appendTo(placeToInsertImagePreview);
+        };
+
+        reader.readAsDataURL(input.files[i]);
+      }
+    }
+  };
+
+  $("#gallery-photo-add").on("change", function () {
+    // document.getElementById("current_post_image").style.display = "none";
+    $(".current_post_image").remove();
+    $(".new_images").remove();
+    imagesPreview(this, "div.gallery");
+  });
+});
+
+// #####################################################################
+// 포스트 수정 관련 함수들
+// #####################################################################
+
+
+
 
 $(document).ready(function () {
   $("#search-button").click(function () {
@@ -149,38 +191,38 @@ $(document).ready(function () {
 
 
 
-var slideIndex = 1;
-showSlides(slideIndex);
+// var slideIndex = 1;
+// showSlides(slideIndex);
 
-// Next/previous controls
-function plusSlides(n) {
-  showSlides((slideIndex += n));
-}
+// // Next/previous controls
+// function plusSlides(n) {
+//   showSlides((slideIndex += n));
+// }
 
-// Thumbnail image controls
-function currentSlide(n) {
-  showSlides((slideIndex = n));
-}
+// // Thumbnail image controls
+// function currentSlide(n) {
+//   showSlides((slideIndex = n));
+// }
 
-function showSlides(n) {
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
-  if (n > slides.length) {
-    slideIndex = 1;
-  }
-  if (n < 1) {
-    slideIndex = slides.length;
-  }
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
-  }
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex - 1].style.display = "block";
-  dots[slideIndex - 1].className += " active";
-}
+// function showSlides(n) {
+//   var i;
+//   var slides = document.getElementsByClassName("mySlides");
+//   var dots = document.getElementsByClassName("dot");
+//   if (n > slides.length) {
+//     slideIndex = 1;
+//   }
+//   if (n < 1) {
+//     slideIndex = slides.length;
+//   }
+//   for (i = 0; i < slides.length; i++) {
+//     slides[i].style.display = "none";
+//   }
+//   for (i = 0; i < dots.length; i++) {
+//     dots[i].className = dots[i].className.replace(" active", "");
+//   }
+//   slides[slideIndex - 1].style.display = "block";
+//   dots[slideIndex - 1].className += " active";
+// }
 
 // #####################################################################
 // 마이페이지에 사용되는 함수들
