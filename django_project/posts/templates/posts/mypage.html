@@ -4,33 +4,26 @@
 <br />
 
 {% if user.is_authenticated %}
-<!--        button onclick 에 2번째 param '도시이름' 부분을 변경할때는 아래쪽 div에 id="도시이름" 부분도 같이 변경해야 js 인식-->
-{% comment %}
-<div>
-  <div id="회원정보">
-    <h3>회원정보</h3>
-    <img src="{{ user.profile_image.url }}" width="30" height="30" />
-    <h4 style="font-size: 2px">사용중인 닉네임 : {{ user.username }}</h4>
-    <h4 style="font-size: 2px">
-      사라마라 가입일 : {{ user.date_joined|date:"Y년 m월 d일" }}
-    </h4>
-    <button class="api-btn" onclick="unlinkApp()">앱 탈퇴하기</button>
-  </div>
-</div>
-{% endcomment %}
-
-<br />
-<br />
 <div class="tab">
-  <button class="tablinks" onclick="openCity(event, 'London')" id="defaultOpen">
+  <button
+    class="tablinks"
+    onclick="mypage_tabs(event, 'user_info_tab')"
+    id="defaultOpen"
+  >
     유저정보
   </button>
-  <button class="tablinks" onclick="openCity(event, 'Paris')">작성글</button>
-  <button class="tablinks" onclick="openCity(event, 'Tokyo')">댓글</button>
-  <button class="tablinks" onclick="openCity(event, 'Seoul')">투표</button>
+  <button class="tablinks" onclick="mypage_tabs(event, 'post_created')">
+    작성글
+  </button>
+  <button class="tablinks" onclick="mypage_tabs(event, 'comment_created')">
+    댓글
+  </button>
+  <button class="tablinks" onclick="mypage_tabs(event, 'vote_created')">
+    투표
+  </button>
 </div>
 
-<div id="London" class="tabcontent">
+<div id="user_info_tab" class="tabcontent">
   <h3>회원정보</h3>
   <img
     src="{{ user.profile_image.url }}"
@@ -40,6 +33,7 @@
   <h4 style="font-size: 10px">
     사라마라 가입일 : {{ user.date_joined|date:"Y년 m월 d일" }}
   </h4>
+
   <a href="{% url 'posts:user_profile' %}"
     ><button class="api-btn">프로필 변경하기</button></a
   >
@@ -47,7 +41,7 @@
   <button class="api-btn" onclick="unlinkApp()">탈퇴하기</button>
 </div>
 
-<div id="Paris" class="tabcontent">
+<div id="post_created" class="tabcontent">
   <h3>작성한 게시글</h3>
   <div class="items-wrap">
     {% if user.get_post %}
@@ -80,7 +74,7 @@
   </div>
 </div>
 
-<div id="Tokyo" class="tabcontent">
+<div id="comment_created" class="tabcontent">
   <h3>작성한 댓글</h3>
   {% if user.get_comment %} {% for comment in user.get_comment %}
   <br />
@@ -96,7 +90,7 @@
   {% endif %}
 </div>
 
-<div id="Seoul" class="tabcontent">
+<div id="vote_created" class="tabcontent">
   <h3>투표한 게시글</h3>
   <div class="items-wrap">
     {% if user.get_post %}
@@ -134,7 +128,7 @@
 </div>
 
 <script>
-  function openCity(evt, cityName) {
+  function mypage_tabs(evt, cityName) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
     for (i = 0; i < tabcontent.length; i++) {
@@ -151,41 +145,9 @@
   // Get the element with id="defaultOpen" and click on it
   document.getElementById("defaultOpen").click();
 </script>
+
 <br />
-<br />
-<script>
-  function logoutWithKakao() {
-    console.log(Kakao.Auth.getAccessToken()); //before Logout
-    Kakao.Auth.logout(function () {
-      console.log(Kakao.Auth.getAccessToken()); //after Logout
-      $.ajax({
-        type: "POST",
-        url: "/kakao_logout/",
-      }).done(function () {
-        location.reload();
-      });
-    });
-  }
-</script>
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
+
 {% else %}
 <h1>로그인을 해주세요</h1>
 <a id="custom-login-btn" href="javascript:loginWithKakao()">
@@ -194,22 +156,7 @@
     width="120"
   />
 </a>
+
 <br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
+
 {% endif %} {% endblock %}
