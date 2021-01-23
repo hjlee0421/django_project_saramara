@@ -56,8 +56,6 @@ class KakaoLoginView(View):
         email = ""
         birthday = ""
 
-        # print(profile_json['kakao_account'])
-
         if profile_json['kakao_account']['has_gender'] is True:
             gender = profile_json['kakao_account']['gender']
 
@@ -69,7 +67,6 @@ class KakaoLoginView(View):
 
         if not User.objects.filter(kakao_unique_id=str(profile_json['id'])).exists():
             # 기존에 username 이 없다면
-
             user = User(username=username, gender=gender, email=email, password=profile_json['id'],
                         birthday=birthday, kakao_access_token=access_token, kakao_unique_id=profile_json['id'])
             user.is_staff = True
@@ -77,8 +74,6 @@ class KakaoLoginView(View):
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             request.session['user_id'] = user.id
             return JsonResponse({'created': True})
-            # return render(request, 'posts/ask.html')
-            # return redirect('/')
         else:
             # 기존에 username 이 있다면?
             user = User.objects.get(kakao_unique_id=profile_json['id'])
@@ -174,7 +169,6 @@ class IndexView(generic.ListView):
 @method_decorator(csrf_exempt, name='dispatch')
 class DetailView(generic.DetailView, View):
 
-    # NEED model & form_class
     model = Post
     form_class = PostForm
 
@@ -192,12 +186,9 @@ class DetailView(generic.DetailView, View):
         context['images'] = post.image_set.all()
         user = request.user
 
-        # render(request, template_name, context=None, content_type=None, status=None, using=None)
-
-        # # 나이 성별은 나중에 view 에서 작업을 해서 html 에서 보여주는 방법으로 해야 함
+        # 나이 성별은 나중에 view 에서 작업을 해서 html 에서 보여주는 방법으로 해야 함
         if request.session.get('user_id'):
             try:
-                # ip주소와 게시글 번호로 기록을 조회함
                 # TODO: post.view_set.all() 방식으로 수정해야 함
                 views = ViewCount.objects.get(
                     loggedin_user=User.objects.get(pk=request.session.get('user_id')), post=post)
@@ -213,7 +204,6 @@ class DetailView(generic.DetailView, View):
             else:
                 # 조회 기록은 있으나, 날짜가 다른 경우
                 if not views.date.date() == timezone.now().date():
-
                     post.view_cnt = post.view_cnt + 1
                     post.save()
                     views.view_cnt = views.view_cnt + 1
@@ -257,10 +247,7 @@ class DetailView(generic.DetailView, View):
             comment = Comment.objects.get(id=comment_id)
             if user == comment.author:
                 comment.delete()
-                # post.comment_cnt = post.comment_set.all().count()
                 post.save()
-
-            # return render(request, 'posts/detail.html', context=context, content_type=None, status=None, using=None)
 
         if 'delete_post' in request.POST:
             post_id = request.POST['delete_post']
@@ -269,39 +256,21 @@ class DetailView(generic.DetailView, View):
             if user == post.author:
                 post.delete()
                 return redirect('/')
-                # return render(request, 'posts/index.html')
 
         if 'edit_post_button' in request.POST:
             post_id = request.POST['edit_post']
             return redirect('/'+post_id+'/edit')
-            # return render(request, 'posts/detail.html', context=context, content_type=None, status=None, using=None)
-            # post.comment_cnt = post.comment_set.all().count()
-            # post.save()
-
-        # delete comment도 ajax로 처리가능할듯
-        # if 'sara_button' in request.POST:
-        #     self.sara_vote(user)
-        # elif 'mara_button' in request.POST:
-        #     self.mara_vote(user)
-        # elif 'add_comment' in request.POST:
-        #     pass
-        # 추후삭제
-            # self.add_comment(user, request.POST.get('add_comment'))
 
         return render(request, 'posts/detail.html', context=context, content_type=None, status=None, using=None)
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
 
     def add_comment(self, user_name, user_comment):
-        print("add_comment called")
         post = self.object
         comment = Comment(post=post, author=user_name, text=user_comment)
         comment.save()
-
-        # post.comment_cnt = post.comment_set.all().count()
         post.save()
 
     def edit_comment(self, pk, user_comment):
-
         comment = Comment.objects.get(pk=pk)
         comment.text = user_comment
         comment.save()
@@ -311,8 +280,8 @@ class DetailView(generic.DetailView, View):
 class AskView(FormView):
 
     form_class = PostForm
-    template_name = 'ask.html'  # Replace with your template.
-    success_url = "/"  # Replace with your URL or reverse().
+    template_name = 'ask.html'
+    success_url = "/"
 
     def get(self, request):
         # if request.method == 'GET':
@@ -365,19 +334,13 @@ class EditView(generic.DetailView, View):
         print("# EditView GET #")
         print("################")
 
-        # post = Post(**form.cleaned_data)
         post = self.get_object()
         form = PostForm(instance=post)
-        # context = self.get_context_data(form=form)
+
         context = dict(form=form)
         context['images'] = post.image_set.all()
-        # TODO: 확인하기
-        # import pdb
-        # pdb.set_trace()
-        # TODO: 게시글 수정 화면 내용 채우기
-        # form 안에 context? 로 내용을 채워야 할듯
-        return render(request, 'posts/edit.html', context=context,
-                      content_type=None, status=None, using=None)
+
+        return render(request, 'posts/edit.html', context=context, content_type=None, status=None, using=None)
         # return render(request, 'posts/ask.html', {'form': form})
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
 
@@ -415,8 +378,6 @@ class EditView(generic.DetailView, View):
 
 
 class MypageView(View):
-    # paginate_by = 2
-
     def get(self, request):
         # if request.method == 'GET':
         print("##################")
@@ -437,8 +398,6 @@ class UserProfileView(View):
         user_id = request.session.get('_auth_user_id')
         user = User.objects.get(pk=user_id)
 
-        print(user.username)
-
         if "username_input" in request.GET:
             new_username = request.GET["username_input"]
 
@@ -458,11 +417,9 @@ class UserProfileView(View):
         user_id = request.session.get('_auth_user_id')
         user = User.objects.get(pk=user_id)
 
-        print(request.FILES)
         if "profile_image" in request.FILES:
             user.profile_image = request.FILES["profile_image"]
 
-        print(request.POST)
         if "username" in request.POST:
             new_username = request.POST["username"]
 
