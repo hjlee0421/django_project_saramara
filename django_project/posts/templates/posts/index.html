@@ -3,12 +3,9 @@
 <div class="ask-list" style="font-size: 20px">
   {% if user.is_authenticated %}
   <a href="{% url 'posts:ask' %}">질문하기</a>
-  {% comment %} forward to ask page {% endcomment %} {% else %} {% comment %}
-  <a href="{% url 'posts:signin' %}">질문하기</a> {% endcomment %}
+  {% else %}
   <button id="after_login">질문하기</button>
-
-  {% comment %} run kakao_login_javascript OR alert "You should log in to ask"
-  {% endcomment %} {% endif %}
+  {% endif %}
 </div>
 
 <div id="search-button">검색설정</div>
@@ -69,65 +66,41 @@
         <label for="30일">30일</label>
       </div>
     </div>
-    <br />
-    <br />
     <input type="submit" class="btn btn-primary" value="검색" />
   </form>
 </div>
 <br />
 
-<!--        item filter-->
-
-<!--        item list-->
-
 <div class="items-wrap infinite-container">
-  {% if post_objects %} {% comment %}
-  <ul
-    style="
-      list-style-type: disc;
-      margin-block-start: 0em;
-      margin-block-end: 0em;
-      margin-inline-start: 0px;
-      margin-inline-end: 0px;
-      padding-inline-start: 0px;
-    "
-  >
-    {% endcomment %} {% for post in post_objects %}
-
-    <a class="infinite-item" href="{% url 'posts:detail' post.id %}"
-      ><div class="single-item">
-        {{post.title|upper}} <br />
-        {{post.author}}<br />
-        {% comment %} {{post.ckcontent|truncatewords:2}} {% endcomment %} 댓글 :
-        {{post.comment_cnt}} 사라 : {{post.sara_cnt}} 마라 : {{post.mara_cnt}}
-        조회수 : {{post.view_cnt}}<br />
-        {{post.get_pub_date}}
-      </div>
-      <br />
-    </a>
-
-    {% endfor %} {% if page_obj.has_next %}
-    <a
-      class="infinite-more-link"
-      href="?page={{ page_obj.next_page_number }}"
-    ></a>
-    {% endif %}
-    <div class="d-flex justify-content-center" style="display: div">
-      <div class="spinner-border" role="status">
-        <span class="sr-only"></span>
-      </div>
+  {% if post_objects %} {% for post in post_objects %}
+  <a class="infinite-item" href="{% url 'posts:detail' post.id %}"
+    ><div class="single-item">
+      {{post.title|upper}} <br />
+      {{post.author}}<br />
+      댓글 : {{post.comment_cnt}} 사라 : {{post.sara_cnt}} 마라 :
+      {{post.mara_cnt}} 조회수 : {{post.view_cnt}}<br />
+      {{post.get_pub_date}}
     </div>
-    {% comment %}
-  </ul>
-  {% endcomment %} {% else %}
-  <p>no posts are available</p>
+    <br />
+  </a>
+  {% endfor %} {% if page_obj.has_next %}
+  <a
+    class="infinite-more-link"
+    href="?page={{ page_obj.next_page_number }}"
+  ></a>
+  {% endif %}
+  <div class="d-flex justify-content-center" style="display: div">
+    <div class="spinner-border" role="status">
+      <span class="sr-only"></span>
+    </div>
+  </div>
+  {% else %}
+  <p>아직 작성된 포스트가 없습니다 :(</p>
   {% endif %}
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="/static/posts/jquery.waypoints.min.js"></script>
 <script src="/static/posts/infinite.min.js"></script>
-<script src="/static/posts/saramara_all.js"></script>
 
 <script>
   var infinite = new Waypoint.Infinite({
