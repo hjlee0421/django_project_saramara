@@ -2,27 +2,25 @@
 
 <br />
 <div class="ask-wrap">
-  <h1>질문 수정하기</h1>
-  {% comment %} <form method="POST" action="."> {% endcomment %}
-  
+  <br />
   <form method="POST" action="." enctype="multipart/form-data">
     {% csrf_token %} {{ form.media }}
-    <p>
-      <label for="id_item_image">Item image:</label>
-      <input
-        type="file"
-        name="item_image"
-        multiple
-        accept="image/*"
-        id="gallery-photo-add"
-      />
-    </p>
+
+    <label for="id_item_image">Item image:</label>
+    <input
+      type="file"
+      name="item_image"
+      multiple
+      accept="image/*"
+      id="gallery-photo-add"
+    />
+
     <br />
     <div id="current_post_image">
-    {% for image in images %}
-  <img src="{{ image.item_image.url }}" style="width: 100%; height: auto" />
-  {% endfor %}
-  </div>
+      {% for image in images %}
+      <img src="{{ image.item_image.url }}" style="width: 100%; height: auto" />
+      {% endfor %}
+    </div>
     <br />
     <div class="gallery" id="id_item_image"></div>
     <br /><br />
@@ -30,18 +28,7 @@
     <button type="submit" class="btn btn-primary">질문 수정하기</button>
   </form>
   <br />
-  <br />
-  
 </div>
-
-<script
-  type="text/javascript"
-  src="{% static 'ckeditor/ckeditor-init.js' %}"
-></script>
-<script
-  type="text/javascript"
-  src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"
-></script>
 
 <script>
   $(function () {
