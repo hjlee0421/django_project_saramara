@@ -55,9 +55,8 @@
 
 {% endif %} {% endif %}
 
-<!--        각 item detail 이 가지는 기본 정보, 혹은 보여지는 정보를 따로 표시-->
 <br />
-<!--        작성한 내용을 container 라는 div 안에 담아서 표현-->
+
 <div class="ckbody">
   <p>카테고리 : {{ post.category }}</p>
   <br />
@@ -71,9 +70,7 @@
   <br />
   {% for image in images %}
   <img src="{{ image.item_image.url }}" style="width: 100%; height: auto" />
-  {% endfor %} {% comment %}
-  <p style="max-width: 400px; height: auto">{{ post.ckcontent|safe }}</p>
-  {% endcomment %}
+  {% endfor %}
   <p>{{ post.ckcontent|safe }}</p>
 
   <h1>투표공간</h1>
@@ -144,25 +141,17 @@
   <br />
   <h1>공유하기</h1>
 </div>
-<!--        작성한 내용을 container 라는 div 안에 담아서 표현-->
+
 <br />
+
 <a id="create-kakao-link-btn" href="javascript:shareWithKakao();">
   <img
     src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"
   />
 </a>
 
-<br />
-<!--        현재의 빈 공간 / 미래의 광고창-->
-<div>
-  <h1>빈 공간</h1>
-</div>
-<br />
-<!--        현재의 빈 공간 / 미래의 광고창-->
-<!--        댓글 공간-->
 <div>
   <h1>댓글창 with pagination</h1>
-  <!-- {{comment}} -->
 
   {% for element in comment %} author {{element.author.id}} <br />
   <div class="comment_{{element.id}}">
@@ -211,7 +200,7 @@
 
   {% if user.is_authenticated %}
   <h1>댓글작성창</h1>
-  <!-- <input type="text" name="add_comment" size="100" height="100"><br><br> -->
+
   <br />
 
   <textarea
@@ -221,13 +210,6 @@
     placeholder="당신의 의견을 말해주세요"
   ></textarea>
 
-  {% comment %}
-  <input
-    id="comment_input"
-    name="add_comment"
-    placeholder="당신의 의견을 말해주세요"
-  />
-  {% endcomment %}
   <br />
   <input
     id="add_comment_button"
@@ -236,9 +218,7 @@
     value="댓글달기"
     class="btn btn-primary"
   />
-  {% else %}
-
-  <!-- <input type="text" name="add_comment" size="100" height="100"><br><br> -->
+  {% else %} {% comment %} onclick="AddComment()" {% endcomment %}
   <textarea
     id="comment_input"
     rows="4"
@@ -256,29 +236,29 @@
     />
   </a>
 
-  {% endif %} {% comment %} ajax method 는 POST로 바꿔줘야 함 {% endcomment %}
+  {% endif %}
 
-  <br />
-  <br />
-  <br />
-  <br />
+  <br /><br /><br /><br />
 </div>
 
+{% comment %}
 <script>
-  $(document).ready(function () {
-    $("#add_comment_button").click(function () {
-      var comment_input = $("#comment_input").val();
-      var current_url = $(location).attr("pathname"); // + "add_comment/";
-      $.ajax({
-        type: "POST",
-        url: current_url, //"/add_comment/",
-        data: { comment_input: comment_input },
-      }).done(function () {
-        location.reload();
-        $("#comment_input").val("");
+  function AddComment() {
+    $(document).ready(function () {
+      $("#add_comment_button").click(function () {
+        var comment_input = $("#comment_input").val();
+        var current_url = $(location).attr("pathname"); // + "add_comment/";
+        $.ajax({
+          type: "POST",
+          url: current_url, //"/add_comment/",
+          data: { comment_input: comment_input },
+        }).done(function () {
+          location.reload();
+          $("#comment_input").val("");
+        });
       });
     });
-  });
+  }
 </script>
 
 <script>
@@ -351,34 +331,7 @@
     }
   }
 </script>
-
-<script>
-  $("#sarabutton").click(function () {
-    var current_url = $(location).attr("pathname"); // + "sara/";
-    var saramara_data = "sara";
-    $.ajax({
-      type: "POST",
-      url: current_url,
-      data: { saramara_input: saramara_data },
-    }).done(function () {
-      location.reload();
-    });
-  });
-</script>
-
-<script>
-  $("#marabutton").click(function () {
-    var current_url = $(location).attr("pathname"); // + "mara/";
-    var saramara_data = "mara";
-    $.ajax({
-      type: "POST",
-      url: current_url,
-      data: { saramara_input: saramara_data },
-    }).done(function () {
-      location.reload();
-    });
-  });
-</script>
+{% endcomment %}
 
 <script>
   var current_url = $(location).attr("href");

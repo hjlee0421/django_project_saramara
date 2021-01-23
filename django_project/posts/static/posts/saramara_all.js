@@ -93,13 +93,34 @@ function profileWithKakao() {
   });
 }
 
+$(document).ready(function () {
+  $("#after_login").click(function () {
+    alert("카카오톡으로 로그인 후 이용해주세요");
+  });
+});
+
 // #####################################################################
 // 카카오계정 관련 함수들
 // #####################################################################
 
 
 // #####################################################################
-// 포스트 수정 관련 함수들
+// 메인페이지 관련 함수들
+// #####################################################################
+
+$(document).ready(function () {
+  $("#search-button").click(function () {
+    $(".items-sort-all").slideToggle(1000);
+  });
+});
+
+// #####################################################################
+// 메인페이지 관련 함수들
+// #####################################################################
+
+
+// #####################################################################
+// 포스트 이미지 관련 함수들
 // #####################################################################
 
 $(function () {
@@ -134,10 +155,100 @@ $(function () {
   });
 });
 
+
+
+// #####################################################################
+// 포스트 이미지 관련 함수들
+// #####################################################################
+
+
 // #####################################################################
 // 포스트 수정 관련 함수들
 // #####################################################################
 
+
+$(document).ready(function () {
+  $("#add_comment_button").click(function () {
+    var comment_input = $("#comment_input").val();
+    var current_url = $(location).attr("pathname"); // + "add_comment/";
+    $.ajax({
+      type: "POST",
+      url: current_url, //"/add_comment/",
+      data: { comment_input: comment_input },
+    }).done(function () {
+      location.reload();
+      $("#comment_input").val("");
+    });
+  });
+});
+
+function EditCommentBox(input) {
+  var text = $(".comment_" + input + ">div.text")
+    .html()
+    .replaceAll("<p>", "")
+    .replaceAll("</p>", "")
+    .replaceAll("<br>", "\n")
+    .replaceAll("      ", "")
+    .replaceAll("\n    ", "");
+  $(".comment_" + input + ">div.text").html(
+    "<textarea id='newComment' rows='4' cols='40'>" + text + "</textarea>"
+  );
+  $(".edit_delete_button").hide();
+  $(".edit_button_" + input + "").show();
+}
+
+function EditComment(input) {
+  var new_comment = $("#newComment").val();
+  var current_url = $(location).attr("pathname");
+  $.ajax({
+    type: "POST",
+    url: current_url,
+    data: { new_comment: new_comment, pk: input },
+  }).done(function () {
+    location.reload();
+  });
+}
+
+function DeleteComment(input) {
+  if (confirm("정말 삭제하시겠습니까?") == true) {
+    //확인
+    var current_url = $(location).attr("pathname");
+    $.ajax({
+      type: "POST",
+      url: current_url,
+      data: { delete_comment_pk: input },
+      //csrfmiddlewaretoken: {{ csrf_token }},
+    }).done(function () {
+      location.reload();
+    });
+  } else {
+    //취소
+    return;
+  }
+}
+
+function DeletePost(input) {
+  if (confirm("정말 삭제하시겠습니까?") == true) {
+    //확인
+    var current_url = $(location).attr("pathname");
+
+    $.ajax({
+      type: "POST",
+      url: current_url,
+      data: { delete_post: input },
+    }).done(function () {
+      window.location.replace("http://127.0.0.1:8000/");
+    });
+  } else {
+    //취소
+    return;
+  }
+}
+
+
+// #####################################################################
+// 포스트 수정 관련 함수들
+// #####################################################################
 
 
 // #####################################################################
