@@ -50,7 +50,6 @@
 
 <script>
   function editComment(input) {
-    console.log(input);
     var text = $(".comment_" + input + ">div.text")
       .html()
       .replaceAll("<p>", "")
@@ -58,7 +57,6 @@
       .replaceAll("<br>", "\n")
       .replaceAll("      ", "")
       .replaceAll("\n    ", "");
-    console.log(text);
     $(".comment_" + input + ">div.text").html(
       "<textarea id='newComment' rows='4' cols='40'>" + text + "</textarea>"
     );
@@ -69,12 +67,8 @@
 
 <script>
   function clickeditComment(input) {
-    console.log(input);
     var new_comment = $("#newComment").val();
-    console.log(new_comment);
-
     var current_url = $(location).attr("pathname");
-    console.log(current_url);
     $.ajax({
       type: "POST",
       url: current_url,
@@ -89,20 +83,15 @@
 <script>
   function deletePost(input) {
     if (confirm("정말 삭제하시겠습니까?") == true) {
-      //확인
       var current_url = $(location).attr("pathname");
-      console.log("%%%%%%%%%%");
-      console.log(current_url);
       $.ajax({
         type: "POST",
         url: current_url,
         data: { delete_post: input },
-        //csrfmiddlewaretoken: {{ csrf_token }},
       }).done(function () {
         window.location.replace("http://192.168.219.104:8000");
       });
     } else {
-      //취소
       return;
     }
   }
@@ -111,31 +100,26 @@
 <script>
   function deleteComment(input) {
     if (confirm("정말 삭제하시겠습니까?") == true) {
-      //확인
       var current_url = $(location).attr("pathname");
       $.ajax({
         type: "POST",
         url: current_url,
         data: { delete_comment_pk: input },
-        //csrfmiddlewaretoken: {{ csrf_token }},
       }).done(function () {
         location.reload();
       });
     } else {
-      //취소
       return;
     }
   }
 </script>
 
-<br />
 <script>
   $("#plz_login_sara").click(function () {
     alert("이건 사야한다!! 투표하려면 로그인을 해주세요");
   });
 </script>
-<br />
-<br />
+
 <script>
   $("#plz_login_mara").click(function () {
     alert("이건 절대아니다!! 투표하려면 로그인을 해주세요");
@@ -172,7 +156,6 @@
 
 <script>
   var current_url = $(location).attr("href");
-  console.log(current_url);
   Kakao.Link.createDefaultButton({
     container: "#create-kakao-link-btn",
     objectType: "feed",
@@ -212,10 +195,8 @@
     ],*/
   });
 </script>
-<br />
-<br />
 
-<br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br />
 
 <!--        각 item detail 이 가지는 기본 정보, 혹은 보여지는 정보를 따로 표시-->
 <div>

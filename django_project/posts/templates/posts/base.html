@@ -13,19 +13,12 @@
     </script>
 
     {% load static %}
+
     <link
       rel="stylesheet"
       type="text/css"
       href="{% static 'posts/styles.css' %}"
     />
-    {% comment %}
-    <style>
-      .imageSize {
-        height: 100px;
-        width: 100px;
-      }
-    </style>
-    {% endcomment %}
   </head>
 
   <body
@@ -99,12 +92,7 @@
 
     <script>
       $("#plz_login_mara").click(function () {
-        //var current_url = $(location).attr("pathname") + "add_comment/";
-        console.log("뭐지?");
         alert("이건 절대아니다!! 투표하려면 로그인을 해주세요");
-        //$.ajax({
-        //  alert("사라 마라 하려면 로그인을 해주세요");
-        //});
       });
     </script>
 
@@ -141,49 +129,6 @@
         $("#vote-result").click(function () {
           $("div.vote-result-area").slideToggle(1000);
         });
-      });
-    </script>
-
-    <script>
-      var current_url = $(location).attr("href");
-      console.log(current_url);
-      Kakao.Link.createDefaultButton({
-        container: "#create-kakao-link-btn",
-        objectType: "feed",
-        content: {
-          title: "포스트 제목을 여기에 가져와야 함",
-          description:
-            "여기에는 포스트 ckcontent 가져와야 함 #사라 #마라 #사이트 #테스트 #해쉬태그를 해야하나",
-          imageUrl:
-            "https://cdn.pixabay.com/photo/2018/06/04/00/29/women-3452067_1280.jpg",
-          link: {
-            // mobileWebUrl: "https://developers.kakao.com",
-            // webUrl: "https://developers.kakao.com",
-            mobileWebUrl: current_url,
-            webUrl: current_url,
-          },
-        },
-        social: {
-          likeCount: 286, // 이걸 사라, 마라, 댓글, 조회수, 공유수 로 바꿀수가 있나?
-          commentCount: 45,
-          sharedCount: 845,
-        },
-        /*buttons: [
-      {
-        title: "웹으로 보기",
-        link: {
-          mobileWebUrl: "https://developers.kakao.com",
-          webUrl: "https://developers.kakao.com",
-        },
-      },
-      {
-        title: "앱으로 보기",
-        link: {
-          mobileWebUrl: "https://developers.kakao.com",
-          webUrl: "https://developers.kakao.com",
-        },
-      },
-    ],*/
       });
     </script>
 

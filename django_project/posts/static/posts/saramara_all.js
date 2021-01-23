@@ -3,8 +3,6 @@
 // #####################################################################
 
 function loginWithKakao() {
-  console.log(Kakao.isInitialized());
-  console.log(Kakao.Auth.getAccessToken());
   if (!Kakao.Auth.getAccessToken()) {
     // 로그인
     Kakao.Auth.login({
@@ -19,7 +17,6 @@ function loginWithKakao() {
             var USER_INFO = JSON.stringify(res);
             var current_url =
               $(location).attr("pathname") + "kakao_login/";
-            console.log(current_url);
             $.ajax({
               type: "POST",
               // url: current_url,
@@ -48,9 +45,7 @@ function loginWithKakao() {
 }
 
 function logoutWithKakao() {
-  console.log(Kakao.Auth.getAccessToken()); //before Logout
   Kakao.Auth.logout(function () {
-    console.log(Kakao.Auth.getAccessToken()); //after Logout
     $.ajax({
       type: "POST",
       url: "/kakao_logout/",
@@ -61,12 +56,10 @@ function logoutWithKakao() {
 }
 
 function unlinkApp() {
-  console.log(Kakao.Auth.getAccessToken());
   Kakao.API.request({
     url: "/v1/user/unlink",
     success: function (res) {
       Kakao.Auth.setAccessToken(undefined);
-      console.log(Kakao.Auth.getAccessToken());
       $.ajax({
         type: "POST",
         url: "/kakao_unlink/",
@@ -85,7 +78,7 @@ function profileWithKakao() {
   Kakao.API.request({
     url: "/v2/user/me",
     success: function (response) {
-      console.log(response);
+      
       document.getElementById("userid").innerText = response.id;
       document.getElementById("nickname").innerText =
         response.kakao_account.profile.nickname;
@@ -184,9 +177,7 @@ $(function () {
 // #####################################################################
 
 function logoutWithKakao() {
-  console.log(Kakao.Auth.getAccessToken()); //before Logout
   Kakao.Auth.logout(function () {
-    console.log(Kakao.Auth.getAccessToken()); //after Logout
     $.ajax({
       type: "POST",
       url: "/kakao_logout/",
@@ -215,15 +206,9 @@ function confirmNewNickname() {
       url: "/user_profile/",
       data: { username_input: username_input },
     }).done(function (res) {
-      //if else 로 username 아래쪽에 가능하면 사용가능한 닉네임입니다.
-      // 불가능하면, 이미 사용중인 닉네임입니다. 를 띄우기
-      //location.reload();
-      console.log(Object.keys(res).length == 1);
       if (Object.keys(res).length == 1) {
-        // 이미 사용중인 아이디
         $("#check_duplicated").text("사용가능한 닉네임이에요 :)");
       } else {
-        // 사용 가능한 아이디
         $("#check_duplicated").text("이미 사용중인 닉네임이에요 :(");
       }
     });
@@ -234,7 +219,6 @@ function noSpaceForm(obj) {
   // 공백사용못하게
   var str_space = /\s/; // 공백체크
   if (str_space.exec(obj.value)) {
-    //공백 체크
     alert(
       "해당 항목에는 공백을 사용할수 없습니다.\n\n공백은 자동적으로 제거 됩니다."
     );

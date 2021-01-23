@@ -198,8 +198,8 @@ CKEDITOR_CONFIGS = {
         'width': 'auto',
         'toolbar_Custom': [
             ['Bold', 'Italic', 'Underline', 'Strike'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['TextColor'],  # 'BGColor'
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],   # , 'JustifyBlock'
+            # ['TextColor'],  # 'BGColor'
             ['FontSize'],  # 'Font',
             # ['Image'],  # 'Smiley'
             # ['Bold', 'Italic', 'Underline'],

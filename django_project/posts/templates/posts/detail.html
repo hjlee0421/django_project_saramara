@@ -45,7 +45,7 @@
   name="delete_post_button"
   value="삭제"
   class="btn"
-  onclick="deletePost('{{post.id}}')"
+  onclick="DeletePost('{{post.id}}')"
 />
 <a class="edit_post" href="{% url 'posts:edit' post.id  %}">
   <input type="submit" name="edit_post_button" value="수정" class="btn" />
@@ -146,7 +146,7 @@
 </div>
 <!--        작성한 내용을 container 라는 div 안에 담아서 표현-->
 <br />
-<a id="create-kakao-link-btn" href="javascript:;">
+<a id="create-kakao-link-btn" href="javascript:shareWithKakao();">
   <img
     src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"
   />
@@ -182,14 +182,14 @@
         type="submit"
         value="삭제"
         class="btn"
-        onclick="deleteComment('{{element.id}}')"
+        onclick="DeleteComment('{{element.id}}')"
       />
 
       <input
         type="submit"
         value="수정"
         class="btn"
-        onclick="editComment('{{element.id}}')"
+        onclick="EditCommentBox('{{element.id}}')"
       />
     </div>
     <div class="edit_button_{{element.id}}" style="display: none">
@@ -199,7 +199,7 @@
         value="댓글수정"
         class="btn"
         id="edit_comment_button"
-        onclick="clickeditComment('{{element.id}}')"
+        onclick="EditComment('{{element.id}}')"
       />
     </div>
   </div>
@@ -248,7 +248,8 @@
   ></textarea>
 
   <br />
-  <a id="custom-login-btn" href="javascript:loginWithKakao()">
+
+  <a id="custom-login-btn" href="javascript:">
     <img
       src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg"
       width="120"
@@ -281,8 +282,7 @@
 </script>
 
 <script>
-  function editComment(input) {
-    console.log(input);
+  function EditCommentBox(input) {
     var text = $(".comment_" + input + ">div.text")
       .html()
       .replaceAll("<p>", "")
@@ -290,7 +290,6 @@
       .replaceAll("<br>", "\n")
       .replaceAll("      ", "")
       .replaceAll("\n    ", "");
-    console.log(text);
     $(".comment_" + input + ">div.text").html(
       "<textarea id='newComment' rows='4' cols='40'>" + text + "</textarea>"
     );
@@ -300,18 +299,13 @@
 </script>
 
 <script>
-  function clickeditComment(input) {
-    console.log(input);
+  function EditComment(input) {
     var new_comment = $("#newComment").val();
-    console.log(new_comment);
-
     var current_url = $(location).attr("pathname");
-    console.log(current_url);
     $.ajax({
       type: "POST",
       url: current_url,
       data: { new_comment: new_comment, pk: input },
-      //csrfmiddlewaretoken: {{ csrf_token }},
     }).done(function () {
       location.reload();
     });
@@ -319,17 +313,15 @@
 </script>
 
 <script>
-  function deletePost(input) {
+  function DeletePost(input) {
     if (confirm("정말 삭제하시겠습니까?") == true) {
       //확인
       var current_url = $(location).attr("pathname");
-      console.log("%%%%%%%%%%");
-      console.log(current_url);
+
       $.ajax({
         type: "POST",
         url: current_url,
         data: { delete_post: input },
-        //csrfmiddlewaretoken: {{ csrf_token }},
       }).done(function () {
         window.location.replace("http://127.0.0.1:8000/");
       });
@@ -341,7 +333,7 @@
 </script>
 
 <script>
-  function deleteComment(input) {
+  function DeleteComment(input) {
     if (confirm("정말 삭제하시겠습니까?") == true) {
       //확인
       var current_url = $(location).attr("pathname");
@@ -390,7 +382,6 @@
 
 <script>
   var current_url = $(location).attr("href");
-  console.log(current_url);
   Kakao.Link.createDefaultButton({
     container: "#create-kakao-link-btn",
     objectType: "feed",
