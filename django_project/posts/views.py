@@ -1,39 +1,38 @@
 
-from django.views.generic.edit import FormView
-from django.utils.decorators import method_decorator
-
-from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
 import os
+import json
+import urllib
+import request
+
+from datetime import datetime, timedelta
+
 from .models import Post, User, Comment, ViewCount, Image
 from .forms import PostForm, EditForm
 
 from django.views import generic, View
+from django.views.generic.edit import FormView
+from django.views.decorators.csrf import csrf_exempt
+
+from django.utils import timezone
+from django.utils.decorators import method_decorator
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import check_password
 
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from django.core.paginator import Paginator
-
-from datetime import datetime, timedelta
-from django.utils import timezone
-
-from rest_framework import generics, status
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .serializers import PostSerializer, AskSerializer
-
-import urllib
-import requests
-import json
-from django.http import JsonResponse
 
 # There is Q objects that allow to complex lookups. Example:
 # Item.objects.filter(Q(creator=owner) | Q(moderated=False))
 from django.db.models import Q
+
+# modules for DRF
+from rest_framework import generics, status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import PostSerializer, AskSerializer
 
 
 # @csrf_exempt, def 에 사용
@@ -56,7 +55,9 @@ class KakaoLoginView(View):
         gender = ""
         email = ""
         birthday = ""
-        print(profile_json['kakao_account'])
+
+        # print(profile_json['kakao_account'])
+
         if profile_json['kakao_account']['has_gender'] is True:
             gender = profile_json['kakao_account']['gender']
 
@@ -80,7 +81,6 @@ class KakaoLoginView(View):
             # return redirect('/')
         else:
             # 기존에 username 이 있다면?
-
             user = User.objects.get(kakao_unique_id=profile_json['id'])
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             request.session['user_id'] = user.id
@@ -162,8 +162,6 @@ class IndexView(generic.ListView):
         if keyword:
             self.queryset = self.get_queryset().filter(Q(title__icontains=keyword)
                                                        | Q(ckcontent__icontains=keyword))
-            # TODO : filter 여러가지 기능 추가하기
-            # https://docs.djangoproject.com/en/3.1/ref/models/querysets/
 
         if drone in drone_list:
             self.queryset = self.get_queryset().order_by('-'+drone)
@@ -171,9 +169,6 @@ class IndexView(generic.ListView):
         # 부모클래스의 get 함수를 대신호출하는 방법
         return super(IndexView, self).get(request, *args, **kwargs)
 #              <- ListView와 같음  ->
-
-
-# @csrf_exempt
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -189,12 +184,10 @@ class DetailView(generic.DetailView, View):
         print("# DetailView GET #")
         print("##################")
 
-        #  self.object 는 post 로 변경하기
-
         post = self.get_object()
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
-        # print(post.comment_set.all())
+
         context['comment'] = post.comment_set.all()
         context['images'] = post.image_set.all()
         user = request.user
@@ -240,10 +233,8 @@ class DetailView(generic.DetailView, View):
         context = self.get_context_data(object=self.object)
         context['comment'] = post.comment_set.all()
 
-        user = request.user
         # user = 현재 로그인한 username
-        print("################")
-        print(request.POST)
+        user = request.user
 
         if 'saramara_input' in request.POST:
             saramara_input = request.POST["saramara_input"]
@@ -268,7 +259,7 @@ class DetailView(generic.DetailView, View):
                 comment.delete()
                 # post.comment_cnt = post.comment_set.all().count()
                 post.save()
-                print("삭제완료")
+
             # return render(request, 'posts/detail.html', context=context, content_type=None, status=None, using=None)
 
         if 'delete_post' in request.POST:
@@ -277,7 +268,6 @@ class DetailView(generic.DetailView, View):
 
             if user == post.author:
                 post.delete()
-                print("post deleted")
                 return redirect('/')
                 # return render(request, 'posts/index.html')
 

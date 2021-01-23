@@ -4,7 +4,6 @@ from . import views
 
 app_name = 'posts'
 
-# view.함수명 인 url들 모두 class based view 로 변경한 후 views.클래스명.as_view() 로 변경하기
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),  # 메인 인데스
     path('<int:pk>/', views.DetailView.as_view(), name='detail'),  # 포스트 디테일
