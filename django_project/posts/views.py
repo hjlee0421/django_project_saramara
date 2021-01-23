@@ -2,7 +2,8 @@
 import os
 import json
 import urllib
-import request
+# import request
+# import requests
 
 from datetime import datetime, timedelta
 
@@ -434,10 +435,15 @@ class UserProfileView(View):
         print("# UserProfileView GET #")
         print("#######################")
 
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(pk=user_id)
+
+        print(user.username)
+
         if "username_input" in request.GET:
             new_username = request.GET["username_input"]
 
-            if not User.objects.filter(username=new_username).exists():
+            if (not User.objects.filter(username=new_username).exists()) or (str(user.username) == str(new_username)):
                 return JsonResponse(data={'created': True})
             elif User.objects.filter(username=new_username).exists():
                 return JsonResponse(data={'created': False, 'len': '2'})
