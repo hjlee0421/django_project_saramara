@@ -139,6 +139,53 @@ $(function () {
 // #####################################################################
 
 
+
+// #####################################################################
+// 포스트 투표 관련 함수들
+// #####################################################################
+
+$("#plz_login_sara").click(function () {
+  alert("이건 사야한다!! 투표하려면 로그인을 해주세요");
+});
+
+$("#plz_login_mara").click(function () {
+  alert("이건 절대아니다!! 투표하려면 로그인을 해주세요");
+});
+
+$("#sarabutton").click(function () {
+  var current_url = $(location).attr("pathname");
+  var saramara_data = "sara";
+  $.ajax({
+    type: "POST",
+    url: current_url,
+    data: { saramara_input: saramara_data },
+  }).done(function () {
+    location.reload();
+  });
+});
+
+$("#marabutton").click(function () {
+  var current_url = $(location).attr("pathname");
+  var saramara_data = "mara";
+  $.ajax({
+    type: "POST",
+    url: current_url,
+    data: { saramara_input: saramara_data },
+  }).done(function () {
+    location.reload();
+  });
+});
+
+$(document).ready(function () {
+  $("#vote-result").click(function () {
+    $("div.vote-result-area").slideToggle(1000);
+  });
+});
+
+// #####################################################################
+// 포스트 투표 관련 함수들
+// #####################################################################
+
 // var slideIndex = 1;
 // showSlides(slideIndex);
 
