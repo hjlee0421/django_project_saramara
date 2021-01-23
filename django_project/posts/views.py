@@ -41,6 +41,11 @@ from django.db.models import Q
 @method_decorator(csrf_exempt, name='dispatch')
 class KakaoLoginView(View):
     def post(self, request):
+        # if request.method == 'POST':
+        print("#######################")
+        print("# KakaoLoginView POST #")
+        print("#######################")
+
         LOGIN_INFO = json.loads(request.POST['LOGIN_INFO'])
         USER_INFO = json.loads(request.POST['USER_INFO'])
 
@@ -87,6 +92,11 @@ class KakaoLoginView(View):
 @method_decorator(csrf_exempt, name='dispatch')
 class KakaoLogoutView(View):
     def post(self, request):
+        # if request.method == 'POST':
+        print("########################")
+        print("# KakaoLogoutView POST #")
+        print("########################")
+
         if request.session.get('user_id'):
             del(request.session['user_id'])
         logout(request)
@@ -97,6 +107,11 @@ class KakaoLogoutView(View):
 @method_decorator(csrf_exempt, name='dispatch')
 class KakaoUnlinkView(View):
     def post(self, request):
+        # if request.method == 'POST':
+        print("########################")
+        print("# KakaoUnlinkView POST #")
+        print("########################")
+
         user_id = request.session.get('user_id')
 
         if request.session.get('user_id'):
@@ -122,6 +137,10 @@ class IndexView(generic.ListView):
 
     def get(self, request, *args, **kwargs):
         # if request.method == 'GET':
+        print("#################")
+        print("# IndexView GET #")
+        print("#################")
+
         timerange = request.GET.get('timerange')
         timerange_list = ['1일', '7일', '30일']
 
@@ -166,6 +185,10 @@ class DetailView(generic.DetailView, View):
 
     def get(self, request, pk, *args, **kwargs):
         # if request.method == 'GET':
+        print("##################")
+        print("# DetailView GET #")
+        print("##################")
+
         #  self.object 는 post 로 변경하기
 
         post = self.get_object()
@@ -208,6 +231,9 @@ class DetailView(generic.DetailView, View):
 
     def post(self, request, pk, *args, **kwargs):
         # if request.method == 'POST':
+        print("###################")
+        print("# DetailView POST #")
+        print("###################")
 
         post = self.get_object()
         self.object = self.get_object()
@@ -300,11 +326,19 @@ class AskView(FormView):
 
     def get(self, request):
         # if request.method == 'GET':
+        print("###############")
+        print("# AskView GET #")
+        print("###############")
+
         form = PostForm()
         return render(request, 'posts/ask.html', {'form': form})
         # render(request, template_name, context=None, content_type=None, status=None, using=None)
 
     def post(self, request):
+        # if request.method == 'POST':
+        print("################")
+        print("# AskView POST #")
+        print("################")
 
         files = request.FILES.getlist('item_image')
 
@@ -336,15 +370,17 @@ class EditView(generic.DetailView, View):
     form_class = PostForm
 
     def get(self, request, pk, *args, **kwargs):
-        print("#####################")
-        print("editview GET function")
-        print("#####################")
         # if request.method == 'GET':
+        print("################")
+        print("# EditView GET #")
+        print("################")
+
         # post = Post(**form.cleaned_data)
         post = self.get_object()
         form = PostForm(instance=post)
         # context = self.get_context_data(form=form)
         context = dict(form=form)
+        context['images'] = post.image_set.all()
         # TODO: 확인하기
         # import pdb
         # pdb.set_trace()
@@ -357,25 +393,31 @@ class EditView(generic.DetailView, View):
 
     def post(self, request, pk, *args, **kwargs):
         # if request.method == 'POST':
-        print("#####################")
-        print("editview POST function")
-        print("#####################")
+        print("#################")
+        print("# EditView POST #")
+        print("#################")
+
         form = PostForm(request.POST)
+
         if form.is_valid():
             user_id = request.session.get('_auth_user_id')
             user = User.objects.get(pk=user_id)
             post = self.get_object()
-
-            # post = Post(**form.cleaned_data)
-            post.title = form.cleaned_data['title']
-            post.category = form.cleaned_data['category']
-            post.brand = form.cleaned_data['brand']
-            post.price = form.cleaned_data['price']
-            post.link = form.cleaned_data['link']
-            post.ckcontent = form.cleaned_data['ckcontent']
-
+            post = Post(**form.cleaned_data)
             post.author = user
             post.save()
+
+            if 'item_image' in request.FILES:
+                for image in request.FILES.getlist('item_image'):
+                    image_obj = Image()
+                    image_obj.post_id = post.id
+                    image_obj.item_image = image
+                    image_obj.save()
+            else:
+                for image_obj in Image.objects.filter(post_id=self.get_object().id):
+                    image_obj.post_id = post.id
+                    image_obj.save()
+
             return redirect('/'+str(post.pk))
         else:
             return render(request, 'posts/ask.html', {'form': form})
@@ -387,6 +429,10 @@ class MypageView(View):
 
     def get(self, request):
         # if request.method == 'GET':
+        print("##################")
+        print("# MypageView GET #")
+        print("##################")
+
         return render(request, 'posts/mypage.html')
 
 
@@ -394,6 +440,9 @@ class MypageView(View):
 class UserProfileView(View):
     def get(self, request):
         # if request.method == 'GET':
+        print("#######################")
+        print("# UserProfileView GET #")
+        print("#######################")
 
         if "username_input" in request.GET:
             new_username = request.GET["username_input"]
@@ -407,6 +456,9 @@ class UserProfileView(View):
 
     def post(self, request):
         # if request.method == 'POST':
+        print("########################")
+        print("# UserProfileView POST #")
+        print("########################")
 
         user_id = request.session.get('_auth_user_id')
         user = User.objects.get(pk=user_id)
