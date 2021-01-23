@@ -336,6 +336,9 @@ class EditView(generic.DetailView, View):
     form_class = PostForm
 
     def get(self, request, pk, *args, **kwargs):
+        print("#####################")
+        print("editview GET function")
+        print("#####################")
         # if request.method == 'GET':
         # post = Post(**form.cleaned_data)
         post = self.get_object()
@@ -354,7 +357,9 @@ class EditView(generic.DetailView, View):
 
     def post(self, request, pk, *args, **kwargs):
         # if request.method == 'POST':
-
+        print("#####################")
+        print("editview POST function")
+        print("#####################")
         form = PostForm(request.POST)
         if form.is_valid():
             user_id = request.session.get('_auth_user_id')

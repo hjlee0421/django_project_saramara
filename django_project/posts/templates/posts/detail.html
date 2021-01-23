@@ -50,6 +50,10 @@
   class="btn"
   onclick="deletePost('{{post.id}}')"
 />
+<a class="edit_post" href="{% url 'posts:edit' post.id  %}">
+  <input type="submit" name="edit_post_button" value="수정" class="btn" />
+</a>
+
 <br />
 
 {% endif %} {% endif %}
