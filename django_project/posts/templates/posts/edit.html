@@ -17,14 +17,17 @@
         id="gallery-photo-add"
       />
     </p>
-    <br /><br />
+    <br />
+    <div id="current_post_image">
+    {% for image in images %}
+  <img src="{{ image.item_image.url }}" style="width: 100%; height: auto" />
+  {% endfor %}
+  </div>
+    <br />
     <div class="gallery" id="id_item_image"></div>
     <br /><br />
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">질문 수정하기</button>
-    {% for image in images %}
-  <img src="{{ image.item_image.url }}" style="width: 100%; height: auto" />
-  {% endfor %}
   </form>
   <br />
   <br />
@@ -64,6 +67,7 @@
     $("#gallery-photo-add").on("change", function () {
       imagesPreview(this, "div.gallery");
       imagesPreview(this, "div.mySlides");
+      document.getElementById("current_post_image").style.display = "none";
     });
   });
 </script>
