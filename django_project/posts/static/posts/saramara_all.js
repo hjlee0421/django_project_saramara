@@ -32,41 +32,113 @@
 //   });
 // }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 마이페이지 vertical tabs js 함수
 
-function openCity(evt, cityName) {
-  var i, tabcontent, tablinks;
+// #####################################################################
+// 카카오계정 관련 함수들
+// #####################################################################
 
-  tabcontent = document.getElementsByClassName("tabcontent");
-
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
+function loginWithKakao() {
+  console.log(Kakao.isInitialized());
+  console.log(Kakao.Auth.getAccessToken());
+  if (!Kakao.Auth.getAccessToken()) {
+    // 로그인
+    Kakao.Auth.login({
+      // authObj : accessToken, type, expires_in, scope 등 포함
+      success: function (authObj) {
+        // alert('login success: ' + JSON.stringify(authObj)),
+        // 유저 인포 불러오기
+        Kakao.API.request({
+          url: "/v2/user/me",
+          success: function (res) {
+            var LOGIN_INFO = JSON.stringify(authObj);
+            var USER_INFO = JSON.stringify(res);
+            var current_url =
+              $(location).attr("pathname") + "kakao_login/";
+            console.log(current_url);
+            $.ajax({
+              type: "POST",
+              // url: current_url,
+              url: "/kakao_login/",
+              dataType: "json",
+              //csrfmiddlewaretoken: '{{ csrf_token }}',
+              data: { LOGIN_INFO: LOGIN_INFO, USER_INFO: USER_INFO },
+            }).done(function (res) {
+              alert(Object.keys(res).length);
+              if (Object.keys(res).length == 1) {
+                window.location.replace(
+                  "http://127.0.0.1:8000/user_profile/"
+                );
+              } else {
+                location.reload();
+              }
+            });
+          },
+        });
+      },
+      fail: function (err) {
+        alert("failed to login: " + JSON.stringify(err));
+      },
+    });
   }
-
-  tablinks = document.getElementsByClassName("tablinks");
-
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-
-  document.getElementById(cityName).style.display = "block";
-  evt.currentTarget.className += " active";
 }
 
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
+function logoutWithKakao() {
+  console.log(Kakao.Auth.getAccessToken()); //before Logout
+  Kakao.Auth.logout(function () {
+    console.log(Kakao.Auth.getAccessToken()); //after Logout
+    $.ajax({
+      type: "POST",
+      url: "/kakao_logout/",
+    }).done(function () {
+      location.reload();
+    });
+  });
+}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function unlinkApp() {
+  console.log(Kakao.Auth.getAccessToken());
+  Kakao.API.request({
+    url: "/v1/user/unlink",
+    success: function (res) {
+      Kakao.Auth.setAccessToken(undefined);
+      console.log(Kakao.Auth.getAccessToken());
+      $.ajax({
+        type: "POST",
+        url: "/kakao_unlink/",
+      }).done(function () {
+        location.reload();
+      });
+      alert("success: " + JSON.stringify(res));
+    },
+    fail: function (err) {
+      alert("fail: " + JSON.stringify(err));
+    },
+  });
+}
 
-//var myElements = $(".dropdown");
+function profileWithKakao() {
+  Kakao.API.request({
+    url: "/v2/user/me",
+    success: function (response) {
+      console.log(response);
+      document.getElementById("userid").innerText = response.id;
+      document.getElementById("nickname").innerText =
+        response.kakao_account.profile.nickname;
+      document.getElementById("profile_image").src =
+        response.properties.profile_image;
+      document.getElementById("thumbnail_image").src =
+        response.properties.thumbnail_image;
+    },
+    fail: function (error) {
+      console.log(error);
+    },
+  });
+}
 
-$(document).ready(function () {
-  var myElement = $(".check1");
-  myElement.text("Hello Sweden!");
-});
+// #####################################################################
+// 카카오계정 관련 함수들
+// #####################################################################
+
 
 
 $(document).ready(function () {
