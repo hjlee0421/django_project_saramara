@@ -116,4 +116,11 @@
     },
   });
 </script>
+<script>
+  $(document).ready(function () {
+    $("#search-button").click(function () {
+      $(".items-sort-all").slideToggle(1000);
+    });
+  });
+</script>
 {% endblock %}
