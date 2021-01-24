@@ -75,6 +75,8 @@
 - 21/01/01 ~ 20/01/31 : Post 모델에 연결된 Image 모델 CRUD 추가하기
 - 21/02/01 ~ 20/02/28 : Comment 모델에 대댓글 기능 CRUD 추가하기 & AWS 진행
 
+## 서비스 페이지들
+
 ![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/index_anonymous.PNG?raw=true)
 
 - 로그인 하지 않은 상태에서는 카카오톡으로 로그인을 보여주며, 질문하기 버튼을 누를때에도 카카오톡으로 로그인한 후 이용하세요 라는 alert가 보이게 됩니다.
