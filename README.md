@@ -74,3 +74,37 @@
 - ~ 20/12/31 : User, Post, Comment 모델 CRUD 완성하기
 - 21/01/01 ~ 20/01/31 : Post 모델에 연결된 Image 모델 CRUD 추가하기
 - 21/02/01 ~ 20/02/28 : Comment 모델에 대댓글 기능 CRUD 추가하기 & AWS 진행
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/index_anonymous.PNG?raw=true)
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/index.PNG?raw=true)
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/index1.PNG?raw=true)
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/ask.PNG?raw=true)
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/ask1.PNG?raw=true)
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/ask2.PNG?raw=true)
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/detail.PNG?raw=true)
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/detail1.PNG?raw=true)
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/detail2.PNG?raw=true)
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/detail3.PNG?raw=true)
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/mypage_anonymous.PNG?raw=true)
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/mypage1_user.PNG?raw=true)
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/mypage2_post.PNG?raw=true)
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/mypage3_comment.PNG?raw=true)
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/mypage4_vote.PNG?raw=true)
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/mypage5_login.PNG?raw=true)
+
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/mypage5_userinfo.PNG?raw=true)
