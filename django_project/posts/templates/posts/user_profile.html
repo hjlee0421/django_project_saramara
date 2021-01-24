@@ -66,4 +66,19 @@
     </button>
   </form>
 </body>
+
+<script>
+  document.getElementById("submit_profile").onclick = function () {
+    $.ajax({
+      url: "/user_profile/",
+      method: "POST",
+      data: new FormData(imageForm),
+      processData: false,
+      contentType: false,
+    }).done(function () {
+      window.location.replace("http://127.0.0.1:8000/");
+    });
+  };
+</script>
+
 {% endblock %}

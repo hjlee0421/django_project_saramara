@@ -35,4 +35,38 @@
 
   <br />
 </div>
+
+<script>
+  $(function () {
+    // Multiple images preview in browser
+    var imagesPreview = function (input, placeToInsertImagePreview) {
+      if (input.files) {
+        var filesAmount = input.files.length;
+
+        for (i = 0; i < filesAmount; i++) {
+          var reader = new FileReader();
+
+          reader.onload = function (event) {
+            $(
+              $.parseHTML(
+                "<img class='new_images' style='width: 100%; height: auto;'>"
+              )
+            )
+              .attr("src", event.target.result)
+              .appendTo(placeToInsertImagePreview);
+          };
+
+          reader.readAsDataURL(input.files[i]);
+        }
+      }
+    };
+
+    $("#gallery-photo-add").on("change", function () {
+      // document.getElementById("current_post_image").style.display = "none";
+      $(".current_post_image").remove();
+      $(".new_images").remove();
+      imagesPreview(this, "div.gallery");
+    });
+  });
+</script>
 {% endblock %}

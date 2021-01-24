@@ -148,37 +148,37 @@ Kakao.Link.createDefaultButton({
 // 포스트 이미지 관련 함수들
 // #####################################################################
 
-$(function () {
-  // Multiple images preview in browser
-  var imagesPreview = function (input, placeToInsertImagePreview) {
-    if (input.files) {
-      var filesAmount = input.files.length;
+// $(function () {
+//   // Multiple images preview in browser
+//   var imagesPreview = function (input, placeToInsertImagePreview) {
+//     if (input.files) {
+//       var filesAmount = input.files.length;
 
-      for (i = 0; i < filesAmount; i++) {
-        var reader = new FileReader();
+//       for (i = 0; i < filesAmount; i++) {
+//         var reader = new FileReader();
 
-        reader.onload = function (event) {
-          $(
-            $.parseHTML(
-              "<img class='new_images' style='width: 100%; height: auto;'>"
-            )
-          )
-            .attr("src", event.target.result)
-            .appendTo(placeToInsertImagePreview);
-        };
+//         reader.onload = function (event) {
+//           $(
+//             $.parseHTML(
+//               "<img class='new_images' style='width: 100%; height: auto;'>"
+//             )
+//           )
+//             .attr("src", event.target.result)
+//             .appendTo(placeToInsertImagePreview);
+//         };
 
-        reader.readAsDataURL(input.files[i]);
-      }
-    }
-  };
+//         reader.readAsDataURL(input.files[i]);
+//       }
+//     }
+//   };
 
-  $("#gallery-photo-add").on("change", function () {
-    // document.getElementById("current_post_image").style.display = "none";
-    $(".current_post_image").remove();
-    $(".new_images").remove();
-    imagesPreview(this, "div.gallery");
-  });
-});
+//   $("#gallery-photo-add").on("change", function () {
+//     // document.getElementById("current_post_image").style.display = "none";
+//     $(".current_post_image").remove();
+//     $(".new_images").remove();
+//     imagesPreview(this, "div.gallery");
+//   });
+// });
 
 // #####################################################################
 // 포스트 이미지 관련 함수들
@@ -387,17 +387,17 @@ function removeUpload() {
   //$(".image-upload-wrap").show();
 }
 
-document.getElementById("submit_profile").onclick = function () {
-  $.ajax({
-    url: "/user_profile/",
-    method: "POST",
-    data: new FormData(imageForm),
-    processData: false,
-    contentType: false,
-  }).done(function () {
-    window.location.replace("http://127.0.0.1:8000/");
-  });
-};
+// document.getElementById("submit_profile").onclick = function () {
+//   $.ajax({
+//     url: "/user_profile/",
+//     method: "POST",
+//     data: new FormData(imageForm),
+//     processData: false,
+//     contentType: false,
+//   }).done(function () {
+//     window.location.replace("http://127.0.0.1:8000/");
+//   });
+// };
 
 // #####################################################################
 // 마이페이지에서 유저정보 수정할때 사용되는 함수들
