@@ -84,6 +84,7 @@
 - 카카오톡으로 간편로그인을 한 후에는 간단히 프로필
   이미지와 닉네임을 설정하게 되며,
   로그인상태로 프로필 이미지가 보이게 됩니다.
+  <br/>
 
 ![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/index.PNG?raw=true)
 
