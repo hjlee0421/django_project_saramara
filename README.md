@@ -3,7 +3,7 @@
 # SARAMARA WEBSITE TECH SPEC
 
 - OWNER : HAJUNE LEE
-- LAST UPDATE : 2021-01-23
+- LAST UPDATE : 2021-01-24
 - Website를 개발하는 이유?
 - 멈춰있는 데이터 (csv, json)을 분석해서 결과물을 보고서로 작성하는 일을 하면서,
   보고서가 아닌 실제 서비스에 적용시킬 수 있는 환경에서 데이터 분석을 해보고 싶었다.
