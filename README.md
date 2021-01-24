@@ -1,3 +1,5 @@
+![alt text](https://github.com/hjlee0421/django_project_saramara/saramara.PNG?raw=true)
+
 # SARAMARA WEBSITE TECH SPEC
 
 - OWNER : HAJUNE LEE
