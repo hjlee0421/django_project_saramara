@@ -1,4 +1,4 @@
-![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/django_project_saramara/saramara.PNG?raw=true)
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/django_project/saramara.PNG?raw=true)
 
 # SARAMARA WEBSITE TECH SPEC
 
