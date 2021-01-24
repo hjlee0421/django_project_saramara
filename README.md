@@ -79,14 +79,14 @@
 
 - 로그인 하지 않은 상태에서는 카카오톡으로 로그인을 보여주며, 질문하기 버튼을 누를때에도 카카오톡으로 로그인한 후 이용하세요 라는 alert가 보이게 됩니다.
 
-![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/index_anonymous.PNG?raw=true)
+![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/index_anonymous.PNG?raw=true)<br/><br/>
 
 - 카카오톡으로 간편로그인을 한 후에는 간단히 프로필
   이미지와 닉네임을 설정하게 되며,
   로그인상태로 프로필 이미지가 보이게 됩니다.
   <br/>
 
-![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/index.PNG?raw=true)
+  ![alt text](https://github.com/hjlee0421/django_project_saramara/blob/master/saramara_pages/index.PNG?raw=true)
 
 - 검색설정을 누르면, 제목과 본문에 해당하는 검색어와, 카테고리 및 기간에 대해서
   조회수/댓글/사라/마라 가 많은순서대로 정렬해서 게시글을 검색할 수 있습니다.
