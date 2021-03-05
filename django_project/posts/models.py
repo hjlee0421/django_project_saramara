@@ -138,8 +138,33 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    # or comment 도 부모가 될수있어야 대댓글 여기가 바뀌면 model view html 모두에 변화가있다.
+    # or comment 도 부모가 될수있어야 대댓글, 여기가 바뀌면 model view html 모두에 변화가있다.
     #
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    text = models.TextField(max_length=1000)
+    created_date = models.DateTimeField(
+        default=timezone.now)  # , input_formats="'%Y.%m.%d. T%H:%M"
+
+    @ property
+    def get_created_date(self):
+        return self.created_date.strftime("%Y.%m.%d. %H:%M")
+
+    def was_published_recently(self):
+        return self.created_date <= timezone.now() - datetime.timedelta(days=1)
+        #  if yes time differece,
+        #  if time 1 hour < diff < 1day %% hours ago
+        #  if time 1 min  < diff < 1hour  %% mins ago
+        #  else  now
+
+    class Meta:
+        ordering = ['created_date']
+
+
+# https://korinkorin.tistory.com/31
+class ReComment(models.Model):
+    comment = models.ForeignKey(
+        Comment, on_delete=models.SET_DEFAULT, default="삭제된 댓글입니다.")
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text = models.TextField(max_length=1000)
